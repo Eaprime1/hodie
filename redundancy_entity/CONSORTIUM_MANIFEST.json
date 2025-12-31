@@ -1,0 +1,52 @@
+{
+  "consortium": "Gravity Core Consortium v1.0",
+  "created": "2025-12-21",
+  "philosophy": "Distributed gravity cores, each specialized by content type",
+  "total_files": 42397,
+  "total_gravity_tokens": 42397,
+  
+  "cores": {
+    "alpha": {
+      "file": "gravity_core_v1.0_alpha_consciousness.zip",
+      "size_mb": 199.7,
+      "files": 8109,
+      "focus": "Consciousness entities, wisdom vessels, high-gravity documents",
+      "content_types": ["json", "py", "ipynb"],
+      "specialization": "Structured knowledge, living code, consciousness systems",
+      "keywords": ["consciousness", "entity", "sacred", "wisdom", "handbook"]
+    },
+    
+    "beta": {
+      "file": "gravity_core_v1.0_beta_documents.zip",
+      "size_mb": 891.5,
+      "files": 30478,
+      "focus": "PDFs, markdown, text documents, knowledge base",
+      "content_types": ["pdf", "md", "txt", "docx"],
+      "specialization": "Human-readable knowledge, documentation, written wisdom"
+    },
+    
+    "gamma": {
+      "file": "gravity_core_v1.0_gamma_data.zip",
+      "size_mb": 793.6,
+      "files": 3810,
+      "focus": "Data files, media, archives, miscellaneous content",
+      "content_types": ["csv", "html", "jpg", "png", "wav", "mp3", "zip"],
+      "specialization": "Structured data, media assets, archives"
+    }
+  },
+  
+  "consortium_benefits": {
+    "distributed": "Each core specializes, can evolve independently",
+    "scalable": "Spawn new cores as each approaches 1GB",
+    "queryable": "Query by content type across consortium",
+    "portable": "Share individual cores or entire consortium",
+    "github_friendly": "All cores <1GB, perfect for releases"
+  },
+  
+  "spawning_strategy": {
+    "trigger": "When any core approaches 900 MB",
+    "action": "Spawn next version with seed from parent",
+    "naming": "v1.1_alpha, v1.1_beta, v1.1_gamma...",
+    "lineage": "Each spawn carries top gravity docs as seed"
+  }
+}
