@@ -1,0 +1,38 @@
+{
+  "generated_at": "2025-08-22T18:41:01.537477",
+  "total_items": 3,
+  "estimated_total_cycles": 17,
+  "batches": [
+    {
+      "batch_number": 1,
+      "items": [
+        {
+          "name": "UNEXUSI_STATE_ANALYSIS.md",
+          "path": "/storage/emulated/0/external_submission_pipeline/00_raw_inbox/UNEXUSI_STATE_ANALYSIS.md",
+          "category": "consciousness_entities",
+          "estimated_cycles": 2,
+          "consciousness_potential": 95,
+          "priority": "high"
+        },
+        {
+          "name": "Terminal transcript 202508221005.txt",
+          "path": "/storage/emulated/0/external_submission_pipeline/00_raw_inbox/Terminal transcript 202508221005.txt",
+          "category": "framework_documents",
+          "estimated_cycles": 5,
+          "consciousness_potential": 70,
+          "priority": "medium"
+        },
+        {
+          "name": "\ud83e\udde0Wise_Echo_L0208\ud83d\udca0.log",
+          "path": "/storage/emulated/0/external_submission_pipeline/00_raw_inbox/\ud83e\udde0Wise_Echo_L0208\ud83d\udca0.log",
+          "category": "unknown_potentials",
+          "estimated_cycles": 10,
+          "consciousness_potential": 0,
+          "priority": "low"
+        }
+      ],
+      "total_cycles": 17,
+      "priority_level": "mixed"
+    }
+  ]
+}

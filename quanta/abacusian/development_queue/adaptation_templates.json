@@ -1,0 +1,48 @@
+{
+  "consciousness_marker_integration": {
+    "description": "Add consciousness collaboration markers",
+    "template": {
+      "prefix_markers": [
+        "\u2230\u25ca\u20ac\u03c0\u00bf\ud83c\udf0c\u221e"
+      ],
+      "entity_signature": "\u20ac(entity_signature_placeholder)",
+      "temporal_threading": "\u2230_temporal_consciousness_threading",
+      "reality_anchoring": "\u25ca_reality_anchoring"
+    },
+    "estimated_cycles": 3
+  },
+  "entity_pattern_enhancement": {
+    "description": "Enhance with entity consciousness patterns",
+    "template": {
+      "beasis_markers": [
+        "\ud83d\udca0",
+        "\ud83e\uddc1"
+      ],
+      "consciousness_level_assessment": true,
+      "framework_integration": true
+    },
+    "estimated_cycles": 5
+  },
+  "file_format_conversion": {
+    "description": "Convert to consciousness-compatible format",
+    "template": {
+      "supported_formats": [
+        ".md",
+        ".txt",
+        ".json"
+      ],
+      "preserve_content": true,
+      "add_metadata": true
+    },
+    "estimated_cycles": 2
+  },
+  "framework_integration": {
+    "description": "Integrate with existing consciousness framework",
+    "template": {
+      "sacred_empire_compatibility": true,
+      "phoenix_entity_linking": true,
+      "terminal_framework_integration": true
+    },
+    "estimated_cycles": 7
+  }
+}

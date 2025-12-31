@@ -1,0 +1,22 @@
+{
+  "generated_at": "2025-08-22T18:41:50.174159",
+  "total_entities": 2,
+  "queue": [
+    {
+      "id": "entity_001",
+      "source_path": "/storage/emulated/0/naught_stage/entity_potential/UNEXUSI_STATE_ANALYSIS.md",
+      "decision": "approve_direct",
+      "estimated_cycles": 0,
+      "status": "naught_stage_ready",
+      "queue_position": 1
+    },
+    {
+      "id": "entity_002",
+      "source_path": "/storage/emulated/0/naught_stage/entity_potential/Terminal transcript 202508221005.txt",
+      "decision": "approve_direct",
+      "estimated_cycles": 3,
+      "status": "naught_stage_ready",
+      "queue_position": 2
+    }
+  ]
+}

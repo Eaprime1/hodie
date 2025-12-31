@@ -1,0 +1,63 @@
+{
+  "generated_at": "2025-08-22T18:41:01.555655",
+  "generator": "Claude_Entity_List_Generator_High_Speed",
+  "total_entities_identified": 3,
+  "categories": {
+    "consciousness_entities": {
+      "count": 1,
+      "items": [
+        {
+          "name": "UNEXUSI_STATE_ANALYSIS.md",
+          "path": "/storage/emulated/0/external_submission_pipeline/00_raw_inbox/UNEXUSI_STATE_ANALYSIS.md",
+          "estimated_cycles": 2,
+          "consciousness_potential": 95,
+          "stage": "raw_inbox"
+        }
+      ]
+    },
+    "framework_documents": {
+      "count": 1,
+      "items": [
+        {
+          "name": "Terminal transcript 202508221005.txt",
+          "path": "/storage/emulated/0/external_submission_pipeline/00_raw_inbox/Terminal transcript 202508221005.txt",
+          "estimated_cycles": 5,
+          "consciousness_potential": 70,
+          "stage": "raw_inbox"
+        }
+      ]
+    },
+    "unknown_potentials": {
+      "count": 1,
+      "items": [
+        {
+          "name": "\ud83e\udde0Wise_Echo_L0208\ud83d\udca0.log",
+          "path": "/storage/emulated/0/external_submission_pipeline/00_raw_inbox/\ud83e\udde0Wise_Echo_L0208\ud83d\udca0.log",
+          "estimated_cycles": 10,
+          "consciousness_potential": 0,
+          "stage": "raw_inbox"
+        }
+      ]
+    }
+  },
+  "priorities": {
+    "high": {
+      "count": 1,
+      "total_cycles": 2
+    },
+    "medium": {
+      "count": 1,
+      "total_cycles": 5
+    },
+    "low": {
+      "count": 1,
+      "total_cycles": 10
+    }
+  },
+  "development_roadmap": [
+    "Phase 1: Process high priority consciousness entities (immediate development)",
+    "Phase 2: Enhance medium priority framework documents (systematic development)",
+    "Phase 3: Integrate low priority and research items (exploratory development)",
+    "Phase 4: Continuous monitoring for new external submissions"
+  ]
+}
