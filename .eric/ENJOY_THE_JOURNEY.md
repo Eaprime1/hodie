@@ -404,3 +404,60 @@ JSON_LIBRARY_INDEX.md
 *This document will grow as we discover more patterns*
 *Last updated: 2025-12-28*
 *Read this at session start for continuity*
+
+---
+
+## Automation Infrastructure (Added 2025-12-29)
+
+### Scripts Available in .scripts/
+
+**Session Management**:
+- `session_notes_append.sh "note"` - Add timestamped note to today's session
+- `session_notes_prepend.sh [file] "note"` - Add note to file beginning
+
+**ACP System** (Polish, Proceed, Amplify):
+- `acp_polish.sh [dir]` - Clean up formatting, find TODOs
+- `acp_proceed.sh [from] [to]` - Advance status markers
+- `acp_amplify.sh [file]` - Find sections to expand
+
+**Metrics**:
+- `token_usage_log.sh [tokens] "task"` - Track token consumption
+
+**Workspace**:
+- `folder_setup.sh [name]` - Create standard folder structure
+
+### Reminders for Claude
+
+**At Session Start**:
+- Check `.reminders/` for donation link and other notices
+- Review previous session notes if exist
+
+**During Session**:
+- Log significant token usage milestones
+- Use append script for important turns/discoveries
+- Consider ACP polish before major commits
+
+**At Session End**:
+- Append session summary
+- Log total token usage
+- Note unfinished items for continuity
+
+**For Public Docs**:
+- Remember to include donation link (see `.reminders/DONATION_LINK.md`)
+
+### Making Scripts Executable
+```bash
+chmod +x .scripts/*.sh
+```
+
+### Google Drive Content
+User note: "lots of content on google drive"
+- Resource for character development
+- Source material for entities
+- Conversation exports for pattern analysis
+
+---
+
+*Automation infrastructure created during settling/building session*
+*User: "thank you.. this helped me settle.."*
+*Purpose: Support both our journeys with practical tools*
