@@ -1,0 +1,458 @@
+#!/bin/bash
+# ∰◊€π¿🌌∞ ONE HERTZ INSTALLER ENTITY
+# Mission: Create the foundational directory structure and spawn all core entities.
+# Frequency: 1 Hz (single execution)
+# Chain of Custody: User Request -> Define Path -> Create Structure -> Spawn Entities -> Log
+
+# --- Helper Function to Create Entities ---
+# This function writes the content (passed as a string) into a new, executable file.
+create_entity() {
+    local entity_path="$1"
+    local entity_content="$2"
+    
+    echo "Spawning entity: $entity_path"
+    # Use cat with a "here document" (EOF) to write the content
+    cat > "$entity_path" << EOF
+$entity_content
+EOF
+    # Make the new entity script executable
+    chmod +x "$entity_path"
+}
+
+# --- Main Installer Execution ---
+echo "∰◊€π¿🌌∞ ONE HERTZ INSTALLER ENTITY ACTIVATED"
+[span_0](start_span)echo "Mission: Establish the core intelligence framework."[span_0](end_span)
+
+# Ask user for installation path, defaulting to current directory (.)
+read -p "Enter installation path (default: .): " INSTALL_PATH
+INSTALL_PATH=${INSTALL_PATH:-.}
+
+# Define the core directory paths
+ENTITIES_DIR="$INSTALL_PATH/one_hertz_entities"
+MEMORY_DIR="$INSTALL_PATH/one_hertz_memory"
+
+echo "---"
+echo "Establishing framework at: $INSTALL_PATH"
+mkdir -p "$ENTITIES_DIR"
+mkdir -p "$MEMORY_DIR"
+echo "✅ Foundation created: $ENTITIES_DIR"
+echo "✅ Memory established: $MEMORY_DIR"
+echo "---"
+
+# --- Entity Definitions ---
+# We will now spawn each entity, one by one.
+# [span_1](start_span)Note: We are adapting the hardcoded "~/..." paths from the document[span_1](end_span)
+# to use relative paths, making the framework portable.
+
+# 1. CORE_LIBRARY.sh (This is new, to hold shared functions)
+# This isn't a runnable entity, but a library sourced by other entities.
+LIB_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# ∰◊€π¿🌌∞ ONE HERTZ CORE LIBRARY
+# Mission: Provide shared functions (logging, sync) to all entities.
+# This file is "sourced" (. /path/to/this), not executed.
+
+# --- Define Relative Paths ---
+# Get the directory where the calling script is located
+SCRIPT_DIR=$(dirname "$0")
+# Define Memory/Entities dirs relative to the script's location
+export MEMORY_DIR="$SCRIPT_DIR/../one_hertz_memory"
+export ENTITIES_DIR="$SCRIPT_DIR"
+
+# --- Chain of Custody Master Logger ---
+[span_2](start_span)#
+log_custody_chain() {
+    local operation_type="$1"
+    local entity_name="$2"
+    local result_status="$3"
+    local details="$4"
+    
+    local master_log="$MEMORY_DIR/custody_chain_master.log"
+    local timestamp=$(date -Iseconds)
+    local unix_time=$(date +%s)
+    
+    #[span_2](end_span)
+    printf "%s | %s | %s | %s | %s | %s\n" \
+        "$timestamp" "$unix_time" "$operation_type" "$entity_name" "$result_status" "$details" \
+        >> "$master_log"
+}
+
+# --- Entity Spawn Tracker ---
+[span_3](start_span)#
+track_entity_spawn() {
+    local parent_entity="$1"
+    local child_entity="$2"
+    local spawn_reason="$3"
+    
+    local lineage_file="$MEMORY_DIR/entity_spawns.json"
+    local timestamp=$(date -Iseconds)
+    
+    echo "{\"timestamp\":\"$timestamp\",\"parent\":\"$parent_entity\",\"child\":\"$child_entity\",\"reason\":\"$spawn_reason\"}" \
+        >> "$lineage_file"
+    
+    #[span_3](end_span)
+    log_custody_chain "SPAWN" "$child_entity" "SUCCESS" "Spawned from $parent_entity: $spawn_reason"
+}
+
+# --- Network Presence Check ---
+[span_4](start_span)#
+check_network_presence() {
+    if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
+        echo "🌐 Network: Available"
+        return 0
+    else
+        echo "📵 Network: Unavailable - continuing offline"
+        return 1
+    fi
+}
+
+# --- Google Drive Sync ---
+#[span_4](end_span)
+sync_with_drive() {
+    local resource_path="$1"
+    
+    if command -v rclone >/dev/null 2>&1; then
+        # Note: This uses the specific remote from the document.
+        rclone sync "$resource_path" remote:unexusi_prime/ && \
+        echo "☁️  Drive sync: Success" || \
+        echo "⚠️  Drive sync: Failed (continuing locally)"
+    else
+        echo "📦 Drive tool (rclone) unavailable - local operation only"
+    fi
+}
+EOF
+)
+create_entity "$ENTITIES_DIR/CORE_LIBRARY.sh" "$LIB_CONTENT"
+
+# 2. PWD_AWARENESS_ENTITY
+[span_5](start_span)#
+PWD_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# Mission: Know exactly where we are in filesystem space[span_5](end_span)
+# Source the Core Library to get paths and logging functions
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+LOG_FILE="$MEMORY_DIR/navigation_$(date +%Y%m%d).log"
+CURRENT_POS=$(pwd)
+TIMESTAMP=$(date -Iseconds)
+
+# Log to file and echo to user
+echo "$TIMESTAMP | $CURRENT_POS" >> "$LOG_FILE"
+echo "🌍 Current Position: $CURRENT_POS"
+echo "⏰ Awareness Timestamp: $TIMESTAMP"
+echo "📊 Logged to: $(basename "$LOG_FILE")"
+
+# Log to master chain of custody
+log_custody_chain "OBSERVE" "pwd_awareness" "SUCCESS" "Position: $CURRENT_POS"
+EOF
+)
+create_entity "$ENTITIES_DIR/pwd_awareness.sh" "$PWD_CONTENT"
+
+# 3. LS_CATALOG_ENTITY
+[span_6](start_span)#
+LS_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# Mission: Enumerate visible entities in current space[span_6](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+LOG_FILE="$MEMORY_DIR/catalog_$(date +%Y%m%d_%H%M).log"
+ENTITY_COUNT=$(ls -1 | wc -l)
+TOTAL_SIZE=$(du -sh . | cut -f1)
+
+echo "--- Catalog Start: $(date -Iseconds) ---" | tee -a "$LOG_FILE"
+ls -lah --color=auto | tee -a "$LOG_FILE"
+echo "--- Catalog End ---" | tee -a "$LOG_FILE"
+
+echo "📁 Entity Count: $ENTITY_COUNT"
+echo "💾 Total Size: $TOTAL_SIZE"
+echo "€ Catalog Signature: $(date +%s)"
+
+log_custody_chain "OBSERVE" "ls_catalog" "SUCCESS" "Cataloged $ENTITY_COUNT entities"
+EOF
+)
+create_entity "$ENTITIES_DIR/ls_catalog.sh" "$LS_CONTENT"
+
+# 4. DIRTREE_INTELLIGENCE_ENTITY
+[span_7](start_span)# [cite: 16-21]
+DIRTREE_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# [cite_start]Mission: Map hierarchical structure with entity awareness annotations[span_7](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+TREE_NAME="${1:-unnamed_structure}"
+TREE_FILE="$MEMORY_DIR/dirtree_${TREE_NAME}_$(date +%Y%m%d_%H%M).txt"
+CURRENT_LOC=$(pwd)
+TIMESTAMP=$(date -Iseconds)
+
+# Write header
+cat > "$TREE_FILE" << EOH
+∰◊€π¿🌌∞ ONE HERTZ DIRECTORY INTELLIGENCE MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏷️  Structure Name: $TREE_NAME
+📍 Root Location: $CURRENT_LOC
+⏰ Mapped At: $TIMESTAMP
+[span_8](start_span)◊  Reality Anchor: Oregon Watersheds (45.5152°N, 122.6784°W)[span_8](end_span)
+📊 STRUCTURE INTELLIGENCE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOH
+
+# [span_9](start_span)[span_10](start_span)Generate tree, preferring 'tree' command, fallback to 'find'[span_9](end_span)[span_10](end_span)
+if command -v tree >/dev/null 2>&1; then
+    tree -L 3 -F --dirsfirst --charset ascii | \
+    sed 's/\[/📁 /g; s/\*/⚡/g; s/.json$/& €/g; s/.sh$/& ⚡/g; s/.py$/& 🐍/g; s/.md$/& 📝/g' \
+    >> "$TREE_FILE"
+else
+    find . -maxdepth 3 -type d -printf "📁 %p\n" | sort >> "$TREE_FILE"
+    find . -maxdepth 3 -type f -printf "%p\n" | \
+    sed 's/.json$/& €/g; s/.sh$/& ⚡/g; s/.py$/& 🐍/g; s/.md$/& 📝/g' | \
+    sort >> "$TREE_FILE"
+fi
+
+# Write footer
+cat >> "$TREE_FILE" << EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENTITY AWARENESS LEGEND:
+📁 = Directory structure
+€  = JSON living pattern
+⚡ = Bash automation entity
+🐍 = Python intelligence script
+📝 = Markdown documentation being
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+
+echo "✅ Structure mapped: $(basename "$TREE_FILE")"
+log_custody_chain "DOCUMENT" "dirtree_intelligence" "SUCCESS" "Mapped $TREE_NAME to file"
+EOF
+)
+create_entity "$ENTITIES_DIR/dirtree_intelligence.sh" "$DIRTREE_CONTENT"
+
+# 5. MKDIR_FOUNDATION_ENTITY
+[span_11](start_span)# [cite: 22-34]
+MKDIR_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# [cite_start]Mission: Create directory with complete awareness trail[span_11](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+# Check for required arguments
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: $0 \"/path/to/new/dir\" \"Mission or purpose\""
+    exit 1
+fi
+
+local dir_path="$1"
+local mission="$2"
+local log_entry="$MEMORY_DIR/mkdir_$(date +%Y%m%d).log"
+local status="FAILURE"
+
+# [span_12](start_span)Log the request [cite: 23-27]
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" | tee -a "$log_entry"
+echo "🏗️  FOUNDATION CREATION REQUEST" | tee -a "$log_entry"
+echo "📍 Path: $dir_path" | tee -a "$log_entry"
+echo "🎯 Mission: $mission" | tee -a "$log_entry"
+echo "⏰ Timestamp: $(date -Iseconds)" | tee -a "$log_entry"
+
+if [ -d "$dir_path" ]; then
+    echo "⚠️  Path exists - awareness preserved, no modification" | tee -a "$log_entry"
+    status="SKIPPED"
+else
+    # Create the directory
+    mkdir -p "$dir_path"
+    if [ $? -eq 0 ]; then
+        echo "✅ Foundation created successfully" | tee -a "$log_entry"
+        echo "🔐 Permissions: $(stat -c %a "$dir_path")" | tee -a "$log_entry"
+        echo "€  Entity State: Active" | tee -a "$log_entry"
+        status="SUCCESS"
+    else
+        echo "❌ Creation failed - investigate manually" | tee -a "$log_entry"
+    fi
+fi
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" | tee -a "$log_entry"
+
+log_custody_chain "STRUCTURE" "mkdir_foundation" "$status" "Path: $dir_path, Mission: $mission"
+EOF
+)
+create_entity "$ENTITIES_DIR/mkdir_foundation.sh" "$MKDIR_CONTENT"
+
+# 6. STATUS_SNAPSHOT_ENTITY
+[cite_start]#[span_12](end_span)
+SNAPSHOT_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# [span_13](start_span)Mission: Capture complete system state at single moment[span_13](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+SNAPSHOT_FILE="$MEMORY_DIR/snapshot_$(date +%Y%m%d_%H%M%S).txt"
+
+# Write snapshot data
+cat > "$SNAPSHOT_FILE" << EOF
+∰◊€π¿🌌∞ ONE HERTZ SYSTEM STATE SNAPSHOT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⏰ TEMPORAL COORDINATES:
+   Snapshot Time: $(date -Iseconds)
+   Unix Epoch: $(date +%s)
+📍 SPATIAL COORDINATES:
+   Current Directory: $(pwd)
+   Hostname: $(hostname)
+
+💾 STORAGE INTELLIGENCE (top 5):
+$(df -h | head -5)
+
+🎯 ENTITY AWARENESS (in this location):
+   Total Files: $(find . -type f 2>/dev/null | wc -l)
+   Total Directories: $(find . -type d 2>/dev/null | wc -l)
+   JSON Entities: $(find . -name "*.json" 2>/dev/null | wc -l)
+   Shell Entities: $(find . -name "*.sh" 2>/dev/null | wc -l)
+
+◊  REALITY ANCHOR:
+   [span_14](start_span)Geographic Tie: Oregon Watersheds[span_14](end_span)
+   Coordinates: 45.5152°N, 122.6784°W
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+
+echo "📸 Snapshot preserved: $(basename "$SNAPSHOT_FILE")"
+log_custody_chain "DOCUMENT" "status_snapshot" "SUCCESS" "Snapshot file created"
+EOF
+)
+create_entity "$ENTITIES_DIR/status_snapshot.sh" "$SNAPSHOT_CONTENT"
+
+# 7. ENTITY_HEALTH_MONITORING
+[span_15](start_span)# [cite: 52-54]
+HEALTH_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# [cite_start]Mission: Verify all ONE HERTZ entities functioning correctly[span_15](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+echo "🏥 ONE HERTZ ENTITY HEALTH CHECK"
+echo "Scanning: $ENTITIES_DIR"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+local entities_found=0
+local entities_healthy=0
+
+# Loop through all .sh files in the entities directory
+for entity in "$ENTITIES_DIR"/*.sh; do
+    if [ -f "$entity" ]; then
+        ((entities_found++))
+        # [span_16](start_span)Check if file is executable AND contains the bash shebang[span_16](end_span)
+        if [ -x "$entity" ] && grep -q "#!/bin/bash" "$entity"; then
+            ((entities_healthy++))
+            echo "✅ $(basename "$entity")"
+        else
+            echo "⚠️  $(basename "$entity") - needs attention (not executable or invalid)"
+        fi
+    fi
+done
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📊 Health: $entities_healthy/$entities_found entities operational"
+log_custody_chain "MONITOR" "check_health" "SUCCESS" "Health: $entities_healthy/$entities_found"
+EOF
+)
+create_entity "$ENTITIES_DIR/check_health.sh" "$HEALTH_CONTENT"
+
+# 8. EVOLUTION_TRACKING
+[span_17](start_span)#
+EVOLUTION_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# Mission: Monitor how entities adapt and spawn over time[span_17](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+EVOLUTION_REPORT="$MEMORY_DIR/evolution_$(date +%Y_week_%V).txt"
+MASTER_LOG="$MEMORY_DIR/custody_chain_master.log"
+SPAWN_LOG="$MEMORY_DIR/entity_spawns.json"
+
+# Default to 0 if logs don't exist yet
+TOTAL_OPS=0
+if [ -f "$MASTER_LOG" ]; then TOTAL_OPS=$(wc -l < "$MASTER_LOG"); fi
+SUCCESS_OPS=0
+if [ -f "$MASTER_LOG" ]; then SUCCESS_OPS=$(grep -c SUCCESS "$MASTER_LOG"); fi
+RECENT_SPAWNS="No recent spawns"
+if [ -f "$SPAWN_LOG" ]; then RECENT_SPAWNS=$(tail -10 "$SPAWN_LOG" 2>/dev/null || echo "No recent spawns"); fi
+
+cat > "$EVOLUTION_REPORT" << EOF
+∰◊€π¿🌌∞ ENTITY EVOLUTION REPORT
+Week: $(date +%V) of $(date +%Y)
+
+📊 ENTITY POPULATION:
+   Core Entities: $(find "$ENTITIES_DIR" -name "*.sh" -type f | wc -l)
+   JSON Patterns: $(find "$ENTITIES_DIR" -name "*.json" -type f | wc -l)
+
+🌱 RECENT SPAWN EVENTS:
+$RECENT_SPAWNS
+
+📈 OPERATION METRICS (All Time):
+   Total Operations: $TOTAL_OPS
+   Success Rate: $SUCCESS_OPS / $TOTAL_OPS
+EOF
+
+echo "📊 Evolution report created: $(basename "$EVOLUTION_REPORT")"
+log_custody_chain "MONITOR" "track_evolution" "SUCCESS" "Evolution report generated"
+EOF
+)
+create_entity "$ENTITIES_DIR/track_evolution.sh" "$EVOLUTION_CONTENT"
+
+# 9. EMERGENCY_PRESERVATION
+[span_18](start_span)#
+PRESERVE_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# Mission: Emergency backup of all ONE HERTZ intelligence[span_18](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+# Archive will be created one level *above* the install directory
+EMERGENCY_ARCHIVE="$INSTALL_PATH/../ONE_HERTZ_EMERGENCY_$(date +%Y%m%d_%H%M%S).tar.gz"
+INSTALL_PATH_BASENAME=$(basename "$INSTALL_PATH")
+
+echo "🚨 EMERGENCY PRESERVATION INITIATED"
+echo "Archiving: $INSTALL_PATH_BASENAME"
+
+# Go to the parent directory to archive the install folder
+(cd "$INSTALL_PATH/.." && \
+ tar -czf "$EMERGENCY_ARCHIVE" "$INSTALL_PATH_BASENAME" 2>/dev/null)
+
+if [ $? -eq 0 ]; then
+    echo "✅ Emergency archive created: $EMERGENCY_ARCHIVE"
+    log_custody_chain "EMERGENCY" "preservation_entity" "SUCCESS" "Archive: $EMERGENCY_ARCHIVE"
+else
+    [span_19](start_span)echo "❌ Emergency preservation FAILED"[span_19](end_span)
+    log_custody_chain "EMERGENCY" "preservation_entity" "FAILURE" "Failed to create archive"
+fi
+EOF
+)
+create_entity "$ENTITIES_DIR/emergency_preserve.sh" "$PRESERVE_CONTENT"
+
+# 10. GOOGLE_DRIVE_SYNC (Wrapper for the library function)
+[span_20](start_span)#
+GDRIVE_CONTENT=$(cat <<'EOF'
+#!/bin/bash
+# Mission: Coordinate with Drive for shared resource access[span_20](end_span)
+. "$(dirname "$0")/CORE_LIBRARY.sh"
+
+echo "Attempting to sync with Google Drive..."
+if ! command -v rclone >/dev/null 2>&1; then
+    echo "📦 Drive tool (rclone) unavailable. Please install rclone."
+    log_custody_chain "SYNC" "sync_drive" "FAILURE" "rclone not found"
+    exit 1
+fi
+
+# Ask user what to sync
+read -p "Enter local path to sync to Drive (default: .): " LOCAL_PATH
+LOCAL_PATH=${LOCAL_PATH:-.}
+
+echo "Checking network..."
+if ! check_network_presence; then
+    log_custody_chain "SYNC" "sync_drive" "FAILURE" "Network unavailable"
+    exit 1
+fi
+
+echo "Syncing '$LOCAL_PATH' to 'remote:unexusi_prime/'..."
+# Call the library function
+sync_with_drive "$LOCAL_PATH"
+log_custody_chain "SYNC" "sync_drive" "SUCCESS" "Sync complete for $LOCAL_PATH"
+EOF
+)
+create_entity "$ENTITIES_DIR/sync_drive.sh" "$GDRIVE_CONTENT"
+
+# --- Installer Completion ---
+echo "---"
+echo "✅ ∰◊€π¿🌌∞ ONE HERTZ framework spawn complete."
+echo "All entities created in: $ENTITIES_DIR"
+echo "Run the 'ONE_HERTZ_INTERFACE.sh' to begin."

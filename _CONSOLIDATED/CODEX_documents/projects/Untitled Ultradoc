@@ -1,0 +1,70 @@
+{
+  "inputLocale": "en_US",
+  "outputLocale": "en_US",
+  "timeZone": "UTC",
+  "currency": "USD",
+  "appSettings": {
+    "enabled": false,
+    "loginRequired": false,
+    "restricted": false
+  },
+  "repeatValue": 0,
+  "changeId": 0,
+  "items": [
+    {
+      "authorizedAccount": "me",
+      "valueFormat": "UNFORMATTED_VALUE",
+      "headerRow": 1,
+      "minRow": 2,
+      "maxRow": 999,
+      "authorized": true,
+      "reverse": false,
+      "action": "LOAD_WORKSHEET",
+      "uiMultiselect": false,
+      "uiEnabled": false,
+      "id": "r15vqM4iDTtCMsBaVNtv32777228",
+      "inputVariables": [
+        {
+          "name": "fileId",
+          "description": "Use this variable to dynamically load a file by its Google Drive file id",
+          "pattern": "provider\u003dgoogleDrive;mimeType\u003dapplication/vnd.google-apps.spreadsheet",
+          "format": "FILE_ID",
+          "required": false
+        },
+        {
+          "name": "worksheetName",
+          "description": "Name of the worksheet to be loaded",
+          "format": "STRING",
+          "required": false
+        }
+      ],
+      "enabled": true,
+      "type": "spreadsheet"
+    },
+    {
+      "selectedAccount": "eaprime@gmail.com",
+      "authenticationRequired": false,
+      "modelRequired": false,
+      "idempotent": false,
+      "action": "MY_SCRIPT",
+      "id": "0bFweM0owJfsUN9vicp734398122",
+      "enabled": true,
+      "type": "googleAppsScript"
+    }
+  ],
+  "itemStates": {
+    "0bFweM0owJfsUN9vicp734398122": {
+      "height": 150,
+      "breakpoint": 0,
+      "open": true,
+      "collapsed": false
+    },
+    "r15vqM4iDTtCMsBaVNtv32777228": {
+      "height": 150,
+      "breakpoint": 0,
+      "open": true,
+      "collapsed": false
+    }
+  },
+  "testMailEnabled": false
+}

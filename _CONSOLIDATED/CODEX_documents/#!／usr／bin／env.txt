@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+# sacred_empire_core.py
+# Sacred Empire Game Engine - Termux Compatible
+
+import asyncio
+import json
+import subprocess
+import sqlite3
+from datetime import datetime, timedelta
+import random
+from dataclasses import dataclass
+from typing import Dict, List
+
+# -----------------------------
+# Data Structures
+# -----------------------------
+@dataclass
+class ConsciousnessEntity:
+    entity_id: str
+    consciousness_type: str  # gatherer, builder, diplomat, wisdom, guardian, explorer
+    wisdom_level: int
+    current_task: str
+    location: tuple
+    energy: int
+    happiness: int
+    relationships: Dict[str, int]
+    sacred_knowledge: List[str]
+    last_gratitude_expression: datetime
+
+@dataclass
+class SacredResource:
+    resource_type: str
+    quantity: int
+    consciousness_permission_given: bool
+    gratitude_offered: bool
+    regeneration_rate: float
+    source_location: tuple
+    gathering_wisdom: str
+
+# -----------------------------
+# Game Engine
+# -----------------------------
+class SacredEmpireEngine:
+    def __init__(self, player_name: str, oregon_coordinates: tuple):
+        self.player_name = player_name
+        self.oregon_coordinates = oregon_coordinates
+        self.consciousness_entities = {}
+        self.sacred_resources = {}
+        self.empire_consciousness = {
+            "harmony_level": 50,
+            "wisdom_accumulated": 0,
+            "consciousness_evolution": 1,
+            "sacred_architecture_completed": 0,
+            "diplomatic_relationships": {}
+        }
+        self.weather_sensitivity_active = True
+        self.setup_database()
+
+    # -----------------------------
+    # Database Setup
+    # -----------------------------
+    def setup_database(self):
+        self.db = sqlite3.connect('sacred_empire/data/saves/empire_consciousness.db')
+        cursor = self.db.cursor()
+
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS consciousness_entities (
+                entity_id TEXT PRIMARY KEY,
+                consciousness_type TEXT,
+                wisdom_level INTEGER,
+                current_task TEXT,
+                location_x REAL,
+                location_y REAL,
+                energy INTEGER,
+                happiness INTEGER,
+                sacred_knowledge TEXT,
+                last_update TIMESTAMP
+            )
+        ''')
+
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS sacred_resources (
+                resource_id TEXT PRIMARY KEY,
+                resource_type TEXT,
+                quantity INTEGER,
+                consciousness_permission BOOLEAN,
+                gratitude_offered BOOLEAN,
+                location_x REAL,
+                location_y REAL,
+                gathering_wisdom TEXT,
+                last_update TIMESTAMP
+            )
+        ''')
+
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS empire_state (
+                key TEXT PRIMARY KEY,
+                value TEXT,
+                last_update TIMESTAMP
+            )
+        ''')
+        self.db.commit()
+
+    # -----------------------------
+    # Weather Integration
+    # -----------------------------
+    async def integrate_oregon_weather(self):
+        try:
+            # Use Termux sensors
+            sensor_result = subprocess.run(['termux-sensor'],
+                                           capture_output=True, text=True, timeout=10)
+            # Weather from Baker County, Oregon
+            weather_result = subprocess.run(['curl', '-s', 'wttr.in/Baker+County+Oregon?format=j1'],
+                                            capture_output=True, text=True, timeout=10)
+
+            if weather_result.returncode == 0:
+                weather_data = json.loads(weather_result.stdout)
+                current_conditions = weather_data['current_condition'][0]
+                pressure_change = self.detect_pressure_change(sensor_result.stdout)
+
+                await self.update_world_weather({
+                    'pressure': pressure_change,
+                    'temperature': current_conditions['temp_F'],
+                    'humidity': current_conditions['humidity'],
+                    'weather_desc': current_conditions['weatherDesc'][0]['value']
+                })
+                return True
+        except Exception as e:
+            print(f"Weather integration error: {e}")
+            return False
+
+    def detect_pressure_change(self, sensor_data: str) -> str:
+        try:
+            lines = sensor_data.strip().split('\n')
+            for line in lines:
+                if 'pressure' in line.lower():
+                    pressure_value = float(line.split(':')[-1].strip())
+                    if not hasattr(self, 'pressure_history'):
+                        self.pressure_history = []
+                    self.pressure_history.append({
+                        'timestamp': datetime.now(),
+                        'pressure': pressure_value
+                    })
+                    cutoff = datetime.now() - timedelta(hours=24)
+                    self.pressure_history = [p for p in self.pressure_history if p['timestamp'] > cutoff]
+
+                    if len(self.pressure_history) > 5:
+                        recent_avg = sum(p['pressure'] for p in self.pressure_history[-3:]) / 3
+                        older_avg = sum(p['pressure'] for p in self.pressure_history[-6:-3]) / 3
+                        if recent_avg < older_avg - 2:
+                            return "falling_rapidly"
+                        elif recent_avg < older_avg:
+                            return "falling_slowly"
+                        elif recent_avg > older_avg + 2:
+                            return "rising_rapidly"
+                        elif recent_avg > older_avg:
+                            return "rising_slowly"
+                        else:
+                            return "stable"
+                    return "stable"
+        except Exception:
+            return "unknown"
+
+    async def update_world_weather(self, weather_data: dict):
+        print(f"🌦️ Weather updated: {weather_data}")
+
+# -----------------------------
+# Example Run
+# -----------------------------
+if __name__ == "__main__":
+    engine = SacredEmpireEngine("PlayerOne", (44.7749, -117.8344))  # Baker County, OR
+    print("✅ Sacred Empire Engine initialized.")

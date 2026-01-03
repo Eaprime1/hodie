@@ -1,0 +1,53 @@
+
+Images
+News
+Shopping
+Short videos
+Forums
+Web
+Books
+Maps
+Flights
+Finance
+
+undefined
+undefined
+undefined
+10 sites
+Bayesian probability: concepts, formula & real‑world uses - Statsig
+
+Statsig
+
+Bayesian probability - Wikipedia
+
+Wikipedia
+What's the difference between probability and possibility? : r/EnglishLearning
+
+Reddit
+
+Bayesian inference - Wikipedia
+
+Wikipedia
+
+Bayesian Statistics: A Beginner's Guide - QuantStart
+
+QuantStart
+
+See all
+Bayesian interpretation of "possibility"
+Bayes' Theorem: What It Is, Formula, and Examples
+Conditional Probability: Bayes' Theorem
+Bayesian Statistics, Inference, and Probability - Statistics ...
+In the realm of Bayesian probability, the concept of "possibility" can be understood as an event or hypothesis having a non-zero probability. More precisely, in Bayesian statistics, the probability attached to a hypothesis (representing a possibility) reflects an individual's degree of belief in that hypothesis being true. 
+Key aspects
+Degrees of Belief: Unlike the frequentist interpretation, where probability represents the long-term frequency of an event in repeated trials, the Bayesian view interprets probability as a measure of belief or uncertainty.
+Prior and Posterior Probabilities: In Bayesian inference, a prior probability for a given hypothesis (initial belief) is used. This prior is updated with new evidence or data using Bayes' theorem, resulting in a posterior probability (revised belief after considering the evidence).
+Incorporating Information: Bayesian methods allow beliefs to be updated rationally based on new information. This is useful when dealing with limited data or situations where prior knowledge is important.
+Hypothesis Testing: Bayesian inference is used for hypothesis testing, where evidence supporting different hypotheses is evaluated, and decisions are made based on the strength of that evidence. 
+Possibility vs. Probability
+While sometimes used interchangeably in everyday language, there is a distinction between "possibility" and "probability" in a Bayesian context. 
+Possibility: An event or hypothesis is possible if it can be conceived without contradiction and has a probability greater than zero.
+Probability: The probability quantifies the degree of belief or the mathematical chance of a possible event occurring, usually expressed as a percentage or fraction between 0 and 1. 
+In simpler terms, something can be possible (its probability is > 0) but not very probable (its probability is low). For instance, winning the lottery is possible, but not probable. 
+Conclusion
+The Bayesian interpretation of "possibility" recognizes that events or hypotheses exist within a spectrum of belief, quantified by probabilities, which can be updated with new evidence using Bayes' theorem. This framework offers a robust way to reason about uncertainty and make informed decisions, especially in situations with limited information or when incorporating prior knowledge is beneficial. 

@@ -1,0 +1,39 @@
+{
+  "inputLocale": "en_US",
+  "outputLocale": "en_US",
+  "timeZone": "UTC",
+  "currency": "USD",
+  "appSettings": {
+    "enabled": false,
+    "loginRequired": false,
+    "restricted": false
+  },
+  "repeatValue": 0,
+  "changeId": 0,
+  "items": [
+    {
+      "rowId": "2",
+      "valueFormat": "UNFORMATTED_VALUE",
+      "headerRow": 1,
+      "minRow": 2,
+      "maxRow": 999,
+      "authorized": false,
+      "reverse": false,
+      "action": "LOAD_ROW",
+      "uiMultiselect": false,
+      "uiEnabled": false,
+      "id": "O4rz7qbf4AJrDiltsSp340574921",
+      "enabled": true,
+      "type": "spreadsheet"
+    }
+  ],
+  "itemStates": {
+    "O4rz7qbf4AJrDiltsSp340574921": {
+      "height": 150,
+      "breakpoint": 0,
+      "open": true,
+      "collapsed": false
+    }
+  },
+  "testMailEnabled": false
+}

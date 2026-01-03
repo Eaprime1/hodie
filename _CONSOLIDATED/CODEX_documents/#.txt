@@ -1,0 +1,14 @@
+# quantum_dice.py
+import random
+from typing import List
+
+class QuantumDice:
+    def roll(self, sides:int=20) -> int:
+        return random.randint(1, sides)
+
+    def superposition(self, sides:int=20, possibilities:int=3) -> List[int]:
+        return [self.roll(sides) for _ in range(possibilities)]
+
+    def collapse(self, rolls:List[int]) -> int:
+        # simple collapse: average then round, you can add runic/ethics influence externally
+        return int(round(sum(rolls)/len(rolls)))

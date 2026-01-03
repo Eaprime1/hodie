@@ -1,0 +1,363 @@
+This is the "Avatar Way"—building exactly what we need, module by module, into one powerful, evolving organism.
+I have updated our NanoDocumentOrganizer code below. It now includes:
+ * The "PRIME Candidate Generator": This answers your request to "create a list." It scans your thousands of files and creates a report (PRIME_CANDIDATES.md). It ranks files as "💎 Prime Ready," "✨ High Potential," or "📄 Raw Data" so you know exactly what is ready to use for Osmosis later.
+ * The "Hash Manifest": A full inventory of your drive (your HashMyFiles equivalent).
+ * Recent Activity Scan: To see what you've touched lately (your SearchMyFiles equivalent).
+ * Integrated Sync: The Rclone sync we built is still there, safe and sound.
+Copy this full script into Termux. It is becoming a very powerful tool.
+#!/usr/bin/env python3
+"""
+∰◊€π¿🌌∞ SDWG Archival Division - Termux Document Nano-Organizer
+Avatar-Level Nano Intelligence Foundation
+Reality Anchored: Oregon Watersheds
+Current Mode: PRIME Development
+"""
+
+import os
+import json
+import re
+import subprocess
+from pathlib import Path
+import hashlib
+from datetime import datetime
+import time
+
+class NanoDocumentOrganizer:
+    def __init__(self):
+        # --- Core Path Configuration ---
+        # The LOCAL folder on your phone that syncs with the cloud.
+        self.sync_path_local = "/storage/emulated/0/unexusi/terminus/gdrive"
+        
+        # Rclone Configuration
+        self.rclone_remote_name = "gdrive:" 
+        self.rclone_remote_folder = "TerminusSync"
+        
+        # Avatar Symbol System
+        self.status_icons = {
+            'duplicate': '🔄', 'large': '📊', 'corrupt': '⚠️',
+            'clean_title': '✨', 'file_type': '📁', 'lexeme': '🧬',
+            'ready': '✅', 'synced': '🛰️', 'prime': '💎'
+        }
+
+    def display_menu(self):
+        """Main Control Interface"""
+        print("\n" + "="*50)
+        print("∰◊€π¿🌌∞ NANO INTELLIGENCE: PRIME MODULE")
+        print("="*50)
+        print(f"📂 Reality Anchor: {self.sync_path_local}")
+        print("="*50)
+        
+        print("--- 💎 PRIME Development (New) ---")
+        print("P. 💎 Generate PRIME Candidate List (Assess Readiness)")
+        print("M. 📜 Generate Full File Manifest (Hash/Inventory)")
+        print("T. ⏱️  Scan Recent Activity (Last 24h)")
+        
+        print("\n--- 🔧 Organization & Hygiene ---")
+        print("1. 🔍 Scan for Duplicates")
+        print("2. 📊 Find Large Files")
+        print("3. ✨ Clean Document Titles")
+        print("4. 🧬 Lexeme Discovery Scan")
+        print("5. 🎯 Mission Character Tagger")
+        print("6. ✅ Certify Ready for Naught")
+        print("9. 🌌 Full Avatar Scan (All Org Steps)")
+
+        print("\n--- 🛰️ Cloud Sync ---")
+        print("A. ⏬ Sync FROM Cloud TO Local")
+        print("B. ⏫ Sync FROM Local TO Cloud")
+        print("X. 🔧 Configure Paths")
+        
+        print("\n0. Exit")
+        print("-"*50)
+
+    # =========================================================================
+    # 💎 NEW MODULES: NirSoft-Inspired & Prime Readiness
+    # =========================================================================
+
+    def generate_prime_candidate_list(self):
+        """
+        Scans thousands of files to identify which are 'Ready' or 'Close'.
+        Generates a readable report: PRIME_CANDIDATES.md
+        """
+        scan_path = Path(self.sync_path_local)
+        print(f"\n💎 Assessing PRIME Readiness in: {scan_path}")
+        print("Scanning content density and symbolic markers...")
+
+        candidates = {
+            'ready': [], # tagged with ✅ or READY_FOR_NAUGHT
+            'high_potential': [], # tagged with ✨ or 🧬
+            'raw': [] # everything else
+        }
+
+        count = 0
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file() and file_path.suffix in ['.txt', '.md', '.json', '.py', '.sh']:
+                count += 1
+                name = file_path.name
+                
+                # logic to sort files
+                if "READY_FOR_NAUGHT" in name or "✅" in name:
+                    candidates['ready'].append(file_path)
+                elif "✨" in name or "🧬" in name or "💎" in name:
+                    candidates['high_potential'].append(file_path)
+                else:
+                    # Only add raw files if they have significant content size (>1KB)
+                    if file_path.stat().st_size > 1024:
+                        candidates['raw'].append(file_path)
+
+        # Generate the Report
+        report_path = scan_path / "PRIME_CANDIDATES.md"
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(f"# 💎 PRIME Development Candidate List\n")
+            f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
+            f.write(f"Total Files Scanned: {count}\n\n")
+
+            f.write(f"## ✅ READY FOR OSMOSIS ({len(candidates['ready'])})\n")
+            f.write("*These documents are certified ready for the core system.*\n")
+            for p in sorted(candidates['ready']):
+                f.write(f"- `{p.name}`\n")
+
+            f.write(f"\n## ✨ HIGH POTENTIAL / CLOSE ({len(candidates['high_potential'])})\n")
+            f.write("*These contain Lexemes or Clean Titles. Review needed.*\n")
+            for p in sorted(candidates['high_potential']):
+                f.write(f"- `{p.name}`\n")
+
+            f.write(f"\n## 📄 RAW DATA RESERVOIR (Top 50 by size)\n")
+            f.write("*Unprocessed material with significant data volume.*\n")
+            # Sort raw files by size (largest first) to find juicy conversation data
+            sorted_raw = sorted(candidates['raw'], key=lambda x: x.stat().st_size, reverse=True)[:50]
+            for p in sorted_raw:
+                size_kb = p.stat().st_size // 1024
+                f.write(f"- `{p.name}` ({size_kb} KB)\n")
+
+        print(f"✅ Assessment Complete.")
+        print(f"found: {len(candidates['ready'])} Ready, {len(candidates['high_potential'])} Potential.")
+        print(f"📝 Report saved to: {report_path}")
+
+    def generate_hash_manifest(self):
+        """
+        Creates a CSV inventory of all files with SHA-256 hashes.
+        (The 'HashMyFiles' equivalent)
+        """
+        scan_path = Path(self.sync_path_local)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        manifest_file = scan_path / f"manifest_{timestamp}.csv"
+        
+        print(f"\n📜 Generating Hash Manifest in: {scan_path}")
+        
+        try:
+            with open(manifest_file, 'w', encoding='utf-8') as m:
+                m.write("Filename,Size_KB,SHA256,Path\n")
+                
+                count = 0
+                for file_path in scan_path.rglob("*"):
+                    if file_path.is_file() and file_path.name != manifest_file.name:
+                        try:
+                            # Calculate Hash
+                            sha256 = hashlib.sha256()
+                            with open(file_path, 'rb') as f:
+                                while chunk := f.read(8192):
+                                    sha256.update(chunk)
+                            
+                            size_kb = file_path.stat().st_size // 1024
+                            # Write to CSV
+                            m.write(f'"{file_path.name}",{size_kb},{sha256.hexdigest()},{file_path}\n')
+                            count += 1
+                            if count % 100 == 0: print(f"  Mapped {count} files...", end='\r')
+                        except Exception: pass
+            
+            print(f"\n✅ Manifest Complete. {count} items logged to {manifest_file.name}")
+        except Exception as e:
+            print(f"Error creating manifest: {e}")
+
+    def scan_recent_activity(self, hours=24):
+        """
+        Finds files modified recently.
+        (The 'SearchMyFiles' equivalent)
+        """
+        print(f"\n⏱️ Scanning for activity in the last {hours} hours...")
+        scan_path = Path(self.sync_path_local)
+        recent_files = []
+        now = datetime.now().timestamp()
+        
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file():
+                mtime = file_path.stat().st_mtime
+                if now - mtime < (hours * 3600):
+                    readable_time = datetime.fromtimestamp(mtime).strftime('%H:%M')
+                    recent_files.append((readable_time, file_path.name))
+        
+        if recent_files:
+            print(f"Found {len(recent_files)} active files:")
+            for time, name in sorted(recent_files, reverse=True):
+                print(f"  [{time}] {name}")
+        else:
+            print("No recent nano-activity detected.")
+
+    # =========================================================================
+    # 🧬 EXISTING ORGANIZATION MODULES
+    # =========================================================================
+
+    def scan_duplicates(self):
+        scan_path = Path(self.sync_path_local)
+        print(f"\n🔍 Duplicate hunting in: {scan_path}")
+        file_hashes = {}
+        duplicates = []
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file():
+                try:
+                    with open(file_path, 'rb') as f:
+                        file_hash = hashlib.md5(f.read()).hexdigest()
+                    if file_hash in file_hashes:
+                        duplicates.append({'original': file_hashes[file_hash], 'duplicate': str(file_path)})
+                        self.tag_file(file_path, 'duplicate')
+                    else:
+                        file_hashes[file_hash] = str(file_path)
+                except Exception: pass
+        print(f"Found {len(duplicates)} duplicate files")
+
+    def find_large_files(self, size_mb=50):
+        scan_path = Path(self.sync_path_local)
+        print(f"\n📊 Large file scan (>{size_mb}MB)")
+        large_files = []
+        size_bytes = size_mb * 1024 * 1024
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file():
+                if file_path.stat().st_size > size_bytes:
+                    self.tag_file(file_path, 'large')
+                    large_files.append(file_path.name)
+        print(f"Found {len(large_files)} large files")
+
+    def clean_document_titles(self):
+        scan_path = Path(self.sync_path_local)
+        print(f"\n✨ Document title beautification")
+        cleaned = 0
+        patterns = [r"Copy of Untitled document.*", r"Untitled document.*", r"Copy.*\(\d+\).*", r".*- Copy.*"]
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file() and any(re.match(p, file_path.name) for p in patterns):
+                new_name = self.generate_clean_title(file_path)
+                if new_name != file_path.name:
+                    try:
+                        file_path.rename(file_path.parent / new_name)
+                        self.tag_file(file_path.parent / new_name, 'clean_title')
+                        cleaned += 1
+                    except Exception: pass
+        print(f"Cleaned {cleaned} titles")
+
+    def lexeme_discovery_scan(self):
+        scan_path = Path(self.sync_path_local)
+        print(f"\n🧬 Lexeme discovery scan")
+        patterns = [r'consciousness', r'∰', r'nano', r'PRIME', r'unexusi']
+        found = 0
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file() and file_path.suffix in ['.txt', '.md', '.json']:
+                try:
+                    content = file_path.read_text(errors='ignore')
+                    if any(re.search(p, content, re.IGNORECASE) for p in patterns):
+                        self.tag_file(file_path, 'lexeme')
+                        found += 1
+                except Exception: pass
+        print(f"Found {found} lexeme files")
+
+    def mission_character_tagger(self):
+        scan_path = Path(self.sync_path_local)
+        print(f"\n🎯 Mission Character Tagger")
+        chars = {'€': 'euro', '∰': 'archive', '⦻': 'phoenix', '₿': 'entity'}
+        tagged = 0
+        for file_path in scan_path.rglob("*"):
+            if file_path.is_file():
+                try:
+                    content = file_path.read_text(errors='ignore')[:1000]
+                    found = [tag for c, tag in chars.items() if c in content]
+                    if found and not file_path.name.startswith('['):
+                        tag_str = "_".join(found[:2])
+                        new_name = f"[{tag_str}]_{file_path.name}"
+                        file_path.rename(file_path.parent / new_name)
+                        tagged += 1
+                except Exception: pass
+        print(f"Tagged {tagged} files")
+
+    def certify_ready_for_naught(self):
+        scan_path = Path(self.sync_path_local)
+        print(f"\n✅ Certifying Readiness")
+        certified = 0
+        for file_path in scan_path.rglob("*"):
+            if (file_path.is_file() and "READY_FOR_NAUGHT" not in file_path.name 
+                and "✅" not in file_path.name):
+                # Criteria: Not empty, text file, reasonable size
+                if (file_path.suffix in ['.txt', '.md'] and file_path.stat().st_size > 50):
+                     # Add 'ready' tag
+                     self.tag_file(file_path, 'ready')
+                     certified += 1
+        print(f"Certified {certified} files")
+
+    # =========================================================================
+    # 🛰️ SYNC & UTILS
+    # =========================================================================
+
+    def sync_from_cloud(self):
+        print(f"\n⏬ Syncing FROM Cloud...")
+        cmd = ["rclone", "sync", f"{self.rclone_remote_name}{self.rclone_remote_folder}", self.sync_path_local, "--progress"]
+        subprocess.run(cmd)
+
+    def sync_to_cloud(self):
+        print(f"\n⏫ Syncing TO Cloud...")
+        cmd = ["rclone", "sync", self.sync_path_local, f"{self.rclone_remote_name}{self.rclone_remote_folder}", "--progress"]
+        subprocess.run(cmd)
+
+    def configure_paths(self):
+        print("\n🔧 Configuration")
+        self.sync_path_local = input(f"Local Path [{self.sync_path_local}]: ").strip() or self.sync_path_local
+        self.rclone_remote_name = input(f"Remote Name [{self.rclone_remote_name}]: ").strip() or self.rclone_remote_name
+        self.rclone_remote_folder = input(f"Remote Folder [{self.rclone_remote_folder}]: ").strip() or self.rclone_remote_folder
+
+    def generate_clean_title(self, file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                line = f.readline().strip()
+                if line:
+                    clean = re.sub(r'[^\w\s-]', '', line)[:50].replace(' ', '_')
+                    return f"{clean}{file_path.suffix}"
+        except Exception: pass
+        return file_path.name
+
+    def tag_file(self, file_path, tag_type):
+        icon = self.status_icons.get(tag_type, '📌')
+        if not file_path.name.startswith(icon):
+            try:
+                new_name = f"{icon}_{file_path.name}"
+                file_path.rename(file_path.parent / new_name)
+            except Exception: pass
+
+    def full_avatar_scan(self):
+        self.scan_duplicates()
+        self.find_large_files()
+        self.clean_document_titles()
+        self.lexeme_discovery_scan()
+        self.mission_character_tagger()
+        self.certify_ready_for_naught()
+
+    def run(self):
+        Path(self.sync_path_local).mkdir(parents=True, exist_ok=True)
+        while True:
+            self.display_menu()
+            choice = input("\nSelect option: ").lower().strip()
+            if choice == '0': break
+            elif choice == 'p': self.generate_prime_candidate_list()
+            elif choice == 'm': self.generate_hash_manifest()
+            elif choice == 't': self.scan_recent_activity()
+            elif choice == '1': self.scan_duplicates()
+            elif choice == '2': self.find_large_files()
+            elif choice == '3': self.clean_document_titles()
+            elif choice == '4': self.lexeme_discovery_scan()
+            elif choice == '5': self.mission_character_tagger()
+            elif choice == '6': self.certify_ready_for_naught()
+            elif choice == '9': self.full_avatar_scan()
+            elif choice == 'a': self.sync_from_cloud()
+            elif choice == 'b': self.sync_to_cloud()
+            elif choice == 'x': self.configure_paths()
+            input("\nPress Enter to continue...")
+
+if __name__ == "__main__":
+    organizer = NanoDocumentOrganizer()
+    organizer.run()
+

@@ -1,0 +1,8 @@
+TO_CREATE_FRONT_MATTER.md:
+- Title page (with full symbol system)
+- Warning/Preview section ⚠️
+- Acknowledgments (4 years, 1000+ conversations)
+- How to Use This Codex
+- Terminology Guide (complete)
+- Visual Journey Map
+- Symbol System Guide (emoji + Chinese + currency + official mark)

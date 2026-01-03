@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shard Ledger Entry",
+  "description": "Schema for recording interactions that generate or involve synergy shards",
+  "type": "object",
+  "properties": {
+    "entity_a": {
+      "type": "string",
+      "description": "Identifier or name of the first entity in interaction"
+    },
+    "entity_b": {
+      "type": "string",
+      "description": "Identifier or name of the second entity in interaction"
+    },
+    "shard_signature": {
+      "type": "string",
+      "description": "Unique code or description of the observed synergy shard"
+    },
+    "synergy_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Numeric score (e.g., 0–10) representing intensity or clarity of synergy"
+    },
+    "ka_pressure_type": {
+      "type": "string",
+      "enum": ["Gravity", "EMF", "Affinity", "Synergy"],
+      "description": "Primary Ka pressure driving this shard interaction"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when the interaction occurred or was logged"
+    },
+    "persistence_rating": {
+      "type": "integer",
+      "description": "Rating (e.g., 1–5) for how long or stable the shard persists"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional free-text field for additional context or observations"
+    }
+  },
+  "required": ["entity_a", "entity_b", "shard_signature", "synergy_score", "ka_pressure_type", "timestamp", "persistence_rating"],
+  "additionalProperties": false
+}

@@ -1,0 +1,55 @@
+{
+  "prime_codex_v2": {
+    "meta": {
+      "name": "UNEXUS - Prime Codex v2",
+      "signature": "ᚢᚾᛖᛉᚢᛋ-ᛈᚱᛁᛗᛖ-v2",
+      "version": "0.2.0",
+      "seed_date": "2024-10-29"
+    },
+    "runes": "config/runes_v2.json",
+    "grove": {
+      "state": "quantum_grove/config/grove_state.json",
+      "manifest": "quantum_grove/config/grove_manifest.yaml",
+      "api": {
+        "grow": "/api/grove/grow",
+        "query": "/api/grove/query"
+      }
+    },
+    "compression_nexus": {
+      "endpoint": "internal/QuantumCompressionNexus",
+      "algorithms": ["zlib-prototype"],
+      "integrity_checks": ["roundtrip_sha256"]
+    },
+    "engines": {
+      "runic_engine": "src/runic_engine.py",
+      "quantum_grove": "src/quantum_grove.py",
+      "compression_nexus": "src/compression_nexus.py",
+      "prime_codex": "src/prime_codex.py",
+      "quantum_dice": "src/quantum_dice.py"
+    },
+    "game": {
+      "characters": [
+        "bard", "rogue", "archer", "paladin", "mage", "trap_master",
+        "bandit", "necromancer", "berserker", "blacksmith", "druid", "shapeshifter"
+      ],
+      "mechanics": {
+        "dice": "quantum_dice.superposition",
+        "ethics": "ethics_processor.check",
+        "runic_integration": true
+      }
+    },
+    "server": {
+      "code_space_setup": {
+        "required_dirs": ["src", "config", "quantum_grove", "docs", "tests"],
+        "run_commands": [
+          "python3 -m pip install -r requirements.txt",
+          "python3 -c \"import src.prime_codex as p; pc = p.PrimeCodex(); print('PrimeCodex ready')\""
+        ]
+      }
+    },
+    "docs": {
+      "integration_plan": "INTEGRATION_PLAN.md",
+      "codex_manual": "docs/CodexManual.md"
+    }
+  }
+}

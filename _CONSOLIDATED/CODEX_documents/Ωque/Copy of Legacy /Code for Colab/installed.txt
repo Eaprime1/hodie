@@ -1,0 +1,1 @@
+Unknown command: 'list_installed' (run 'pkg help' for usage information)

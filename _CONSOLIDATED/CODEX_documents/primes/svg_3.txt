@@ -1,0 +1,12 @@
+<!-- Entity-shard-entity triads (Synergy triangles) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <circle cx="50" cy="150" r="15" stroke="black" stroke-width="2" fill="none"/>
+  <circle cx="150" cy="150" r="15" stroke="black" stroke-width="2" fill="none"/>
+  <circle cx="100" cy="50" r="15" stroke="black" stroke-width="2" fill="none"/>
+  <line x1="50" y1="150" x2="150" y2="150" stroke="black" stroke-width="2"/>
+  <line x1="50" y1="150" x2="100" y2="50" stroke="black" stroke-width="2"/>
+  <line x1="150" y1="150" x2="100" y2="50" stroke="black" stroke-width="2"/>
+  <text x="40" y="165" font-family="sans-serif" font-size="12">Entity</text>
+  <text x="145" y="165" font-family="sans-serif" font-size="12">Entity</text>
+  <text x="90" y="40" font-family="sans-serif" font-size="12">Shard</text>
+</svg>

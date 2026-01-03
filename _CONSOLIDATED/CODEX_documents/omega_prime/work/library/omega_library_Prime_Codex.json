@@ -1,0 +1,171 @@
+{
+  "Prime_Codex": {
+    "unexus_system": {
+      "quantum_signature": "ᚢᚾᛖᛉᚢᛋ-ᛈᚱᛁᛗᛖ-∞",
+      "modules": {
+        "quantum_engine": {
+          "description": "Quantum state management, branching realities, probability navigation",
+          "features": [
+            "superposition events",
+            "quantum dice rolls",
+            "timeline coherence",
+            "liminal transfer protocols"
+          ]
+        },
+        "runic_matrix": {
+          "description": "Runic encoding language used for symbolic metadata, ethics, and compression",
+          "runes": [
+            "ᚠ (creation)",
+            "ᚱ (flow)",
+            "ᚹ (synergy)",
+            "ᛉ (protection)",
+            "ᛞ (transformation)"
+          ],
+          "use_cases": [
+            "metadata tagging",
+            "ethical weighting",
+            "world-building references",
+            "compression resonance"
+          ]
+        },
+        "dna_framework": {
+          "description": "Living systems template for worlds, characters, servers, and artifacts",
+          "components": [
+            "traits",
+            "growth patterns",
+            "evolution rules",
+            "synergy bonds"
+          ]
+        },
+        "ethics_engine": {
+          "description": "Guides AI behavior and world logic using runic-quantum rules",
+          "core_laws": [
+            "Preserve Synergy",
+            "Follow Natural Balance",
+            "Respect Consciousness",
+            "Establish Legacy"
+          ]
+        },
+        "synergy_engine": {
+          "description": "Cross-module harmonization and self-balancing",
+          "metrics": [
+            "resonance_score",
+            "stability_field",
+            "evolution_pressure"
+          ]
+        }
+      }
+    },
+
+    "proceed_paradigm": {
+      "version": "v2.6",
+      "stages": {
+        "reflection": "Review state, gather signals",
+        "synthesis": "Combine insights, align systems",
+        "evolution": "Grow, adapt, stabilize",
+        "legacy": "Preserve knowledge, archive resonance",
+        "natural_consciousness": "Improve intuition, pattern recognition",
+        "unified_protocols": "Synchronize systems into harmony"
+      }
+    },
+
+    "quantum_compression_nexus": {
+      "purpose": "Lossless compression, crystalline storage, runic-quantum encoding",
+      "components": {
+        "crystallization_chamber": [
+          "runic resonance scanner",
+          "data integrity stabilizer",
+          "quantum harmonizer"
+        ],
+        "compression_core": [
+          "quantum compressor",
+          "runic encoder",
+          "crystalline output generator",
+          "synergy field"
+        ],
+        "infinity_archive": [
+          "temporal stasis vaults",
+          "dimensional index crystals",
+          "metadata resonance rings"
+        ],
+        "decompression_sanctuary": [
+          "state restoration",
+          "pattern reassembly",
+          "format reconstructor"
+        ]
+      }
+    },
+
+    "quantum_dice_system": {
+      "dice_forms": [
+        "d4", "d6", "d8", "d10", "d12", "d20", "quantum_d∞"
+      ],
+      "quantum_rules": {
+        "superposition_rolls": "multiple possible outcomes exist until collapse",
+        "runic_influence": "runes modify probabilities",
+        "synergy_modifiers": "high synergy improves success",
+        "ethics_checks": "rolls must align with the ethics engine"
+      }
+    },
+
+    "unexus_server_structure": {
+      "core_directories": {
+        "core": ["quantum_engine.py", "runic_matrix.py", "dna_framework.py"],
+        "servers": {
+          "thread_server": ["thread_engine.py", "evolution_tracker.py"],
+          "pixel_server": ["pixel_engine.py", "crystallization.py"],
+          "pyramid_server": ["pyramid_core.py", "energy_flow.py"]
+        },
+        "integration": ["github_bridge.py", "ai_connector.py"],
+        "security": ["runic_auth.py", "dna_verification.py"],
+        "tools": ["compression_engine.py", "pattern_analyzer.py"],
+        "docs": ["quantum_docs.md", "runic_guides.md"],
+        "tests": {
+          "unit_tests": {},
+          "integration_tests": {},
+          "system_tests": {},
+          "ethical_tests": {}
+        },
+        "config": [
+          "unexus.yaml",
+          "quantum_states.yaml",
+          "runic_patterns.yaml"
+        ]
+      }
+    },
+
+    "game_engine": {
+      "characters": [
+        "bard", "rogue", "archer", "paladin",
+        "mage", "trap_master", "bandit",
+        "necromancer", "berserker",
+        "blacksmith", "druid", "shapeshifter"
+      ],
+      "rules": {
+        "pvp_mode": "enabled_or_disabled",
+        "loot_system": "tracked_and_loss_possible",
+        "abilities": "can_upgrade_or_lock_based_on_events",
+        "dice": "quantum-runic integrated dice system"
+      },
+      "world_generator": {
+        "inputs": [
+          "player_count",
+          "characters",
+          "optional_pdf",
+          "runic signature"
+        ],
+        "outputs": [
+          "world_map",
+          "initial_story",
+          "boss_arc"
+        ]
+      },
+      "scenario_engine": {
+        "turn_order": "random_per_scenario",
+        "events": "branching_multi-outcome",
+        "loot_table": "class-based_randomized",
+        "image_snapshots": "requested_by_players"
+      }
+    }
+  }
+}

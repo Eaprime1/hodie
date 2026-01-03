@@ -1,0 +1,36 @@
+{
+  "inputLocale": "en_US",
+  "outputLocale": "en_US",
+  "timeZone": "UTC",
+  "currency": "USD",
+  "appSettings": {
+    "enabled": false,
+    "loginRequired": false,
+    "restricted": false
+  },
+  "repeatValue": 0,
+  "changeId": 0,
+  "items": [
+    {
+      "authorized": false,
+      "inputFormat": "GOOGLE_DOCS",
+      "outputFormat": "PDF",
+      "uiMultiselect": false,
+      "uiEnabled": false,
+      "id": "uhmOqIMeGye9ShtOUJEo26987402",
+      "name": "...to PDF",
+      "prefix": "pdf",
+      "enabled": true,
+      "type": "template"
+    }
+  ],
+  "itemStates": {
+    "uhmOqIMeGye9ShtOUJEo26987402": {
+      "height": 150,
+      "breakpoint": 0,
+      "open": true,
+      "collapsed": false
+    }
+  },
+  "testMailEnabled": false
+}

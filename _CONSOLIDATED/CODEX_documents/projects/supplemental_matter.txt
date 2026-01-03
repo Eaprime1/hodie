@@ -1,0 +1,6 @@
+TO_CREATE_SUPPLEMENTAL.md:
+- Cross-phase patterns document
+- Achievement/wood system expanded
+- Chest constellation map (visual)
+- Integration protocols
+- Application case studies
