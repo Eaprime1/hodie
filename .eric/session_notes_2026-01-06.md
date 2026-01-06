@@ -14,3 +14,6 @@
 
 ## [06:48:35] Quick wins complete: Q/ structure, laptop scripts, committed and pushed to GitHub
 
+
+## [06:57:04] PowerShell 7.5.4 installed, cloud guides created, PS1 scripts ready
+
