@@ -17,12 +17,14 @@ from crawler_pixel8.processors.conversation_parser import ConversationParser
 from crawler_pixel8.processors.pattern_extractor import PatternExtractor
 
 
-async def test_crawler(test_file: Path = None):
+async def test_crawler(test_file: Path = None, prompt_folder: bool = False, search_dir: Path = None):
     """
     Test crawler with a single file
 
     Args:
         test_file: Path to test conversation file (auto-detects if not provided)
+        prompt_folder: If True, prompt user for folder location
+        search_dir: Optional directory to search for files
     """
     print("🔮 PIXEL8 Crawler Test")
     print("=" * 60)
@@ -30,12 +32,22 @@ async def test_crawler(test_file: Path = None):
     # Initialize config
     config = CrawlerConfig()
 
+    # Handle folder selection
+    if prompt_folder:
+        search_dir = config.prompt_for_folder()
+
+    if search_dir:
+        print(f"📁 Searching in: {search_dir}")
+    else:
+        print(f"📁 Searching in: {config.conversation_archive} (default: current directory)")
+
     # Find test file if not provided
     if not test_file:
-        conversations = config.get_conversation_paths()
+        conversations = config.get_conversation_paths(search_dir)
         if not conversations:
             print("❌ No conversation files found")
-            print(f"   Looked in: {config.conversation_archive}")
+            print(f"   Looked in: {search_dir or config.conversation_archive}")
+            print(f"   Supported formats: {', '.join(config.supported_formats)}")
             return
 
         test_file = conversations[0]
@@ -125,11 +137,23 @@ def main():
         type=Path,
         help="Path to conversation file (auto-selects if not provided)"
     )
+    parser.add_argument(
+        "--prompt",
+        "-p",
+        action="store_true",
+        help="Prompt for folder location interactively"
+    )
+    parser.add_argument(
+        "--dir",
+        "-d",
+        type=Path,
+        help="Directory to search for conversation files"
+    )
 
     args = parser.parse_args()
 
     # Run test
-    asyncio.run(test_crawler(args.file))
+    asyncio.run(test_crawler(args.file, args.prompt, args.dir))
 
 
 if __name__ == "__main__":

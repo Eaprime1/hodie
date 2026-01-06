@@ -8,6 +8,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 import json
+import hashlib
 
 
 @dataclass
@@ -119,6 +120,34 @@ class ProcessingResult:
     # Output paths
     output_files: Dict[str, Path] = field(default_factory=dict)
 
+    # Verification seal
+    verification_seal: str = ""
+    pixel8_verified: bool = False
+
+    def generate_verification_seal(self):
+        """
+        Generate verification seal for this processing result
+        PIXEL8 verification seal: ∰◊€π¿🌌∞
+        """
+        # Create hash from key processing data
+        seal_data = {
+            "conversation_id": self.conversation_id,
+            "processed_at": self.processed_at.isoformat(),
+            "parts_count": self.parts_count,
+            "patterns": sorted(self.key_patterns),
+            "topics": sorted(self.key_topics),
+        }
+
+        # Generate hash
+        seal_string = json.dumps(seal_data, sort_keys=True)
+        seal_hash = hashlib.sha256(seal_string.encode()).hexdigest()[:16]
+
+        # Create PIXEL8 verification seal
+        self.verification_seal = f"∰◊€π¿🌌∞-PIXEL8-{seal_hash}"
+        self.pixel8_verified = True
+
+        return self.verification_seal
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization"""
         return {
@@ -136,6 +165,8 @@ class ProcessingResult:
             "related_conversations": self.related_conversations,
             "cross_references": self.cross_references,
             "output_files": {k: str(v) for k, v in self.output_files.items()},
+            "verification_seal": self.verification_seal,
+            "pixel8_verified": self.pixel8_verified,
         }
 
     def save(self, output_path: Path):

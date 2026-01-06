@@ -98,9 +98,13 @@ class LocalProcessor(ABC):
             result.aggregate_entities()
             result.aggregate_topics()
 
+            # Generate verification seal
+            result.generate_verification_seal()
+
             self.logger.info(
                 f"Processed {result.parts_count} parts from {file_path.name}"
             )
+            self.logger.info(f"Verification seal: {result.verification_seal}")
 
         except Exception as e:
             error_msg = f"Error processing {file_path}: {str(e)}"
