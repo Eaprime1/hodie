@@ -1,0 +1,18 @@
+{
+  "source_file": "/data/data/com.termux/files/home/Pixel8a/Q",
+  "conversation_id": "Q",
+  "processed_at": "2026-01-05T15:26:07.221934",
+  "parts_count": 0,
+  "processing_time": 0.0004057884216308594,
+  "errors": [
+    "2026-01-05T15:26:07.222319: Error processing /data/data/com.termux/files/home/Pixel8a/Q: [Errno 2] No such file or directory: '/data/data/com.termux/files/home/Pixel8a/Q'"
+  ],
+  "parts": [],
+  "summary": "",
+  "key_patterns": [],
+  "key_entities": [],
+  "key_topics": [],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {}
+}
