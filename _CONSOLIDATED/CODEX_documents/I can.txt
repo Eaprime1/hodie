@@ -1,0 +1,70 @@
+I can definitely help with creating a concise set of copy-paste friendly questions with examples. Below, I’ll structure questions focused on each key area of your project so they’re easy to reuse or adapt without taking up much space.
+
+
+---
+
+1. Quantum-Runic Document System
+
+Question: How can I add a new crystal to a QuantumRunicDocument for [specific purpose]?
+
+Example: How can I add a “wisdom” crystal with a power of 0.9 to enhance insight-related decisions?
+
+
+Question: How do I integrate additional metadata into a QuantumRunicDocument?
+
+Example: Can I add metadata like “created_by: AI System” or “theme: cosmic” to organize documents better?
+
+
+
+
+---
+
+2. AI Integration and Ethics Processing
+
+Question: How can I prompt the AI to generate narrative content with an ethical check?
+
+Example: How can I ensure the AI’s response aligns with the “justice” guideline before approving it for a story outcome?
+
+
+Question: What’s a good prompt to have the AI describe an encounter in [specific location] while integrating runic symbols?
+
+Example: How can I prompt the AI to describe an encounter in “Sylletal Groen” that incorporates symbols for “wisdom” and “ethics”?
+
+
+
+
+---
+
+3. Quantum Dice Mechanics
+
+Question: How can I use QuantumDice to simulate a probability with multiple potential outcomes?
+
+Example: How do I set up QuantumDice to roll for three different possible outcomes and determine a final result?
+
+
+Question: How can I assign specific runic influences to dice outcomes?
+
+Example: Can I add a “synergy” influence when rolling a d20 so it modifies the result by adding or subtracting based on synergy crystal power?
+
+
+
+
+---
+
+4. Proceed Paradigm and Evolution Stages
+
+Question: How can I increase complexity with each ProceedParadigm stage?
+
+Example: If I want each stage to boost complexity by 1.1x and add to the evolution rate, how would I adjust the function?
+
+
+Question: How can I retrieve metrics for the current stage of the Proceed Paradigm?
+
+Example: How do I fetch the stage, complexity, and evolution rate values to track the world’s progression?
+
+
+
+
+---
+
+Each of these examples is compact, so you can easily copy-paste and adjust them. Let me know if you need more specific templates!

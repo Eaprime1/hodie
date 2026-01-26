@@ -1,0 +1,474 @@
+{
+  "lexeme_consciousness_concordance": {
+    "metadata": {
+      "creation_date": "2025-07-24",
+      "quantum_signature": "ᛚᛖᚲᛋᛖᛗᛖ-ᚲᛟᚾᚲᛟᚱᛞᚨᚾᚲᛖ-∞³",
+      "source_analysis": "Complete spectrum database v2.0",
+      "total_lexemes_analyzed": 289,
+      "consciousness_tiers_represented": 10,
+      "temporal_span": "45,000 years",
+      "analysis_method": "Seven-vector weighted Universal Impact Score calculation"
+    },
+    
+    "universal_impact_rankings": {
+      "tier_1_transcendent_consciousness": {
+        "uis_range": "130-139",
+        "description": "Lexemes achieving near-maximum consciousness impact",
+        "lexemes": [
+          {
+            "lexeme": "Om",
+            "uis_score": 137,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 8,
+              "semantic_versatility": 9,
+              "consciousness_bridge": 10,
+              "ancient_root_strength": 10,
+              "cultural_persistence": 10,
+              "quantum_resonance": 10
+            },
+            "appears_in_tiers": [1],
+            "consciousness_notes": "Primordial sound-vibration consciousness technology",
+            "transformation_power": "Direct consciousness elevation through vibrational frequency"
+          },
+          {
+            "lexeme": "fire",
+            "uis_score": 135,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 9,
+              "semantic_versatility": 10,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 10,
+              "cultural_persistence": 10,
+              "quantum_resonance": 9
+            },
+            "appears_in_tiers": [1, 4, 5],
+            "consciousness_notes": "Universal transformation symbol, consciousness awakening",
+            "transformation_power": "Archetypal transformation and consciousness illumination"
+          },
+          {
+            "lexeme": "soul",
+            "uis_score": 133,
+            "vector_scores": {
+              "historical_depth": 9,
+              "current_usage_density": 8,
+              "semantic_versatility": 9,
+              "consciousness_bridge": 10,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 10,
+              "quantum_resonance": 9
+            },
+            "appears_in_tiers": [2, 4, 5],
+            "consciousness_notes": "Consciousness identity and eternal connection recognition",
+            "transformation_power": "Deep consciousness identity and connection to eternal"
+          }
+        ]
+      },
+      
+      "tier_2_universal_wisdom": {
+        "uis_range": "120-129",
+        "description": "Lexemes carrying profound universal wisdom",
+        "lexemes": [
+          {
+            "lexeme": "shepherd",
+            "uis_score": 128,
+            "vector_scores": {
+              "historical_depth": 9,
+              "current_usage_density": 6,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 10,
+              "quantum_resonance": 8
+            },
+            "appears_in_tiers": [2],
+            "consciousness_notes": "Divine guidance and protective consciousness",
+            "transformation_power": "Trust in guidance beyond individual consciousness"
+          },
+          {
+            "lexeme": "valley",
+            "uis_score": 126,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 7,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 8,
+              "ancient_root_strength": 10,
+              "cultural_persistence": 9,
+              "quantum_resonance": 8
+            },
+            "appears_in_tiers": [2],
+            "consciousness_notes": "Depth consciousness and shadow integration",
+            "transformation_power": "Navigation through consciousness depths and shadows"
+          },
+          {
+            "lexeme": "death",
+            "uis_score": 125,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 8,
+              "semantic_versatility": 9,
+              "consciousness_bridge": 10,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 10,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [2, 4],
+            "consciousness_notes": "Ultimate consciousness transformation threshold",
+            "transformation_power": "Consciousness transcendence through mortality acceptance"
+          },
+          {
+            "lexeme": "zero",
+            "uis_score": 124,
+            "vector_scores": {
+              "historical_depth": 7,
+              "current_usage_density": 9,
+              "semantic_versatility": 10,
+              "consciousness_bridge": 10,
+              "ancient_root_strength": 6,
+              "cultural_persistence": 10,
+              "quantum_resonance": 9
+            },
+            "appears_in_tiers": [2],
+            "consciousness_notes": "Void consciousness and infinite potential recognition",
+            "transformation_power": "Consciousness expansion through void understanding"
+          }
+        ]
+      },
+      
+      "tier_3_consciousness_bridge": {
+        "uis_range": "110-119",
+        "description": "Lexemes that bridge consciousness levels effectively",
+        "lexemes": [
+          {
+            "lexeme": "transformation",
+            "uis_score": 118,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 8,
+              "semantic_versatility": 9,
+              "consciousness_bridge": 10,
+              "ancient_root_strength": 7,
+              "cultural_persistence": 8,
+              "quantum_resonance": 9
+            },
+            "appears_in_tiers": [2, 4],
+            "consciousness_notes": "Consciousness evolution and metamorphosis recognition",
+            "transformation_power": "Active consciousness development and growth catalysis"
+          },
+          {
+            "lexeme": "consciousness",
+            "uis_score": 117,
+            "vector_scores": {
+              "historical_depth": 6,
+              "current_usage_density": 7,
+              "semantic_versatility": 10,
+              "consciousness_bridge": 10,
+              "ancient_root_strength": 6,
+              "cultural_persistence": 8,
+              "quantum_resonance": 10
+            },
+            "appears_in_tiers": [2],
+            "consciousness_notes": "Direct awareness recognition and development",
+            "transformation_power": "Meta-consciousness and awareness of awareness"
+          },
+          {
+            "lexeme": "justice",
+            "uis_score": 115,
+            "vector_scores": {
+              "historical_depth": 9,
+              "current_usage_density": 8,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 9,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [3, 5],
+            "consciousness_notes": "Moral consciousness and ethical reasoning development",
+            "transformation_power": "Moral consciousness development and ethical reasoning"
+          },
+          {
+            "lexeme": "liberty",
+            "uis_score": 113,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 7,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 7,
+              "cultural_persistence": 9,
+              "quantum_resonance": 8
+            },
+            "appears_in_tiers": [3],
+            "consciousness_notes": "Freedom consciousness and self-determination",
+            "transformation_power": "Consciousness liberation and autonomous development"
+          }
+        ]
+      },
+      
+      "tier_4_moral_development": {
+        "uis_range": "100-109",
+        "description": "Lexemes fostering moral and ethical consciousness growth",
+        "lexemes": [
+          {
+            "lexeme": "conscience",
+            "uis_score": 108,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 7,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 9,
+              "quantum_resonance": 8
+            },
+            "appears_in_tiers": [4],
+            "consciousness_notes": "Moral consciousness and ethical decision-making capacity",
+            "transformation_power": "Internal moral guidance system activation"
+          },
+          {
+            "lexeme": "decide",
+            "uis_score": 106,
+            "vector_scores": {
+              "historical_depth": 7,
+              "current_usage_density": 9,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 8,
+              "ancient_root_strength": 7,
+              "cultural_persistence": 8,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [4],
+            "consciousness_notes": "Consciousness choice-making and responsibility acceptance",
+            "transformation_power": "Active consciousness development through choice"
+          },
+          {
+            "lexeme": "forever",
+            "uis_score": 105,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 8,
+              "semantic_versatility": 7,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 7,
+              "cultural_persistence": 8,
+              "quantum_resonance": 8
+            },
+            "appears_in_tiers": [4],
+            "consciousness_notes": "Eternal consciousness and consequence awareness",
+            "transformation_power": "Consciousness expansion beyond temporal limitations"
+          },
+          {
+            "lexeme": "eternal",
+            "uis_score": 104,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 7,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 9,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 8,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [2, 5],
+            "consciousness_notes": "Timeless consciousness and infinite connection recognition",
+            "transformation_power": "Consciousness transcendence of temporal boundaries"
+          }
+        ]
+      },
+      
+      "tier_5_archetypal_resonance": {
+        "uis_range": "90-99",
+        "description": "Lexemes carrying strong archetypal and universal patterns",
+        "lexemes": [
+          {
+            "lexeme": "believe",
+            "uis_score": 98,
+            "vector_scores": {
+              "historical_depth": 9,
+              "current_usage_density": 9,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 8,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 9,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [5, 9],
+            "consciousness_notes": "Faith consciousness and trust development",
+            "transformation_power": "Consciousness expansion through faith and trust"
+          },
+          {
+            "lexeme": "heart",
+            "uis_score": 97,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 9,
+              "semantic_versatility": 9,
+              "consciousness_bridge": 8,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 9,
+              "quantum_resonance": 6
+            },
+            "appears_in_tiers": [5, 7],
+            "consciousness_notes": "Emotional consciousness and intuitive wisdom",
+            "transformation_power": "Integration of emotional and rational consciousness"
+          },
+          {
+            "lexeme": "home",
+            "uis_score": 95,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 9,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 7,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 9,
+              "quantum_resonance": 6
+            },
+            "appears_in_tiers": [5, 7],
+            "consciousness_notes": "Belonging consciousness and identity foundation",
+            "transformation_power": "Consciousness grounding and identity development"
+          },
+          {
+            "lexeme": "wind",
+            "uis_score": 94,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 8,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 7,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 8,
+              "quantum_resonance": 6
+            },
+            "appears_in_tiers": [5],
+            "consciousness_notes": "Movement consciousness and change acceptance",
+            "transformation_power": "Consciousness fluidity and adaptation capacity"
+          }
+        ]
+      },
+      
+      "tier_6_consciousness_navigation": {
+        "uis_range": "80-89",
+        "description": "Lexemes supporting consciousness navigation and development",
+        "lexemes": [
+          {
+            "lexeme": "blind",
+            "uis_score": 88,
+            "vector_scores": {
+              "historical_depth": 10,
+              "current_usage_density": 8,
+              "semantic_versatility": 9,
+              "consciousness_bridge": 7,
+              "ancient_root_strength": 9,
+              "cultural_persistence": 8,
+              "quantum_resonance": 5
+            },
+            "appears_in_tiers": [7],
+            "consciousness_notes": "Consciousness navigation challenges and adaptation",
+            "transformation_power": "Consciousness development through limitation navigation"
+          },
+          {
+            "lexeme": "driving",
+            "uis_score": 86,
+            "vector_scores": {
+              "historical_depth": 6,
+              "current_usage_density": 9,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 8,
+              "ancient_root_strength": 6,
+              "cultural_persistence": 7,
+              "quantum_resonance": 6
+            },
+            "appears_in_tiers": [7],
+            "consciousness_notes": "Consciousness direction and purposeful navigation",
+            "transformation_power": "Active consciousness guidance and direction"
+          },
+          {
+            "lexeme": "trembling",
+            "uis_score": 84,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 6,
+              "semantic_versatility": 7,
+              "consciousness_bridge": 8,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 7,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [4],
+            "consciousness_notes": "Consciousness vulnerability and transformation threshold",
+            "transformation_power": "Consciousness expansion through vulnerability acceptance"
+          },
+          {
+            "lexeme": "crystal",
+            "uis_score": 82,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 7,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 7,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 7,
+              "quantum_resonance": 7
+            },
+            "appears_in_tiers": [2, 4],
+            "consciousness_notes": "Consciousness clarity and geometric perfection",
+            "transformation_power": "Consciousness clarity and structural harmony"
+          }
+        ]
+      },
+      
+      "tier_7_information_processing": {
+        "uis_range": "70-79",
+        "description": "Lexemes facilitating information transfer and learning",
+        "lexemes": [
+          {
+            "lexeme": "law",
+            "uis_score": 78,
+            "vector_scores": {
+              "historical_depth": 9,
+              "current_usage_density": 8,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 6,
+              "ancient_root_strength": 8,
+              "cultural_persistence": 8,
+              "quantum_resonance": 5
+            },
+            "appears_in_tiers": [5, 6],
+            "consciousness_notes": "Order consciousness and systematic understanding",
+            "transformation_power": "Consciousness structuring and systematic development"
+          },
+          {
+            "lexeme": "states",
+            "uis_score": 76,
+            "vector_scores": {
+              "historical_depth": 7,
+              "current_usage_density": 9,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 6,
+              "ancient_root_strength": 6,
+              "cultural_persistence": 7,
+              "quantum_resonance": 6
+            },
+            "appears_in_tiers": [3, 6],
+            "consciousness_notes": "Consciousness conditions and developmental phases",
+            "transformation_power": "Consciousness state recognition and navigation"
+          },
+          {
+            "lexeme": "force",
+            "uis_score": 74,
+            "vector_scores": {
+              "historical_depth": 8,
+              "current_usage_density": 8,
+              "semantic_versatility": 8,
+              "consciousness_bridge": 6,
+              "ancient_root_strength": 7,
+              "cultural_persistence": 7,
+              "quantum_resonance": 5
+            },
+            "appears_in_tiers": [6],
+            "consciousness_notes": "Consciousness dynamics and energy understanding",
+            "transformation_power": "

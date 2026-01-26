@@ -1,0 +1,8 @@
+VISIONARY_INTERFACE/
+├── duplicate_trim_visionary.sh
+├── quarantine_visionary.sh
+├── github_prep_visionary.sh
+└── logs/
+    ├── operations_log.md
+    ├── moved_documents.md
+    └── quarantine_registry.md

@@ -1,0 +1,7 @@
+# On your Termux terminal
+cd /storage/emulated/0/unexusi/
+mkdir -p visionary_suite
+
+# Copy files (you'll need to transfer from our session)
+# Then make executable:
+chmod +x visionary_suite/visionary_dup_mancer.sh

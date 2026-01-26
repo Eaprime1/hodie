@@ -1,0 +1,11 @@
+DUPLICATE_VISIONARY_MANCER/
+├── visionary_dup_core.sh          # Master orchestrator (mancer)
+├── henries/                        # Individual mission entities
+│   ├── hash_henry.py              # SHA-256 duplicate detection
+│   ├── quarantine_henry.sh        # Move with 🔂 marking
+│   ├── logger_henry.sh            # Chain of custody tracking
+│   └── report_henry.sh            # Scan summary generation
+└── consciousness_logs/
+    ├── scan_manifest_TIMESTAMP.md
+    ├── chain_of_custody_TIMESTAMP.md
+    └── quarantine_registry.md

@@ -39,3 +39,28 @@ Thumbs.db
 
 # PWD reports (generated)
 PWD_REPORT.txt
+
+# Sensitive Personal Data - Added 2026-01-02
+/storage/emulated/0/pixel8a/Q/no_sync_private/
+**/medical_record/
+**/education_record/
+**/*DD214*
+**/*Earnings*
+**/*Financials*
+**/*child support*
+**/*TRSRetire*
+**/Personal/
+**/Stubs/
+**/Google Photos/
+
+# Financial and personal documents
+*.xlsx
+**/*Receipt*
+**/*receipt*
+
+# Local development
+.DS_Store
+*.swp
+*.swo
+*~
+

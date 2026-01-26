@@ -1,0 +1,5 @@
+# Test on small directory first
+bash visionary_suite/visionary_dup_mancer.sh /storage/emulated/0/unexusi/test_folder
+
+# Review results
+cat /storage/emulated/0/unexusi_quarantine/consciousness_logs/scan_manifest_*.md

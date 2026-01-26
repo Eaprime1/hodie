@@ -1,0 +1,40 @@
+import os, json
+
+structure = {
+    "unexus_prime": {
+        "setup.py": "",
+        "pyproject.toml": "",
+        "MANIFEST.in": "",
+        "README.md": "",
+        "requirements.txt": "",
+        "unexus": {
+            "__init__.py": "",
+            "prime_codex.py": "",
+            "quantum_grove.py": "",
+            "runic_engine.py": "",
+            "compression_nexus.py": "",
+            "quantum_dice.py": ""
+        },
+        "config": {
+            "runes_v2.json": ""
+        },
+        "quantum_grove": {
+            "grove_state.json": "",
+            "rune_resonance.json": ""
+        }
+    }
+}
+
+def build(path, tree):
+    for name, content in tree.items():
+        p = os.path.join(path, name)
+        if isinstance(content, dict):
+            os.makedirs(p, exist_ok=True)
+            build(p, content)
+        else:
+            with open(p, "w", encoding="utf-8") as f:
+                f.write(content)
+
+if __name__ == "__main__":
+    build(".", structure)
+    print("UNEXUS Prime package structure created!")

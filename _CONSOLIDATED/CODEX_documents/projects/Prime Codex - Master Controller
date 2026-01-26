@@ -1,0 +1,19 @@
+{
+  "inputLocale": "en_US",
+  "outputLocale": "en_US",
+  "timeZone": "UTC",
+  "currency": "USD",
+  "appSettings": {
+    "url": "prime_codex_generator",
+    "theme": "red-orange",
+    "image": "https://www.ultradox.com/images/abstract.jpg",
+    "enabled": true,
+    "loginRequired": false,
+    "restricted": false
+  },
+  "repeatValue": 0,
+  "changeId": 0,
+  "items": [],
+  "itemStates": {},
+  "testMailEnabled": false
+}

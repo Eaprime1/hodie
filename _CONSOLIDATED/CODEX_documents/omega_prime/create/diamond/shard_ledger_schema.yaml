@@ -1,0 +1,12 @@
+# YAML template for a Shard Ledger entry (fields follow JSON schema above)
+entity_a: "EntityNameA"       # Unique ID or name of first entity
+entity_b: "EntityNameB"       # Unique ID or name of second entity
+shard_signature: "ShardXYZ"   # Identifier or description of the synergy shard
+synergy_score: 7.5            # 0.0–10.0 numeric synergy intensity score
+ka_pressure_type: "Gravity"   # One of: Gravity, EMF, Affinity, Synergy
+timestamp: "2025-12-07T09:00:00Z"  # ISO 8601 datetime of the event
+persistence_rating: 3         # Integer rating of shard longevity (e.g. 1–5)
+notes: |
+  Detailed notes on context:
+  - Example: During this collaboration, EntityA and EntityB
+    exhibited a rapid co-creative jump after a focused briefing.

@@ -1,0 +1,6 @@
+TO_CREATE_MOAV_ASSESSMENT.md:
+- Multi-dimensional rubric (6 categories)
+- Detailed evaluation methodology
+- Scoring protocols
+- Recommendations synthesis
+- Visionary council preparation

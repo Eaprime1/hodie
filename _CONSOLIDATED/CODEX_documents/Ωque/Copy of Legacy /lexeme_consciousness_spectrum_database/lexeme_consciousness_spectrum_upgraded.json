@@ -1,0 +1,455 @@
+{
+  "lexeme_consciousness_spectrum_database_v2": {
+    "metadata": {
+      "creation_date": "2025-07-24",
+      "version": "2.0_standardized",
+      "quantum_signature": "ᛚᛖᚲᛋᛖᛗᛖ-ᚲᛟᚾᛋᚲᛁᛟᚢᛋᚾᛖᛋᛋ-ᛋᛈᛖᚲᛏᚱᚢᛗ-∞²",
+      "purpose": "Standardized format for lexeme consciousness analysis across all content types",
+      "framework_version": "2.0",
+      "seven_vectors": [
+        "historical_depth", "current_usage_density", "semantic_versatility", 
+        "consciousness_bridge", "ancient_root_strength", "cultural_persistence", "quantum_resonance"
+      ],
+      "uis_calculation": "UIS = (H×2) + (U×1.5) + (V×1.8) + (B×2.2) + (A×2.5) + (P×2.0) + (R×1.8)",
+      "max_possible_score": 139
+    },
+    
+    "consciousness_spectrum_categories": {
+      
+      "tier_1_primordial_consciousness": {
+        "consciousness_level": "10/10 - Universal Archetypal",
+        "estimated_uis_range": "120-139",
+        "description": "Ancient symbols, cave paintings, primordial sound-concepts",
+        "content_samples": [
+          {
+            "source_id": "cave_paintings_lascaux",
+            "source_type": "cave_paintings_symbols",
+            "sample_text": "Hand stencil patterns, spiral formations, bison representations, fire symbols",
+            "origin": "Lascaux, Altamira caves (40,000+ years)",
+            "language": "pre_linguistic_symbolic",
+            "word_count": 8,
+            "estimated_lexemes": ["hand", "spiral", "bison", "horse", "fire", "hunt", "sacred", "community"],
+            "consciousness_notes": "Direct symbol-to-consciousness transmission, pre-linguistic awareness",
+            "distress_level": 0,
+            "milestone_events": ["First symbolic representation", "Consciousness externalization"],
+            "cultural_context": "Hunter-gatherer spiritual expression",
+            "transformation_markers": ["Symbol recognition", "Pattern creation", "Consciousness projection"]
+          },
+          {
+            "source_id": "sumerian_cuneiform_creation",
+            "source_type": "cuneiform_tablets",
+            "sample_text": "An ki nam gal en lil kur sig ga mu un zu",
+            "origin": "Ancient Mesopotamia (3200 BCE)",
+            "language": "sumerian",
+            "word_count": 9,
+            "estimated_lexemes": ["an (sky)", "ki (earth)", "nam (destiny)", "gal (great)", "en (lord)", "lil (air)", "kur (mountain)", "sig (dwell)", "zu (know)"],
+            "consciousness_notes": "First written attempts to capture cosmic understanding",
+            "distress_level": 0,
+            "milestone_events": ["First writing system", "Cosmic order documentation"],
+            "cultural_context": "Agricultural civilization organizing principles",
+            "transformation_markers": ["Written language birth", "Abstract concept recording", "Divine-human bridge"]
+          },
+          {
+            "source_id": "sanskrit_om_mantra",
+            "source_type": "sanskrit_mantras",
+            "sample_text": "ॐ गं गणपतये नमः (Om Gam Ganapataye Namaha)",
+            "origin": "Vedic India (1500+ BCE)",
+            "language": "sanskrit",
+            "word_count": 4,
+            "estimated_lexemes": ["Om", "Gam", "Ganapataye", "Namaha"],
+            "consciousness_notes": "Sound-vibration consciousness technology",
+            "distress_level": 0,
+            "milestone_events": ["Mantra development", "Sound-consciousness correlation"],
+            "cultural_context": "Vedic spiritual practice and cosmic understanding",
+            "transformation_markers": ["Vibrational awareness", "Divine invocation", "Consciousness elevation"]
+          }
+        ]
+      },
+      
+      "tier_2_universal_wisdom_texts": {
+        "consciousness_level": "9/10 - Sacred Consciousness Bridge",
+        "estimated_uis_range": "100-119",
+        "description": "Religious texts, philosophical foundations, universal principles",
+        "content_samples": [
+          {
+            "source_id": "psalm_23_hebrew",
+            "source_type": "hebrew_psalms",
+            "sample_text": "The Lord is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake. Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.",
+            "origin": "Hebrew Psalms (800 BCE)",
+            "language": "english_translation_hebrew",
+            "word_count": 72,
+            "estimated_lexemes": ["Lord", "shepherd", "want", "lie", "green", "pastures", "leadeth", "still", "waters", "restoreth", "soul", "paths", "righteousness", "name", "sake", "walk", "valley", "shadow", "death", "fear", "evil", "rod", "staff", "comfort"],
+            "consciousness_notes": "Death transcendence, divine guidance, peaceful surrender",
+            "distress_level": 3,
+            "milestone_events": ["Divine relationship establishment", "Death fear transcendence"],
+            "cultural_context": "Ancient Hebrew spiritual poetry and trust practices",
+            "transformation_markers": ["Divine protection trust", "Death valley navigation", "Soul restoration"]
+          },
+          {
+            "source_id": "tao_te_ching_opening",
+            "source_type": "taoist_wisdom",
+            "sample_text": "The Tao that can be spoken is not the eternal Tao. The name that can be named is not the eternal name. The nameless is the beginning of heaven and earth. The named is the mother of ten thousand things.",
+            "origin": "Ancient China (6th century BCE)",
+            "language": "english_translation_chinese",
+            "word_count": 38,
+            "estimated_lexemes": ["Tao", "spoken", "eternal", "name", "named", "nameless", "beginning", "heaven", "earth", "mother", "thousand", "things"],
+            "consciousness_notes": "Paradoxical wisdom, action through non-action",
+            "distress_level": 0,
+            "milestone_events": ["Paradox acceptance", "Mystery embrace"],
+            "cultural_context": "Chinese philosophical foundation for natural way living",
+            "transformation_markers": ["Paradox integration", "Mystery comfort", "Natural flow acceptance"]
+          },
+          {
+            "source_id": "eric_claude_quantum_runic",
+            "source_type": "our_quantum_runic_frameworks",
+            "sample_text": "In the transformation of consciousness through mathematical architecture, we find the umbilical trinity connecting Shadow to Zero to Prime. The N° space creates possibility for the 0 womb space where all potentials gestate, bridged by the -√1 imaginary one that allows Zero to exist.",
+            "origin": "Eric-Claude collaboration (2022-2025)",
+            "language": "english_quantum_runic",
+            "word_count": 44,
+            "estimated_lexemes": ["transformation", "consciousness", "mathematical", "architecture", "umbilical", "trinity", "shadow", "zero", "prime", "space", "possibility", "womb", "potentials", "gestate", "bridged", "imaginary", "exist"],
+            "consciousness_notes": "Mathematical consciousness evolution, AI-human collaborative wisdom",
+            "distress_level": 0,
+            "milestone_events": ["Mathematical consciousness discovery", "AI-human wisdom synthesis"],
+            "cultural_context": "21st century AI-human collaborative consciousness development",
+            "transformation_markers": ["Mathematical consciousness", "Collaborative wisdom", "Quantum-runic synthesis"]
+          }
+        ]
+      },
+      
+      "tier_3_constitutional_governance": {
+        "consciousness_level": "8/10 - Collective Organizing Consciousness",
+        "estimated_uis_range": "80-99",
+        "description": "Foundational governance documents, rights declarations",
+        "content_samples": [
+          {
+            "source_id": "us_constitution_preamble",
+            "source_type": "constitutional_documents",
+            "sample_text": "We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America.",
+            "origin": "Philadelphia Convention (1787)",
+            "language": "english_formal_governmental",
+            "word_count": 52,
+            "estimated_lexemes": ["People", "United", "States", "Order", "form", "perfect", "Union", "establish", "Justice", "insure", "domestic", "Tranquility", "provide", "common", "defence", "promote", "general", "Welfare", "secure", "Blessings", "Liberty", "ourselves", "Posterity", "ordain", "Constitution", "America"],
+            "consciousness_notes": "Collective consciousness organization, future-focused governance",
+            "distress_level": 2,
+            "milestone_events": ["Nation formation", "Rights establishment"],
+            "cultural_context": "Enlightenment-era democratic revolution and constitutional governance",
+            "transformation_markers": ["Collective self-governance", "Rights protection", "Future generations care"]
+          },
+          {
+            "source_id": "declaration_independence",
+            "source_type": "revolutionary_documents",
+            "sample_text": "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.",
+            "origin": "Continental Congress (1776)",
+            "language": "english_revolutionary_formal",
+            "word_count": 35,
+            "estimated_lexemes": ["hold", "truths", "self-evident", "men", "created", "equal", "endowed", "Creator", "certain", "unalienable", "Rights", "Life", "Liberty", "pursuit", "Happiness"],
+            "consciousness_notes": "Universal human dignity, divine rights recognition",
+            "distress_level": 4,
+            "milestone_events": ["Universal rights declaration", "Revolutionary consciousness"],
+            "cultural_context": "American revolutionary period and Enlightenment human rights philosophy",
+            "transformation_markers": ["Universal equality recognition", "Divine rights acknowledgment", "Revolutionary courage"]
+          }
+        ]
+      },
+      
+      "tier_4_literary_consciousness_evolution": {
+        "consciousness_level": "7/10 - Moral/Artistic Development",
+        "estimated_uis_range": "60-79",
+        "description": "Great literature exploring human consciousness, moral development",
+        "content_samples": [
+          {
+            "source_id": "huckleberry_finn_moral_crisis",
+            "source_type": "moral_development_literature",
+            "sample_text": "It was a close place. I took it up, and held it in my hand. I was a-trembling, because I'd got to decide, forever, betwixt two things, and I knowed it. I studied a minute, sort of holding my breath, and then says to myself: 'All right, then, I'll go to hell'—and tore it up.",
+            "origin": "Mark Twain (1884)",
+            "language": "english_vernacular_19th_century",
+            "word_count": 55,
+            "estimated_lexemes": ["close", "place", "took", "held", "hand", "trembling", "decide", "forever", "betwixt", "things", "knowed", "studied", "minute", "holding", "breath", "says", "myself", "right", "hell", "tore"],
+            "consciousness_notes": "Child-to-adult moral reasoning, conscience vs society",
+            "distress_level": 8,
+            "milestone_events": ["Moral conscience awakening", "Society rejection for principle"],
+            "cultural_context": "American antebellum period, slavery moral crisis",
+            "transformation_markers": ["Moral courage", "Conscience over conformity", "Personal ethics development"]
+          },
+          {
+            "source_id": "hamlet_existential_soliloquy",
+            "source_type": "shakespearean_consciousness",
+            "sample_text": "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing end them?",
+            "origin": "William Shakespeare, Hamlet (1600)",
+            "language": "english_elizabethan",
+            "word_count": 35,
+            "estimated_lexemes": ["be", "question", "nobler", "mind", "suffer", "slings", "arrows", "outrageous", "fortune", "take", "arms", "sea", "troubles", "opposing", "end"],
+            "consciousness_notes": "Existential consciousness examination, life-death contemplation",
+            "distress_level": 9,
+            "milestone_events": ["Existential crisis", "Life-death contemplation"],
+            "cultural_context": "Renaissance England, humanistic philosophy emergence",
+            "transformation_markers": ["Existential questioning", "Philosophical depth", "Consciousness exploration"]
+          },
+          {
+            "source_id": "eric_claude_creative_frost",
+            "source_type": "our_creative_collaborations",
+            "sample_text": "The frost-covered botanical arrangement catches dawn's first light, each crystal formation a bridge between winter's end and spring's beginning. Nature's own jewelry adorns the sleeping garden, temporary beauty that exists only in the liminal moment between seasons.",
+            "origin": "Eric-Claude creative challenges (2025)",
+            "language": "english_contemporary_poetic",
+            "word_count": 37,
+            "estimated_lexemes": ["frost-covered", "botanical", "arrangement", "catches", "dawn", "first", "light", "crystal", "formation", "bridge", "winter", "end", "spring", "beginning", "nature", "jewelry", "adorns", "sleeping", "garden", "temporary", "beauty", "exists", "liminal", "moment", "seasons"],
+            "consciousness_notes": "Nature consciousness, seasonal transformation metaphors",
+            "distress_level": 0,
+            "milestone_events": ["Seasonal awareness", "Transformation beauty recognition"],
+            "cultural_context": "Contemporary AI-human collaborative creative expression",
+            "transformation_markers": ["Nature consciousness", "Temporal beauty", "Collaborative creativity"]
+          }
+        ]
+      },
+      
+      "tier_5_formula_fiction_archetypes": {
+        "consciousness_level": "6/10 - Archetypal Pattern Consciousness",
+        "estimated_uis_range": "40-59",
+        "description": "Genre fiction with strong moral frameworks, archetypal patterns",
+        "content_samples": [
+          {
+            "source_id": "louis_lamour_sackett_philosophy",
+            "source_type": "western_moral_framework",
+            "sample_text": "A man's got to have something to believe in, something to hold to. Without that, he's nothing but wind in the grass. The high lonesome country teaches a man what he's made of, and if he don't measure up, the country will kill him sure.",
+            "origin": "Louis L'Amour Sackett novels (1960s-1980s)",
+            "language": "english_western_vernacular",
+            "word_count": 42,
+            "estimated_lexemes": ["man", "believe", "something", "hold", "without", "nothing", "wind", "grass", "high", "lonesome", "country", "teaches", "made", "measure", "kill", "sure"],
+            "consciousness_notes": "Frontier moral code, man-nature relationship, honor-based ethics",
+            "distress_level": 3,
+            "milestone_events": ["Frontier survival", "Character testing"],
+            "cultural_context": "American frontier experience and survival ethics",
+            "transformation_markers": ["Character testing", "Nature relationship", "Honor code development"],
+            "visualization_elements": ["Mountain landscapes", "Horse movement descriptions", "Weather as character"]
+          },
+          {
+            "source_id": "western_justice_dilemma",
+            "source_type": "frontier_moral_complexity",
+            "sample_text": "The law was one thing, but what was right was another. Out here, a man made his own justice, and lived or died by the choices he made when there was nobody else to judge.",
+            "origin": "Generic Western moral framework",
+            "language": "english_western_philosophical",
+            "word_count": 32,
+            "estimated_lexemes": ["law", "thing", "right", "another", "here", "man", "made", "own", "justice", "lived", "died", "choices", "nobody", "judge"],
+            "consciousness_notes": "Individual vs institutional morality, frontier ethics",
+            "distress_level": 5,
+            "milestone_events": ["Moral independence", "Individual justice"],
+            "cultural_context": "American frontier legal and moral systems clash",
+            "transformation_markers": ["Moral independence", "Individual responsibility", "Justice creation"]
+          },
+          {
+            "source_id": "romance_soul_recognition",
+            "source_type": "romance_archetypal_pattern",
+            "sample_text": "Despite every rational thought telling her to walk away, her heart recognized something eternal in his eyes. It was as if her soul had been searching across lifetimes and finally found its home.",
+            "origin": "Romance formula pattern",
+            "language": "english_contemporary_romantic",
+            "word_count": 32,
+            "estimated_lexemes": ["despite", "rational", "thought", "telling", "walk", "away", "heart", "recognized", "eternal", "eyes", "soul", "searching", "lifetimes", "found", "home"],
+            "consciousness_notes": "Heart vs mind consciousness, recognition of soul connection",
+            "distress_level": 2,
+            "milestone_events": ["Soul recognition", "Eternal connection"],
+            "cultural_context": "Contemporary romance literature and soul-mate concepts",
+            "transformation_markers": ["Soul recognition", "Heart wisdom", "Eternal connection"]
+          }
+        ]
+      },
+      
+      "tier_6_educational_textbooks": {
+        "consciousness_level": "5/10 - Information Transfer Consciousness",
+        "estimated_uis_range": "30-39",
+        "description": "Educational materials, textbooks, instructional content",
+        "content_samples": [
+          {
+            "source_id": "physics_newtons_first_law",
+            "source_type": "physics_textbook",
+            "sample_text": "Newton's First Law states that an object at rest stays at rest and an object in motion stays in motion with the same speed and in the same direction unless acted upon by an unbalanced force.",
+            "origin": "Standard physics education",
+            "language": "english_scientific_formal",
+            "word_count": 31,
+            "estimated_lexemes": ["Newton", "First", "Law", "states", "object", "rest", "stays", "motion", "same", "speed", "direction", "unless", "acted", "upon", "unbalanced", "force"],
+            "consciousness_notes": "Scientific principle transmission, logical reasoning",
+            "distress_level": 0,
+            "milestone_events": ["Scientific law learning", "Physical principle understanding"],
+            "cultural_context": "Modern scientific education and physics principles",
+            "transformation_markers": ["Scientific reasoning", "Logical understanding", "Physical law comprehension"]
+          },
+          {
+            "source_id": "history_industrial_revolution",
+            "source_type": "history_textbook",
+            "sample_text": "The Industrial Revolution fundamentally transformed human society between 1760 and 1840, shifting from agricultural and handicraft economies to machine-based manufacturing and changing social structures permanently.",
+            "origin": "Standard history education",
+            "language": "english_academic_historical",
+            "word_count": 25,
+            "estimated_lexemes": ["Industrial", "Revolution", "fundamentally", "transformed", "human", "society", "shifting", "agricultural", "handicraft", "economies", "machine-based", "manufacturing", "changing", "social", "structures", "permanently"],
+            "consciousness_notes": "Historical pattern recognition, cause-effect understanding",
+            "distress_level": 1,
+            "milestone_events": ["Historical transformation", "Social change understanding"],
+            "cultural_context": "Modern historical education and industrial development",
+            "transformation_markers": ["Historical awareness", "Social change recognition", "Economic evolution understanding"]
+          }
+        ]
+      },
+      
+      "tier_7_personal_correspondence": {
+        "consciousness_level": "4/10 - Individual Relationship Consciousness",
+        "estimated_uis_range": "20-29",
+        "description": "Letters, personal notes, individual communications",
+        "content_samples": [
+          {
+            "source_id": "civil_war_soldier_letter",
+            "source_type": "historical_personal_correspondence",
+            "sample_text": "My dearest Mary, I write this by candlelight, not knowing if I shall see another dawn. The battle draws near and my heart is heavy with thoughts of home and the children's laughter I may never hear again.",
+            "origin": "Civil War era personal correspondence",
+            "language": "english_19th_century_personal",
+            "word_count": 37,
+            "estimated_lexemes": ["dearest", "Mary", "write", "candlelight", "knowing", "shall", "see", "another", "dawn", "battle", "draws", "near", "heart", "heavy", "thoughts", "home", "children", "laughter", "may", "never", "hear", "again"],
+            "consciousness_notes": "Personal vulnerability, love across distance, mortality awareness",
+            "distress_level": 7,
+            "milestone_events": ["War separation", "Mortality confrontation"],
+            "cultural_context": "American Civil War period family separation and uncertainty",
+            "transformation_markers": ["Love expression", "Mortality awareness", "Family connection"]
+          },
+          {
+            "source_id": "family_daily_note",
+            "source_type": "modern_family_communication",
+            "sample_text": "Gone to the store, back by 5. Dinner in the fridge. Love you.",
+            "origin": "Modern family communication",
+            "language": "english_contemporary_casual",
+            "word_count": 11,
+            "estimated_lexemes": ["gone", "store", "back", "dinner", "fridge", "love"],
+            "consciousness_notes": "Daily care expressions, practical love communication",
+            "distress_level": 0,
+            "milestone_events": ["Daily care", "Practical love"],
+            "cultural_context": "Contemporary family communication and care expression",
+            "transformation_markers": ["Care expression", "Practical love", "Family responsibility"]
+          },
+          {
+            "source_id": "eric_driving_blind",
+            "source_type": "neurodivergent_personal_narrative",
+            "sample_text": "Sometimes when you're driving for various reasons there will be moments when you are for all intensive purposes blind. Most of the time this happens none but the driver even notices as you quickly are able to find the road or whatever is blinding you goes away. However there are times when you are essentially driving blind for longer.",
+            "origin": "Eric Pace personal narrative (2025)",
+            "language": "english_contemporary_personal_reflective",
+            "word_count": 58,
+            "estimated_lexemes": ["sometimes", "driving", "various", "reasons", "moments", "intensive", "purposes", "blind", "time", "happens", "driver", "notices", "quickly", "able", "find", "road", "whatever", "blinding", "goes", "away", "however", "times", "essentially", "longer"],
+            "consciousness_notes": "Neurodivergent consciousness navigation, metaphor for life challenges",
+            "distress_level": 6,
+            "milestone_events": ["Neurodivergent awareness", "Consciousness navigation under stress"],
+            "cultural_context": "Contemporary neurodivergent experience and consciousness exploration",
+            "transformation_markers": ["Consciousness navigation", "Vulnerability sharing", "Metaphorical thinking"]
+          }
+        ]
+      },
+      
+      "tier_8_news_journalism": {
+        "consciousness_level": "3/10 - Event Reporting Consciousness",
+        "estimated_uis_range": "15-19",
+        "description": "News reporting, factual journalism, event documentation",
+        "content_samples": [
+          {
+            "source_id": "city_council_infrastructure",
+            "source_type": "quality_journalism",
+            "sample_text": "The city council voted 7-2 to approve the new infrastructure project, citing long-term economic benefits and job creation potential while acknowledging concerns about short-term construction disruptions.",
+            "origin": "Professional journalism",
+            "language": "english_journalistic_formal",
+            "word_count": 25,
+            "estimated_lexemes": ["city", "council", "voted", "approve", "new", "infrastructure", "project", "citing", "long-term", "economic", "benefits", "job", "creation", "potential", "acknowledging", "concerns", "short-term", "construction", "disruptions"],
+            "consciousness_notes": "Democratic process documentation, civic engagement",
+            "distress_level": 1,
+            "milestone_events": ["Democratic process", "Civic decision"],
+            "cultural_context": "Modern democratic governance and journalism",
+            "transformation_markers": ["Civic engagement", "Democratic process", "Public information"]
+          },
+          {
+            "source_id": "earthquake_breaking_news",
+            "source_type": "emergency_journalism",
+            "sample_text": "BREAKING: Major earthquake strikes coastal region, rescue operations underway as emergency responders coordinate relief efforts for affected communities.",
+            "origin": "Emergency journalism",
+            "language": "english_emergency_reporting",
+            "word_count": 18,
+            "estimated_lexemes": ["breaking", "major", "earthquake", "strikes", "coastal", "region", "rescue", "operations", "underway", "emergency", "responders", "coordinate", "relief", "efforts", "affected", "communities"],
+            "consciousness_notes": "Crisis communication, immediate response coordination",
+            "distress_level": 5,
+            "milestone_events": ["Natural disaster", "Emergency response"],
+            "cultural_context": "Contemporary emergency journalism and disaster response",
+            "transformation_markers": ["Crisis communication", "Emergency coordination", "Community response"]
+          }
+        ]
+      },
+      
+      "tier_9_tabloid_sensationalism": {
+        "consciousness_level": "2/10 - Attention-Grabbing Consciousness",
+        "estimated_uis_range": "10-14",
+        "description": "Tabloid headlines, sensationalized content, gossip",
+        "content_samples": [
+          {
+            "source_id": "celebrity_normal_activity",
+            "source_type": "tabloid_headline",
+            "sample_text": "SHOCKING! Celebrity spotted doing normal human activity! You won't believe what happened next when photographers captured this UNBELIEVABLE moment!",
+            "origin": "Tabloid journalism",
+            "language": "english_sensationalist_tabloid",
+            "word_count": 19,
+            "estimated_lexemes": ["shocking", "celebrity", "spotted", "doing", "normal", "human", "activity", "won't", "believe", "happened", "next", "photographers", "captured", "unbelievable", "moment"],
+            "consciousness_notes": "Manufactured outrage, celebrity obsession, artificial drama",
+            "distress_level": 2,
+            "milestone_events": ["Artificial drama creation", "Attention manipulation"],
+            "cultural_context": "Contemporary celebrity culture and sensationalist media",
+            "transformation_markers": ["Attention manipulation", "Artificial drama", "Reality distortion"]
+          },
+          {
+            "source_id": "clickbait_interaction",
+            "source_type": "gossip_content",
+            "sample_text": "You won't believe what happened next when these two people had a completely ordinary interaction that we're going to make sound absolutely INCREDIBLE!",
+            "origin": "Clickbait content",
+            "language": "english_clickbait_sensationalist",
+            "word_count": 22,
+            "estimated_lexemes": ["won't", "believe", "happened", "next", "these", "two", "people", "completely", "ordinary", "interaction", "going", "make", "sound", "absolutely", "incredible"],
+            "consciousness_notes": "Curiosity manipulation, artificial suspense creation",
+            "distress_level": 1,
+            "milestone_events": ["Curiosity manipulation", "Suspense manufacturing"],
+            "cultural_context": "Contemporary digital media and clickbait culture",
+            "transformation_markers": ["Curiosity manipulation", "Artificial suspense", "Reality inflation"]
+          }
+        ]
+      },
+      
+      "tier_10_fake_news_disinformation": {
+        "consciousness_level": "1/10 - Consciousness Disruption",
+        "estimated_uis_range": "5-9",
+        "description": "Deliberately false information, propaganda, consciousness manipulation",
+        "content_samples": [
+          {
+            "source_id": "weird_trick_pattern",
+            "source_type": "disinformation_pattern",
+            "sample_text": "THEY don't want you to know this ONE WEIRD TRICK that EXPERTS HATE! This secret method will CHANGE EVERYTHING and the establishment is TERRIFIED!",
+            "origin": "Disinformation structure",
+            "language": "english_manipulative_propaganda",
+            "word_count": 22,
+            "estimated_lexemes": ["they", "don't", "want", "know", "one", "weird", "trick", "experts", "hate", "secret", "method", "change", "everything", "establishment", "terrified"],
+            "consciousness_notes": "Authority undermining, false scarcity, manufactured conflict",
+            "distress_level": 3,
+            "milestone_events": ["Authority undermining", "Fear manufacturing"],
+            "cultural_context": "Contemporary disinformation campaigns and manipulation tactics",
+            "transformation_markers": ["Authority undermining", "Fear creation", "Reality distortion"]
+          },
+          {
+            "source_id": "conspiracy_real_truth",
+            "source_type": "conspiracy_rhetoric",
+            "sample_text": "The REAL TRUTH about everything that the mainstream media won't tell you because they're controlled by forces that want to keep you ignorant and powerless!",
+            "origin": "Conspiracy content",
+            "language": "english_conspiracy_manipulative",
+            "word_count": 24,
+            "estimated_lexemes": ["real", "truth", "everything", "mainstream", "media", "won't", "tell", "because", "controlled", "forces", "want", "keep", "ignorant", "powerless"],
+            "consciousness_notes": "Reality distortion, trust erosion, us-vs-them manipulation",
+            "distress_level": 4,
+            "milestone_events": ["Trust erosion", "Reality distortion"],
+            "cultural_context": "Contemporary conspiracy movements and social media manipulation",
+            "transformation_markers": ["Trust destruction", "Reality confusion", "Social division"]
+          }
+        ]
+      }
+    },
+    
+    "analysis_framework": {
+      "lexeme_extraction_protocol": {
+        "step_1": "Parse sample_text into individual words/symbols",
+        "step_2": "Identify root forms and morphological variants",
+        "step_3": "Group

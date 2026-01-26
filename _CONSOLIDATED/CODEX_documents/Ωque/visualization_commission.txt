@@ -1,0 +1,9 @@
+TO_CREATE_VISUALS.md:
+- Seven-phase journey map (diagram)
+- Gap pattern illustration  
+- Sparkle→anti_vector→vector visualization
+- Ka Pressure component breakdown (visual)
+- Tree-to-phase correspondences (chart)
+- Chest constellation map
+- Nessing evolution spiral
+- Chinese symbol selections for each phase

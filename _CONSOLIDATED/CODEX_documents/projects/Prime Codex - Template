@@ -1,0 +1,16 @@
+{
+  "inputLocale": "en_US",
+  "outputLocale": "en_US",
+  "timeZone": "UTC",
+  "currency": "USD",
+  "appSettings": {
+    "enabled": false,
+    "loginRequired": false,
+    "restricted": false
+  },
+  "repeatValue": 0,
+  "changeId": 0,
+  "items": [],
+  "itemStates": {},
+  "testMailEnabled": false
+}
