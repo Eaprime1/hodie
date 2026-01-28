@@ -1,0 +1,21 @@
+#!/bin/bash
+# Post-commit hook — log commit to session notes
+# Install: git config core.hooksPath .githooks
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Source environment if available
+if [ -f "$SCRIPT_DIR/.scripts/env_setup.sh" ]; then
+    source "$SCRIPT_DIR/.scripts/env_setup.sh" 2>/dev/null
+fi
+
+ERIC_DIR="${ERIC_PATH:-$SCRIPT_DIR/.eric}"
+TODAY=$(date +%Y-%m-%d)
+NOTES_FILE="$ERIC_DIR/session_notes_${TODAY}.md"
+COMMIT_MSG=$(git log -1 --pretty=format:"%h %s")
+TIMESTAMP=$(date +%H:%M)
+
+# Append commit to session notes if directory exists
+if [ -d "$ERIC_DIR" ]; then
+    echo "- [$TIMESTAMP] COMMIT: $COMMIT_MSG" >> "$NOTES_FILE"
+fi

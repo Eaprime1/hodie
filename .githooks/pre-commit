@@ -1,0 +1,61 @@
+#!/bin/bash
+# Pre-commit review hook for hodie
+# Install: git config core.hooksPath .githooks
+#
+# Checks:
+# 1. No secrets (.env, credentials, API keys)
+# 2. No sensitive personal data patterns
+# 3. Python lint on staged .py files
+# 4. Summary of what's being committed
+
+echo "--- Pre-commit Review ---"
+
+# Check for secrets
+SECRETS_PATTERN='(API_KEY|SECRET|PASSWORD|CREDENTIAL|PRIVATE_KEY|TOKEN)[\s]*[=:]'
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED" ]; then
+    echo "  No staged files. Nothing to check."
+    exit 0
+fi
+
+echo "  Staged files:"
+echo "$STAGED" | sed 's/^/    /'
+
+# Secret scan
+FOUND_SECRETS=$(git diff --cached --unified=0 | grep -iE "$SECRETS_PATTERN" || true)
+if [ -n "$FOUND_SECRETS" ]; then
+    echo ""
+    echo "  WARNING: Possible secrets detected in staged changes:"
+    echo "$FOUND_SECRETS" | sed 's/^/    /'
+    echo ""
+    echo "  Remove secrets before committing, or use --no-verify to bypass."
+    exit 1
+fi
+
+# Check for sensitive file patterns
+SENSITIVE_PATTERNS='(DD214|Earnings|Financials|child.support|TRSRetire|medical_record|education_record)'
+SENSITIVE_FILES=$(echo "$STAGED" | grep -iE "$SENSITIVE_PATTERNS" || true)
+if [ -n "$SENSITIVE_FILES" ]; then
+    echo ""
+    echo "  BLOCKED: Sensitive files staged:"
+    echo "$SENSITIVE_FILES" | sed 's/^/    /'
+    exit 1
+fi
+
+# Lint staged Python files
+PY_FILES=$(echo "$STAGED" | grep '\.py$' || true)
+if [ -n "$PY_FILES" ]; then
+    if command -v pylint &> /dev/null; then
+        echo "  Linting Python files..."
+        echo "$PY_FILES" | xargs pylint --errors-only 2>/dev/null
+        if [ $? -ne 0 ]; then
+            echo "  Python lint errors found. Fix or use --no-verify."
+            exit 1
+        fi
+        echo "  Lint: OK"
+    fi
+fi
+
+echo "  Review: PASS"
+echo "---"

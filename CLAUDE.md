@@ -4,7 +4,7 @@
 
 Hodie is a staged processing pipeline and consciousness development framework. The core system (PIXEL8 Crawler) processes conversations from sort/today folders into organized plexus stages, extracting patterns and entities. The project follows a PRIME number progression framework (2→3→5→7→11→13→17) for organizing information and domain-specific entities.
 
-**Target environment**: Pixel 8a / Termux (mobile-first), also runs on desktop Linux/WSL2.
+**Target environments**: Multi-location — Laptop HQ (mulberry), Pixel 8a / Termux (pixel8a), GitHub Codespaces.
 
 ## Repository Structure
 
@@ -24,7 +24,10 @@ hodie/
 ├── quanta/                  # 16 entity domains (tardigradia, microversa, etc.)
 ├── redundancy_entity/       # File deduplication & gravity analysis
 ├── crawler_output/          # Processing results (summaries, patterns, maps)
-├── .scripts/                # 21 bash/PowerShell automation scripts
+├── .locations/              # Per-device config (mulberry, pixel8a, codespaces)
+├── .streams/                # Active workstreams (prime, codex, gamemaster)
+├── .githooks/               # Pre-commit review, post-commit logging
+├── .scripts/                # 21+ bash/PowerShell automation scripts
 ├── .claude/                 # Windows/WSL setup guides
 ├── .eric/                   # Session notes and continuity tracking
 ├── _CONSOLIDATED/           # Merged documents (CODEX, PRIME, research)
@@ -61,6 +64,12 @@ bash .scripts/acp_amplify.sh [filename]
 
 # File server
 bash .scripts/start_unified_server.sh 8080
+
+# Mulberry HQ first-time setup (installs hooks, verifies tools)
+bash .scripts/mulberry_setup.sh
+
+# Load environment (any location)
+source .scripts/env_setup.sh
 ```
 
 ## CI/CD
@@ -86,6 +95,20 @@ bash .scripts/start_unified_server.sh 8080
 - Branch prefixes: `feature/`, `heritage/`, `experimental/`, `claude/`
 - See `BRANCH_STRATEGY.md` for full details
 - PRs merged into main; CI runs on all pushes
+- **Git hooks** (`.githooks/`): pre-commit scans for secrets and lint errors; post-commit logs to session notes
+- Install hooks: `git config core.hooksPath .githooks`
+
+## Locations & Streams
+
+**Locations** (`.locations/`): Each device has a config defining its role and capabilities.
+- `mulberry` — Laptop HQ, multi-stream, heavy workloads
+- `pixel8a` — Mobile field station, lightweight
+- `codespaces` — Cloud ephemeral
+
+**Streams** (`.streams/`): Parallel workstreams active across the project.
+- `prime` — PRIME framework development and progression
+- `codex` — Knowledge consolidation and readiness
+- `gamemaster` — Game system testing (Hyborian Wars, etc.)
 
 ## Key Concepts
 
@@ -112,3 +135,5 @@ bash .scripts/start_unified_server.sh 8080
 | `QUICK_START.md` | Infrastructure overview |
 | `INVENTORY.md` | Status tracking |
 | `.scripts/README.md` | Automation script catalog |
+| `.locations/README.md` | Location config system |
+| `.streams/README.md` | Active workstreams |
