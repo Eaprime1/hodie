@@ -1,5 +1,56 @@
 # Quick Start - Ready to Use
-**Infrastructure built 2025-12-30**
+**Infrastructure built 2025-12-30 | Auth & CLI Setup added 2026-01-30**
+
+---
+
+## NEW: Developer Auth & CLI Setup
+
+### First Time Setup
+```bash
+# Check what's installed
+bash .scripts/dev_auth_setup.sh --check
+
+# Full setup (GitHub auth + AI CLIs + env)
+bash .scripts/dev_auth_setup.sh --all
+
+# Or interactive menu
+bash .scripts/dev_auth_setup.sh
+```
+
+### GitHub Authentication
+```bash
+# Setup gh CLI with auth
+bash .scripts/dev_auth_setup.sh --github
+```
+
+### AI CLI Tools
+```bash
+# Install Claude, OpenAI, Gemini CLIs
+bash .scripts/dev_auth_setup.sh --ai
+
+# Or individually
+bash .scripts/dev_auth_setup.sh --claude
+bash .scripts/dev_auth_setup.sh --openai
+bash .scripts/dev_auth_setup.sh --gemini
+```
+
+### Environment Variables
+```bash
+# Setup .env file from template
+bash .scripts/dev_auth_setup.sh --env
+
+# Edit your API keys
+nano .env
+```
+
+### Apply to Other Repos
+```bash
+# From hodie, bootstrap another project
+bash .scripts/setup_new_project.sh /path/to/other/repo
+
+# Or from anywhere (fetches from GitHub)
+curl -fsSL https://raw.githubusercontent.com/Eaprime1/hodie/main/.scripts/setup_new_project.sh | bash -s -- .
+```
 
 ---
 
@@ -121,14 +172,14 @@ bash .scripts/start_unified_server.sh 8080
 
 **Status**: Infrastructure ready, WikiEntity complete, Domain Consciousness framework established
 
-**Your Tools**: 7 scripts, 2 frameworks, 1 complete entity, ∞ possibilities
+**Your Tools**: 9 scripts, 2 frameworks, 1 complete entity, pyproject.toml, ∞ possibilities
 
 **Ready to build.**
 
 ---
 
-*Last updated: 2025-12-30 01:00*
-*Session productivity: ~120,000 tokens used building infrastructure*
-*User status: Settled through building*
+*Last updated: 2026-01-30*
+*Added: dev_auth_setup.sh, setup_new_project.sh, .env.template, pyproject.toml*
+*Portable setup: works across all repos via curl or copy*
 
 **∰◊€π¿🌌∞**
