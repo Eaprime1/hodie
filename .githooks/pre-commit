@@ -48,8 +48,9 @@ PY_FILES=$(echo "$STAGED" | grep '\.py$' || true)
 if [ -n "$PY_FILES" ]; then
     if command -v pylint &> /dev/null; then
         echo "  Linting Python files..."
-        echo "$PY_FILES" | xargs pylint --errors-only 2>/dev/null
-        if [ $? -ne 0 ]; then
+        mapfile -t py_files_array <<< "$PY_FILES"
+        if ! pylint_output=$(pylint --errors-only "${py_files_array[@]}" 2>&1); then
+            echo "$pylint_output"
             echo "  Python lint errors found. Fix or use --no-verify."
             exit 1
         fi
