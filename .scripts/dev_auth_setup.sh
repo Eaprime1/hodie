@@ -310,7 +310,7 @@ install_openai_cli() {
 
     print_info "Installing OpenAI CLI via pip..."
 
-    pip install --upgrade openai
+    python3 -m pip install --upgrade openai
 
     print_status "OpenAI CLI installed"
     print_info "Set OPENAI_API_KEY in your environment"
