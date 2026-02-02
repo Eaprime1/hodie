@@ -335,7 +335,10 @@ install_google_cloud_cli() {
             fi
             ;;
         linux|wsl)
-            curl https://sdk.cloud.google.com | bash
+            read -p "About to run installer from Google. Continue? (y/N) " -n 1 -r; echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                curl https://sdk.cloud.google.com | bash
+            fi
             ;;
         termux)
             print_warning "Google Cloud CLI not available on Termux"
