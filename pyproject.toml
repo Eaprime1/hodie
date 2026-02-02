@@ -1,0 +1,108 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hodie"
+version = "0.1.0"
+description = "Staged processing pipeline for content organization and AI-assisted analysis"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+authors = [
+    {name = "Eaprime1"}
+]
+keywords = ["crawler", "processing", "pipeline", "ai", "content-analysis"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pylint>=2.17.0",
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+]
+ai = [
+    "anthropic>=0.18.0",
+    "openai>=1.0.0",
+    "google-generativeai>=0.3.0",
+]
+all = [
+    "hodie[dev,ai]",
+]
+
+[project.scripts]
+hodie = "crawler_pixel8.cli:main"
+hodie-crawler = "crawler_pixel8.cli.test_crawler:main"
+
+[project.urls]
+Homepage = "https://github.com/Eaprime1/hodie"
+Repository = "https://github.com/Eaprime1/hodie"
+Issues = "https://github.com/Eaprime1/hodie/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["crawler_pixel8*", "redundancy_entity*"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --tb=short"
+
+[tool.pylint.main]
+py-version = "3.8"
+jobs = 0
+fail-under = 7.0
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "too-few-public-methods",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+    | \.venv
+    | __pycache__
+    | build
+    | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+skip_gitignore = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
