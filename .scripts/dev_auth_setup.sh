@@ -376,8 +376,8 @@ setup_env_file() {
     local env_file="${SCRIPT_DIR}/../.env"
 
     if [ ! -f "$env_template" ]; then
-        print_warning ".env.template not found, creating..."
-        create_env_template
+        print_error ".env.template not found. It should be in the project root. Aborting."
+        return 1
     fi
 
     if [ -f "$env_file" ]; then
