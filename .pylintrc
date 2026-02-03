@@ -1,0 +1,33 @@
+[MAIN]
+# Hodie project pylint configuration
+# Active code: crawler_pixel8/, redundancy_entity/
+
+ignore=_CONSOLIDATED,_SORTING,_BOX_SIMULATION,.git,venv,env
+ignore-patterns=test_*.py
+
+[MESSAGES CONTROL]
+# Disable overly strict checks for this project phase
+disable=
+    C0114,  # missing-module-docstring (we have philosophical docstrings, not standard)
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    R0903,  # too-few-public-methods (dataclasses trigger this)
+    R0913,  # too-many-arguments
+    W0511,  # fixme/todo (we track these separately)
+    W1203,  # logging-fstring-interpolation (f-strings are fine)
+
+[FORMAT]
+max-line-length=120
+indent-string='    '
+
+[DESIGN]
+max-args=8
+max-locals=20
+max-branches=15
+
+[SIMILARITIES]
+min-similarity-lines=6
+
+[TYPECHECK]
+# Ignore missing imports for optional dependencies
+ignored-modules=google.genai,google.generativeai
