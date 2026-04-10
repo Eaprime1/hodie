@@ -1,0 +1,48 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/omega_prime/create/diamond/shard_ledger_schema.json",
+  "conversation_id": "shard_ledger_schema",
+  "processed_at": "2026-04-10T12:56:55.095745",
+  "parts_count": 1,
+  "processing_time": 0.0008761882781982422,
+  "errors": [],
+  "parts": [
+    {
+      "text": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Shard Ledger Entry\",\n  \"description\": \"Schema for recording interactions that generate or involve synergy shards\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"entity_a\": {\n      \"type\": \"string\",\n      \"description\": \"Identifier or name of the first entity in interaction\"\n    },\n    \"entity_b\": {\n      \"type\": \"string\",\n      \"description\": \"Identifier or name of the second entity in interaction\"\n    },\n    \"shard_signature\": {\n      \"type\": \"string\",\n      \"description\": \"Unique code or description of the observed synergy shard\"\n    },\n    \"synergy_score\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 10,\n      \"description\": \"Numeric score (e.g., 0–10) representing intensity or clarity of synergy\"\n    },\n    \"ka_pressure_type\": {\n      \"type\": \"string\",\n      \"enum\": [\"Gravity\", \"EMF\", \"Affinity\", \"Synergy\"],\n      \"description\": \"Primary Ka pressure driving this shard interaction\"\n    },\n    \"timestamp\": {\n      \"type\": \"string\",\n      \"format\": \"date-time\",\n      \"description\": \"ISO 8601 timestamp of when the interaction occurred or was logged\"\n    },\n    \"persistence_rating\": {\n      \"type\": \"integer\",\n      \"description\": \"Rating (e.g., 1–5) for how long or stable the shard persists\"\n    },\n    \"notes\": {\n      \"type\": \"string\",\n      \"description\": \"Optional free-text field for additional context or observations\"\n    }\n  },\n  \"required\": [\"entity_a\", \"entity_b\", \"shard_signature\", \"synergy_score\", \"ka_pressure_type\", \"timestamp\", \"persistence_rating\"],\n  \"additionalProperties\": false\n}",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.096040",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/omega_prime/create/diamond/shard_ledger_schema.json",
+      "conversation_id": "shard_ledger_schema",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [
+        "question"
+      ],
+      "entities": [
+        "url:http://json-schema.org/draft-07/schema#\",",
+        "file_path:/json-schema.org/draft-07/schema"
+      ],
+      "topics": [
+        "code",
+        "entity"
+      ],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [
+    "question"
+  ],
+  "key_entities": [
+    "file_path:/json-schema.org/draft-07/schema",
+    "url:http://json-schema.org/draft-07/schema#\","
+  ],
+  "key_topics": [
+    "code",
+    "entity"
+  ],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-5a08c0488531d59e",
+  "pixel8_verified": true
+}

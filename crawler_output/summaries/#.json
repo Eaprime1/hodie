@@ -1,0 +1,48 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/#.txt",
+  "conversation_id": "#",
+  "processed_at": "2026-04-10T12:56:54.849049",
+  "parts_count": 1,
+  "processing_time": 0.0015039443969726562,
+  "errors": [],
+  "parts": [
+    {
+      "text": "# quantum_dice.py\nimport random\nfrom typing import List\n\nclass QuantumDice:\n    def roll(self, sides:int=20) -> int:\n        return random.randint(1, sides)\n\n    def superposition(self, sides:int=20, possibilities:int=3) -> List[int]:\n        return [self.roll(sides) for _ in range(possibilities)]\n\n    def collapse(self, rolls:List[int]) -> int:\n        # simple collapse: average then round, you can add runic/ethics influence externally\n        return int(round(sum(rolls)/len(rolls)))",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:54.849311",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/#.txt",
+      "conversation_id": "#",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [
+        "code_import",
+        "code_definition"
+      ],
+      "entities": [
+        "file_path:/ethics",
+        "file_path:/len"
+      ],
+      "topics": [
+        "code"
+      ],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [
+    "code_import",
+    "code_definition"
+  ],
+  "key_entities": [
+    "file_path:/ethics",
+    "file_path:/len"
+  ],
+  "key_topics": [
+    "code"
+  ],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-24942cb1b162868a",
+  "pixel8_verified": true
+}

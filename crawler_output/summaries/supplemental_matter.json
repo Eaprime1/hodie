@@ -1,0 +1,46 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/projects/supplemental_matter.txt",
+  "conversation_id": "supplemental_matter",
+  "processed_at": "2026-04-10T12:56:55.250243",
+  "parts_count": 1,
+  "processing_time": 0.0004017353057861328,
+  "errors": [],
+  "parts": [
+    {
+      "text": "TO_CREATE_SUPPLEMENTAL.md:\n- Cross-phase patterns document\n- Achievement/wood system expanded\n- Chest constellation map (visual)\n- Integration protocols\n- Application case studies",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.250449",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/projects/supplemental_matter.txt",
+      "conversation_id": "supplemental_matter",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [
+        "implementation_request"
+      ],
+      "entities": [
+        "file_path:/wood"
+      ],
+      "topics": [
+        "file",
+        "framework"
+      ],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [
+    "implementation_request"
+  ],
+  "key_entities": [
+    "file_path:/wood"
+  ],
+  "key_topics": [
+    "file",
+    "framework"
+  ],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-ced6b703503db0a6",
+  "pixel8_verified": true
+}
