@@ -13,41 +13,66 @@ import os
 class CrawlerConfig:
     """Configuration for PIXEL8 Crawler operations"""
 
-    # Base paths
-    base_dir: Path = field(default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q"))
-    hodie_dir: Path = field(default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie"))
+    # Location identity — set by env_setup.sh or auto-detected
+    location_name: str = field(default_factory=lambda: os.getenv("ENV_NAME", "unknown"))
+
+    # Base paths — overridden by HODIE_PATH / Q_ROOT env vars when set
+    base_dir: Path = field(
+        default_factory=lambda: Path(os.getenv("Q_ROOT", "/storage/emulated/0/pixel8a/Q"))
+    )
+    hodie_dir: Path = field(
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        )
+    )
 
     # Input paths (defaults to current directory if not specified)
     conversation_archive: Optional[Path] = None
     codex_documents: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/_CONSOLIDATED/CODEX_documents")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "_CONSOLIDATED/CODEX_documents"
     )
 
-    # Output paths
+    # Output paths — all relative to hodie_dir
     crawler_output: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "crawler_output"
     )
     patterns_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/patterns")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "crawler_output/patterns"
     )
     maps_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/maps")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "crawler_output/maps"
     )
     summaries_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/summaries")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "crawler_output/summaries"
     )
     exports_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/exports")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "crawler_output/exports"
     )
 
     # Entity integration
     quanta_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/quanta")
+        default_factory=lambda: Path(
+            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
+        ) / "quanta"
     )
 
     # Processing settings
     batch_size: int = 10
-    max_concurrent: int = 3  # Mobile device constraint
+    max_concurrent: int = field(
+        default_factory=lambda: int(os.getenv("HQ_MAX_CONCURRENT", "3"))
+    )  # Mobile constraint default; HQ raises this via env
     chunk_size: int = 1000  # Characters per processing chunk
 
     # Feature flags
