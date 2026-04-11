@@ -23,9 +23,11 @@ jobs:
       contents: read
       pull-requests: read
       issues: read
-      id-token: write
-
-    steps:
+      id-token: steps
+      with:
+  allowed_bots: '*'
+  
+  steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
