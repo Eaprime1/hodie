@@ -27,11 +27,23 @@ rudera/fragmenta/*
 rudera/pulvis/*
 !rudera/pulvis/.gitkeep
 
-# Logs and temp
+# Logs and Databases
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.db
+*.sqlite
+*.sqlite3
+
+# Temp files
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Build output
+build/
 
 # Local config
 .env
