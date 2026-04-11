@@ -6,7 +6,33 @@ Pixel8-specific paths and settings for conversation processing
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import List, Optional
+import logging
 import os
+
+
+def _resolve_hodie_path() -> Path:
+    """
+    Resolve the hodie directory from environment variables.
+
+    Priority:
+    1. HODIE_PATH env var (explicit override — all locations)
+    2. HODIE_LOCATION env var → pixel8a hardcoded path
+    3. Fall back to Path.cwd() (CI, testing, unknown environments)
+    """
+    if hodie_path := os.getenv("HODIE_PATH"):
+        return Path(hodie_path)
+    if os.getenv("HODIE_LOCATION") == "pixel8a":
+        return Path("/storage/emulated/0/pixel8a/Q/hodie")
+    return Path.cwd()
+
+
+def _resolve_base_dir() -> Path:
+    """Resolve the Q root directory (parent of hodie_dir)."""
+    if q_root := os.getenv("Q_ROOT"):
+        return Path(q_root)
+    if os.getenv("HODIE_LOCATION") == "pixel8a":
+        return Path("/storage/emulated/0/pixel8a/Q")
+    return Path.cwd()
 
 
 @dataclass
@@ -17,55 +43,35 @@ class CrawlerConfig:
     location_name: str = field(default_factory=lambda: os.getenv("ENV_NAME", "unknown"))
 
     # Base paths — overridden by HODIE_PATH / Q_ROOT env vars when set
-    base_dir: Path = field(
-        default_factory=lambda: Path(os.getenv("Q_ROOT", "/storage/emulated/0/pixel8a/Q"))
-    )
-    hodie_dir: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        )
-    )
+    base_dir: Path = field(default_factory=_resolve_base_dir)
+    hodie_dir: Path = field(default_factory=_resolve_hodie_path)
 
     # Input paths (defaults to current directory if not specified)
     conversation_archive: Optional[Path] = None
     codex_documents: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "_CONSOLIDATED/CODEX_documents"
+        default_factory=lambda: _resolve_hodie_path() / "_CONSOLIDATED/CODEX_documents"
     )
 
     # Output paths — all relative to hodie_dir
     crawler_output: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "crawler_output"
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output"
     )
     patterns_dir: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "crawler_output/patterns"
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/patterns"
     )
     maps_dir: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "crawler_output/maps"
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/maps"
     )
     summaries_dir: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "crawler_output/summaries"
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/summaries"
     )
     exports_dir: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "crawler_output/exports"
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/exports"
     )
 
     # Entity integration
     quanta_dir: Path = field(
-        default_factory=lambda: Path(
-            os.getenv("HODIE_PATH", "/storage/emulated/0/pixel8a/Q/hodie")
-        ) / "quanta"
+        default_factory=lambda: _resolve_hodie_path() / "quanta"
     )
 
     # Processing settings
@@ -103,12 +109,18 @@ class CrawlerConfig:
         if self.conversation_archive is None:
             self.conversation_archive = Path.cwd()
 
-        # Ensure all directories exist
+        # Ensure all directories exist (best-effort — skips paths that can't be created)
+        _log = logging.getLogger(__name__)
         for attr_name in dir(self):
             if attr_name.endswith('_dir') or attr_name in ('crawler_output',):
                 path = getattr(self, attr_name)
                 if isinstance(path, Path):
-                    path.mkdir(parents=True, exist_ok=True)
+                    try:
+                        path.mkdir(parents=True, exist_ok=True)
+                    except PermissionError:
+                        _log.debug("Skipping unwritable path %s (PermissionError)", path)
+                    except OSError as exc:
+                        _log.warning("Could not create directory %s: %s", path, exc)
 
     @property
     def gemini_api_key(self) -> Optional[str]:
