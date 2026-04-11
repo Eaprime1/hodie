@@ -146,7 +146,7 @@ ls ~/CloudMounts/GoogleDrive/
 find ~/CloudMounts/GoogleDrive/ -name "Q" -type d
 
 # Link to local Q
-ln -s ~/CloudMounts/GoogleDrive/Q /home/user/Q_from_GoogleDrive
+ln -s ~/CloudMounts/GoogleDrive/Q ~/Q_from_GoogleDrive
 ```
 
 ---

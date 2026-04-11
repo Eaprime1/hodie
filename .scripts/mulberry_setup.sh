@@ -50,11 +50,11 @@ echo "  .eric/    OK"
 echo "  .metrics/ OK"
 
 # 5. Ensure Q structure exists
-if [ -d "/home/user/Q" ]; then
-    mkdir -p /home/user/Q/today
+if [ -d "$HOME/Q" ]; then
+    mkdir -p "$HOME/Q/today"
     echo "  Q/today/  OK"
 else
-    echo "  NOTE: /home/user/Q not found — create it for full HQ operation"
+    echo "  NOTE: $HOME/Q not found — create it for full HQ operation"
 fi
 
 # 6. Verify streams

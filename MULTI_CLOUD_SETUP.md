@@ -131,7 +131,7 @@ hodie/
 
 1. **Pixel 8a** (Phone) - `/storage/emulated/0/pixel8a/Q/`
 2. **Ubuntu "sauron"** - (path TBD)
-3. **New Laptop** (this) - `/home/user/Q/`
+3. **New Laptop** (this) - `$HOME/Q/`
 4. **Google Drive** - Central Q/ folder (primary sync point)
 
 ### Sync Flow
@@ -180,7 +180,7 @@ rclone mount gdrive: ~/CloudMounts/GoogleDrive --daemon
 pwsh .scripts/Mount-Clouds.ps1 -All
 
 # Sync local to cloud
-rclone sync /home/user/Q/today gdrive:Q/today
+rclone sync ~/Q/today gdrive:Q/today
 ```
 
 ### Session Notes
