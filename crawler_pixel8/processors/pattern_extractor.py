@@ -6,7 +6,6 @@ Local processing without AI models (rule-based initially)
 
 from typing import AsyncIterable, Set
 import re
-from collections import Counter
 
 from ..core.local_processor import LocalProcessor
 from ..core.content_types import ConversationPart
@@ -138,8 +137,9 @@ class PatternExtractor(LocalProcessor):
 
 class AdvancedPatternExtractor(PatternExtractor):
     """
-    Enhanced pattern extractor with optional AI integration
-    Can use Gemini API or local models for better pattern recognition
+    Enhanced pattern extractor with optional Gemini API integration.
+    Rule-based extraction always runs first; Gemini results are merged in
+    additively (never replace). Gracefully degrades if API is unavailable.
     """
 
     def __init__(self, *args, use_ai=False, **kwargs):
@@ -151,12 +151,55 @@ class AdvancedPatternExtractor(PatternExtractor):
         content: AsyncIterable[ConversationPart]
     ) -> AsyncIterable[ConversationPart]:
         """
-        Extract patterns with optional AI enhancement
+        Extract patterns with optional Gemini AI enhancement.
+        Rule-based results are always computed; Gemini adds on top when available.
         """
-        async for part in await super().process(content):
+        async for part in super().process(content):
             if self.use_ai and self.config.gemini_api_key:
-                # TODO: Add Gemini API integration for enhanced pattern extraction
-                # For now, just use base patterns
-                pass
-
+                gemini_data = await self._call_gemini(part.text)
+                for topic in gemini_data.get("topics", []):
+                    part.add_topic(str(topic))
+                for entity in gemini_data.get("entities", []):
+                    part.add_entity(f"gemini:{entity}")
             yield part
+
+    async def _call_gemini(self, text: str) -> dict:
+        """
+        Call Gemini API for enhanced topic and entity extraction.
+        Truncates input to 500 chars for mobile constraint compliance.
+        Returns empty dict on any error — never raises.
+
+        Returns:
+            dict with optional keys: "topics" (list[str]), "entities" (list[str])
+        """
+        import json as _json  # pylint: disable=import-outside-toplevel
+        try:
+            import google.generativeai as genai  # pylint: disable=import-outside-toplevel
+        except ImportError:
+            self.logger.warning("google-generativeai not installed; skipping Gemini call")
+            return {}
+
+        try:
+            genai.configure(api_key=self.config.gemini_api_key)
+            model = genai.GenerativeModel("gemini-pro")
+
+            prompt = (
+                'Extract topics and named entities from this text. '
+                'Return only valid JSON like: {"topics": ["..."], "entities": ["..."]}.\n'
+                f'Text: {text[:500]}'
+            )
+
+            response = model.generate_content(prompt)
+            raw = response.text.strip()
+
+            # Strip markdown code fences if present
+            if raw.startswith("```"):
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+
+            return _json.loads(raw)
+
+        except Exception as exc:  # pylint: disable=broad-except
+            self.logger.debug("Gemini call failed (non-fatal): %s", exc)
+            return {}

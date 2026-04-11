@@ -1,0 +1,48 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/Ωque/🍾📥sovereign_submission_pipeline/🪬# On your.txt",
+  "conversation_id": "🪬# On your",
+  "processed_at": "2026-04-10T12:56:55.555056",
+  "parts_count": 1,
+  "processing_time": 0.000476837158203125,
+  "errors": [],
+  "parts": [
+    {
+      "text": "# On your Termux terminal\ncd /storage/emulated/0/unexusi/\nmkdir -p visionary_suite\n\n# Copy files (you'll need to transfer from our session)\n# Then make executable:\nchmod +x visionary_suite/visionary_dup_mancer.sh",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.555336",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/Ωque/🍾📥sovereign_submission_pipeline/🪬# On your.txt",
+      "conversation_id": "🪬# On your",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [
+        "code_import"
+      ],
+      "entities": [
+        "file_path:/storage/emulated/0/unexusi/",
+        "file_path:/visionary_dup_mancer.sh"
+      ],
+      "topics": [
+        "pixel8",
+        "file"
+      ],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [
+    "code_import"
+  ],
+  "key_entities": [
+    "file_path:/storage/emulated/0/unexusi/",
+    "file_path:/visionary_dup_mancer.sh"
+  ],
+  "key_topics": [
+    "pixel8",
+    "file"
+  ],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-563f02abc2ae9705",
+  "pixel8_verified": true
+}

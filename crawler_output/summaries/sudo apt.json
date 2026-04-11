@@ -1,0 +1,46 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/sudo apt.txt",
+  "conversation_id": "sudo apt",
+  "processed_at": "2026-04-10T12:56:55.251647",
+  "parts_count": 1,
+  "processing_time": 0.0004382133483886719,
+  "errors": [],
+  "parts": [
+    {
+      "text": "sudo apt install curl\n\nsudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg\n\nsudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources\n\nsudo apt update\n\nsudo apt install brave-browser",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.251886",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/sudo apt.txt",
+      "conversation_id": "sudo apt",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [],
+      "entities": [
+        "url:https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
+        "url:https://brave-browser-apt-release.s3.brave.com/brave-browser.sources",
+        "file_path:/usr/share/keyrings/brave-browser-archive-keyring.gpg",
+        "file_path:/brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
+        "file_path:/etc/apt/sources.list.d/brave-browser-release.sources",
+        "file_path:/brave-browser-apt-release.s3.brave.com/brave-browser.sources"
+      ],
+      "topics": [],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [],
+  "key_entities": [
+    "file_path:/brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
+    "file_path:/brave-browser-apt-release.s3.brave.com/brave-browser.sources",
+    "file_path:/etc/apt/sources.list.d/brave-browser-release.sources",
+    "file_path:/usr/share/keyrings/brave-browser-archive-keyring.gpg",
+    "url:https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
+    "url:https://brave-browser-apt-release.s3.brave.com/brave-browser.sources"
+  ],
+  "key_topics": [],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-57aa36a8febfad8d",
+  "pixel8_verified": true
+}

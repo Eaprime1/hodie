@@ -1,0 +1,32 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/Ωque/Copy of Legacy /Code for Colab/installed.txt",
+  "conversation_id": "installed",
+  "processed_at": "2026-04-10T12:56:55.270384",
+  "parts_count": 1,
+  "processing_time": 0.00045180320739746094,
+  "errors": [],
+  "parts": [
+    {
+      "text": "Unknown command: 'list_installed' (run 'pkg help' for usage information)\n",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.270655",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/Ωque/Copy of Legacy /Code for Colab/installed.txt",
+      "conversation_id": "installed",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [],
+      "entities": [],
+      "topics": [],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [],
+  "key_entities": [],
+  "key_topics": [],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-a61b6df6391d3365",
+  "pixel8_verified": true
+}

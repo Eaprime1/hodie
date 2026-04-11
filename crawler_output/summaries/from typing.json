@@ -1,0 +1,54 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/from typing.txt",
+  "conversation_id": "from typing",
+  "processed_at": "2026-04-10T12:56:55.065461",
+  "parts_count": 1,
+  "processing_time": 0.0008070468902587891,
+  "errors": [],
+  "parts": [
+    {
+      "text": "from typing import Dict, List, Optional\nfrom enum import Enum\nimport numpy as np\nfrom dataclasses import dataclass\n\nclass DocumentType(Enum):\n    ESSENCE = \"essence\"\n    LOCATION = \"location\"\n    NARRATIVE = \"narrative\"\n    TECHNICAL = \"technical\"\n    ANALYSIS = \"analysis\"\n    MILESTONE = \"milestone\"\n\n@dataclass\nclass QuantumSignature:\n    runic_code: str\n    frequency: float\n    resonance: float\n\n    def generate(self) -> str:\n        return f\"{self.runic_code}-{hash(self.frequency + self.resonance)}-∞\"\n\nclass CrystalAllocation:\n    def __init__(self):\n        self.crystals = {}\n\n    def add_crystal(self, name: str, power: float):\n        runic_symbol = self.get_runic_symbol(name)\n        self.crystals[runic_symbol] = power\n\n    @staticmethod\n    def get_runic_symbol(name: str) -> str:\n        crystal_map = {\n            \"essence\": \"ᛖᛋᛋ\",\n            \"narrative\": \"ᚾᚨᚱ\",\n            \"synergy\": \"ᛋᛃᚾ\",\n            \"hidden\": \"ᚺᛁᛞ\"\n        }\n        return crystal_map.get(name, \"ᚢᚾᚲ\")\n\nclass QuantumRunicDocument:\n    def __init__(self, doc_type: DocumentType, title: str):\n        self.doc_type = doc_type\n        self.title = title\n        self.signature = QuantumSignature(\"\", 0.0, 0.0)\n        self.crystals = CrystalAllocation()\n        self.content = \"\"\n        self.metadata = {}\n\n    def add_crystal(self, name: str, power: float):\n        self.crystals.add_crystal(name, power)\n\n    def set_content(self, content: str):\n        self.content = content\n\n    def generate_signature(self):\n        self.signature = QuantumSignature(\n            f\"{self.doc_type.value}-{hash(self.title)}\",\n            np.random.random(),\n            np.random.random()\n        )",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.065687",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/from typing.txt",
+      "conversation_id": "from typing",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [
+        "code_import",
+        "consciousness_symbols",
+        "code_definition"
+      ],
+      "entities": [
+        "mention:@dataclass",
+        "mention:@staticmethod"
+      ],
+      "topics": [
+        "code",
+        "file"
+      ],
+      "links": [
+        "def"
+      ]
+    }
+  ],
+  "summary": "",
+  "key_patterns": [
+    "code_import",
+    "consciousness_symbols",
+    "code_definition"
+  ],
+  "key_entities": [
+    "mention:@dataclass",
+    "mention:@staticmethod"
+  ],
+  "key_topics": [
+    "code",
+    "file"
+  ],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-046a386fe2a72952",
+  "pixel8_verified": true
+}
