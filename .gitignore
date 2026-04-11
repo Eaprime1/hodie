@@ -11,6 +11,13 @@ env/
 venv/
 *.egg-info/
 
+# Python Caches & Reports
+.pytest_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
 # Content folders (sync to Drive, not Git)
 plexus/*/
 !plexus/*/.gitkeep
