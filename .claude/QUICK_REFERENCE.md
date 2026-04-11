@@ -169,7 +169,8 @@ git config --global user.email "your@email.com"
 chmod +x filename.sh
 
 # Fix directory permissions
-chmod -R 755 directory/
+find directory/ -type d -exec chmod 755 {} +
+find directory/ -type f -exec chmod 644 {} +
 ```
 
 ---

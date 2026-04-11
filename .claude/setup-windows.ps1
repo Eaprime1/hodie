@@ -21,13 +21,6 @@ if (-not $isAdmin) {
 Write-Host "✓ Running as Administrator" -ForegroundColor Green
 Write-Host ""
 
-# Function to check if feature is enabled
-function Test-WindowsFeature {
-    param($FeatureName)
-    $feature = Get-WindowsOptionalFeature -Online -FeatureName $FeatureName -ErrorAction SilentlyContinue
-    return ($feature -and $feature.State -eq "Enabled")
-}
-
 # Install WSL
 Write-Host "📦 Installing WSL2..." -ForegroundColor Cyan
 
