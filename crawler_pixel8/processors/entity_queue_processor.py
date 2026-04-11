@@ -22,7 +22,9 @@ from typing import Optional
 
 from ..config import CrawlerConfig
 from ..core.content_types import ProcessingResult
+from ..processors.conversation_parser import ConversationParser
 from ..processors.one_hertz import OneHertzProcessor, PLEXUS_STAGES
+from ..processors.pattern_extractor import PatternExtractor
 
 
 # Queue status lifecycle
@@ -70,14 +72,22 @@ class EntityQueueProcessor:
 
     QUEUE_FILENAME = "entity_development_queue.json"
 
-    def __init__(self, config: Optional[CrawlerConfig] = None):
+    def __init__(
+        self,
+        config: Optional[CrawlerConfig] = None,
+        queue_file: Optional[Path] = None,
+    ):
         self.config = config or CrawlerConfig()
         self.logger = self.config  # Reuse config's logger attribute pattern
         self._pipeline = OneHertzProcessor(self.config)
-        self._queue_dir = (
-            self.config.quanta_dir / "abacusian" / "development_queue"
-        )
-        self._queue_path = self._queue_dir / self.QUEUE_FILENAME
+        if queue_file is not None:
+            self._queue_dir = queue_file.parent
+            self._queue_path = queue_file
+        else:
+            self._queue_dir = (
+                self.config.quanta_dir / "abacusian" / "development_queue"
+            )
+            self._queue_path = self._queue_dir / self.QUEUE_FILENAME
 
     # ------------------------------------------------------------------
     # Public API
@@ -267,8 +277,6 @@ class EntityQueueProcessor:
             return cycle.result, output_path
 
         # Fallback: process directly without staging
-        from ..processors.conversation_parser import ConversationParser  # pylint: disable=import-outside-toplevel
-        from ..processors.pattern_extractor import PatternExtractor  # pylint: disable=import-outside-toplevel
         pipeline = ConversationParser(self.config) + PatternExtractor(self.config)
         result = await pipeline.process_file(source_file)
         result.aggregate_patterns()
@@ -283,14 +291,7 @@ class EntityQueueProcessor:
 async def _cli_main(action: str, queue_json: Optional[Path]) -> None:
     """CLI entry: run one queue cycle or print queue status."""
     config = CrawlerConfig()
-
-    if queue_json:
-        # Override queue dir from explicit path
-        processor = EntityQueueProcessor(config)
-        processor._queue_path = queue_json  # pylint: disable=protected-access
-        processor._queue_dir = queue_json.parent  # pylint: disable=protected-access
-    else:
-        processor = EntityQueueProcessor(config)
+    processor = EntityQueueProcessor(config, queue_file=queue_json)
 
     if action == "status":
         status = processor.queue_status()

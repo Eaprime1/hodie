@@ -6,6 +6,7 @@ Pixel8-specific paths and settings for conversation processing
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import List, Optional
+import logging
 import os
 
 
@@ -109,14 +110,17 @@ class CrawlerConfig:
             self.conversation_archive = Path.cwd()
 
         # Ensure all directories exist (best-effort — skips paths that can't be created)
+        _log = logging.getLogger(__name__)
         for attr_name in dir(self):
             if attr_name.endswith('_dir') or attr_name in ('crawler_output',):
                 path = getattr(self, attr_name)
                 if isinstance(path, Path):
                     try:
                         path.mkdir(parents=True, exist_ok=True)
-                    except OSError:
-                        pass  # Skip unwritable paths (e.g. /storage on non-Android)
+                    except PermissionError:
+                        _log.debug("Skipping unwritable path %s (PermissionError)", path)
+                    except OSError as exc:
+                        _log.warning("Could not create directory %s: %s", path, exc)
 
     @property
     def gemini_api_key(self) -> Optional[str]:
