@@ -157,13 +157,11 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
         else:
             request = service.files().get_media(fileId=file_id)
 
-        buf = io.BytesIO()
-        downloader = MediaIoBaseDownload(buf, request)
-        done = False
-        while not done:
-            _, done = downloader.next_chunk()
-
-        temp_dest.write_bytes(buf.getvalue())
+        with open(temp_dest, "wb") as f:
+            downloader = MediaIoBaseDownload(f, request)
+            done = False
+            while not done:
+                _, done = downloader.next_chunk()
         temp_dest.replace(dest)
         return "downloaded", dest
 
