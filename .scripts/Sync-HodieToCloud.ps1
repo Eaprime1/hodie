@@ -47,10 +47,9 @@ $RemotePath = "${Remote}:${Folder}"
 
 # ── Detect mode ───────────────────────────────────────────────────────────────
 # Default to status (dry-run) to prevent accidental destructive syncs.
-if     ($Push)   { $Mode = "push" }
-elseif ($Pull)   { $Mode = "pull" }
-elseif ($Status) { $Mode = "status" }
-else             { $Mode = "status" }
+if     ($Push) { $Mode = "push" }
+elseif ($Pull) { $Mode = "pull" }
+else           { $Mode = "status" }
 
 # ── Banner ────────────────────────────────────────────────────────────────────
 $LocationName = $env:LOCATION_NAME ?? "mulberry"
