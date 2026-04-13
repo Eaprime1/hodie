@@ -55,15 +55,17 @@ read -p "Install Node.js LTS? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_status "Installing Node.js LTS..."
-    # Add NodeSource GPG key
+    # Add NodeSource GPG key for package verification
+    sudo apt-get install -y ca-certificates gnupg
     sudo mkdir -p /etc/apt/keyrings
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-    # Add NodeSource repository
-    NODE_MAJOR=20 # LTS version
+    sudo chmod a+r /etc/apt/keyrings/nodesource.gpg
+    # Add NodeSource repository (Node.js 20 LTS)
+    NODE_MAJOR=20
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
     # Update and install
     sudo apt-get update
-    sudo apt install -y nodejs
+    sudo apt-get install -y nodejs
     print_success "Node.js installed: $(node --version)"
     print_success "npm installed: $(npm --version)"
     echo ""

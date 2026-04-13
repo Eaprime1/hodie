@@ -101,6 +101,17 @@ sudo apt install -y \
   vim
 
 # Install Node.js (if needed for future tools)
+# Add NodeSource GPG key for package verification
+sudo apt-get install -y ca-certificates gnupg
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+sudo chmod a+r /etc/apt/keyrings/nodesource.gpg
+# Add NodeSource repository (Node.js 20 LTS)
+NODE_MAJOR=20
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+# Update and install
+sudo apt-get update
+sudo apt-get install -y nodejs
 # Add NodeSource GPG key
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
@@ -147,8 +158,8 @@ eval "$(ssh-agent -s)"
 # Add your SSH key
 ssh-add ~/.ssh/id_ed25519
 
-# Copy public key to clipboard
-cat ~/.ssh/id_ed25519.pub
+# Copy public key to Windows clipboard
+cat ~/.ssh/id_ed25519.pub | clip.exe
 ```
 
 **Add to GitHub**:
