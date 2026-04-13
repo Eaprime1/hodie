@@ -46,9 +46,11 @@ $HodiePath = (Resolve-Path -LiteralPath $HodiePath).Path
 $RemotePath = "${Remote}:${Folder}"
 
 # ── Detect mode ───────────────────────────────────────────────────────────────
-$Mode = "push"
-if ($Pull)   { $Mode = "pull" }
-if ($Status) { $Mode = "status" }
+# Default to status (dry-run) to prevent accidental destructive syncs.
+if     ($Push)   { $Mode = "push" }
+elseif ($Pull)   { $Mode = "pull" }
+elseif ($Status) { $Mode = "status" }
+else             { $Mode = "status" }
 
 # ── Banner ────────────────────────────────────────────────────────────────────
 $LocationName = $env:LOCATION_NAME ?? "mulberry"

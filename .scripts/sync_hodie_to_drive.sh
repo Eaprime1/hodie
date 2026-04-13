@@ -38,7 +38,7 @@ GDRIVE_REMOTE="${GDRIVE_REMOTE:-gdrive}"
 GDRIVE_FOLDER="${GDRIVE_FOLDER:-hodie}"
 LOCAL_PATH="${HODIE_PATH:-$REPO_ROOT}"
 REMOTE_PATH="${GDRIVE_REMOTE}:${GDRIVE_FOLDER}"
-MODE="${1:-push}"
+MODE="${1:-status}"
 
 echo "∰ Hodie Drive Sync"
 echo "  Location: ${LOCATION_NAME:-unknown}"
@@ -56,7 +56,7 @@ if ! command -v rclone &>/dev/null; then
     exit 1
 fi
 
-if ! rclone listremotes 2>/dev/null | grep -q "^${GDRIVE_REMOTE}:$"; then
+if ! rclone listremotes 2>/dev/null | grep -Fxq "${GDRIVE_REMOTE}:"; then
     echo "✗ rclone remote '${GDRIVE_REMOTE}' not configured."
     echo ""
     echo "Set it up with:"

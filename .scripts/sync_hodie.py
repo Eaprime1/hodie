@@ -267,12 +267,12 @@ def main() -> None:
     parser.add_argument(
         "--credentials",
         default=None,
-        help="Path to service account JSON key (env: GDRIVE_SERVICE_ACCOUNT_KEY)",
-    )
         help=(
             "Path to service account JSON key file "
             "(env: GDRIVE_SERVICE_ACCOUNT_KEY contains the JSON key string)"
         ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show what would be downloaded without writing files",
