@@ -35,7 +35,20 @@ Thumbs.db
 
 # Local config
 .env
+.env.local
 *.local
+
+# Secrets & Credentials
+*.secret
+secrets/
+credentials/
+.credentials
+
+# Cloud deployment artifacts
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.kubeconfig
 
 # PWD reports (generated)
 PWD_REPORT.txt
