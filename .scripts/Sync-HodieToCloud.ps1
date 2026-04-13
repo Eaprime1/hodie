@@ -34,6 +34,15 @@ if (-not $HodiePath) {
     $HodiePath = $RepoRoot
 }
 
+if (-not (Test-Path -LiteralPath $HodiePath -PathType Container)) {
+    Write-Error (
+        "Hodie path does not exist or is not a directory: '$HodiePath'. " +
+        "Set -HodiePath or HODIE_PATH to a valid local repository path."
+    )
+    exit 1
+}
+
+$HodiePath = (Resolve-Path -LiteralPath $HodiePath).Path
 $RemotePath = "${Remote}:${Folder}"
 
 # ── Detect mode ───────────────────────────────────────────────────────────────
