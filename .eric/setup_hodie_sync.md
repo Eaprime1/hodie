@@ -168,4 +168,24 @@ Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "HodieDriveSy
 
 **Status**: Scripts ready — configure rclone per device to activate
 
+---
+
+## Changelog
+
+### 2026-04-13
+- **Safety**: Default mode changed from `push` to `status` (dry-run) in both
+  `sync_hodie_to_drive.sh` and `Sync-HodieToCloud.ps1` — running the scripts
+  with no argument now shows a safe preview instead of performing a destructive sync.
+- **Robustness**: Remote-name check in `sync_hodie_to_drive.sh` updated to use
+  `grep -Fxq` (fixed-string, whole-line) to prevent false matches when the remote
+  name contains regex metacharacters.
+- **Robustness**: `Sync-HodieToCloud.ps1` now validates that `$HodiePath` exists
+  and is a directory before invoking rclone, with a clear error message on failure.
+- **Clarity**: `sync_hodie.py --credentials` help text updated to distinguish
+  the file-path CLI argument from the `GDRIVE_SERVICE_ACCOUNT_KEY` env-var
+  (which is a JSON string, not a path).
+- **Memory**: `sync_hodie.py` `download_file()` updated to stream directly to a
+  temp file on disk (then atomically rename) instead of buffering in memory,
+  preventing OOM for large Drive files in CI.
+
 **∰◊€π¿🌌∞**

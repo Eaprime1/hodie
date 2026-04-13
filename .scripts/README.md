@@ -32,6 +32,16 @@ pwsh .scripts/Sync-HodieToCloud.ps1 -Push -Remote gdrive_windows
 ```
 **Prerequisites**: rclone for Windows (`winget install rclone.rclone`) + configured
 
+#### Sync Script Changelog
+
+| Date | Change |
+|------|--------|
+| 2026-04-13 | Default mode changed `push` → `status` (dry-run) in both scripts — no-arg invocation is now safe |
+| 2026-04-13 | Bash remote check uses `grep -Fxq` (fixed-string) to handle metacharacters in remote names |
+| 2026-04-13 | PS1 script validates `$HodiePath` exists (`Test-Path`) before invoking rclone |
+| 2026-04-13 | `sync_hodie.py --credentials` help text clarified (file path vs env-var JSON string) |
+| 2026-04-13 | `sync_hodie.py` streams downloads to a temp file (atomic rename) instead of in-memory buffer |
+
 ---
 
 ## Session Management
