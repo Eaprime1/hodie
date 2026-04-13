@@ -46,11 +46,14 @@ yarn-error.log*
 
 # Temp files
 *.tmp
+
+# OS-specific files
 .DS_Store
 Thumbs.db
 
-# Build output
-build/
+# Editor configurations
+.vscode/
+.idea/
 
 # Local config
 .env
@@ -90,9 +93,23 @@ PWD_REPORT.txt
 **/*Receipt*
 **/*receipt*
 
-# Local development
-.DS_Store
+# Local development (editor temp files)
 *.swp
 *.swo
 *~
 
+# Build-related directories
+node_modules/
+dist/
+build/
+
+# Large media and archive files
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+*.mp4
+*.mp3
+*.mov
+*.avi
