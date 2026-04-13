@@ -28,7 +28,7 @@ jobs:
       - name: Sync hodie folder from Google Drive
         env:
           GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
-        run: python scripts/sync_hodie.py
+        run: python .github/workflows/scripts/sync_hodie.py
 
       - name: Commit and push synced files
         run: |
