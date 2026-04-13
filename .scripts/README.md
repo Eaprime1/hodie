@@ -3,6 +3,37 @@
 
 ---
 
+## Google Drive Sync
+
+### `sync_hodie_to_drive.sh`
+**Purpose**: Sync hodie to/from Google Drive via rclone (bash — Linux, WSL, Termux)
+**Usage**:
+```bash
+bash .scripts/sync_hodie_to_drive.sh push    # Local → Drive
+bash .scripts/sync_hodie_to_drive.sh pull    # Drive → Local
+bash .scripts/sync_hodie_to_drive.sh status  # Dry-run: see what would change
+```
+**Environment overrides**:
+```bash
+GDRIVE_REMOTE=gdrive_terminal bash .scripts/sync_hodie_to_drive.sh push
+GDRIVE_FOLDER=Q/hodie bash .scripts/sync_hodie_to_drive.sh push
+```
+**Prerequisites**: rclone installed + configured (`rclone config`, remote name: `gdrive`)
+**See**: `.eric/setup_hodie_sync.md`, `.claude/RCLONE_QUICK_CONFIG.md`
+
+### `Sync-HodieToCloud.ps1`
+**Purpose**: Sync hodie to/from Google Drive via rclone (PowerShell — Windows / Git for Windows)
+**Usage**:
+```powershell
+pwsh .scripts/Sync-HodieToCloud.ps1 -Push    # Local → Drive
+pwsh .scripts/Sync-HodieToCloud.ps1 -Pull    # Drive → Local
+pwsh .scripts/Sync-HodieToCloud.ps1 -Status  # Dry-run
+pwsh .scripts/Sync-HodieToCloud.ps1 -Push -Remote gdrive_windows
+```
+**Prerequisites**: rclone for Windows (`winget install rclone.rclone`) + configured
+
+---
+
 ## Session Management
 
 ### `session_notes_append.sh`
