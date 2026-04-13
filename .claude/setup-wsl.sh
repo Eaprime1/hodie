@@ -111,7 +111,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
 fi
 
 if [ ! -f ~/.ssh/id_ed25519 ]; then
-    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519 -N ""
+    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_ed25519
 
