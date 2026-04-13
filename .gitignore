@@ -11,6 +11,13 @@ env/
 venv/
 *.egg-info/
 
+# Python Caches & Reports
+.pytest_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
 # Content folders (sync to Drive, not Git)
 plexus/*/
 !plexus/*/.gitkeep
@@ -27,8 +34,17 @@ rudera/fragmenta/*
 rudera/pulvis/*
 !rudera/pulvis/.gitkeep
 
-# Logs and temp
+# Logs and Databases
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.db
+*.sqlite
+*.sqlite3
+
+# Temp files
 *.tmp
 
 # OS-specific files
@@ -41,7 +57,20 @@ Thumbs.db
 
 # Local config
 .env
+.env.local
 *.local
+
+# Secrets & Credentials
+*.secret
+secrets/
+credentials/
+.credentials
+
+# Cloud deployment artifacts
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.kubeconfig
 
 # PWD reports (generated)
 PWD_REPORT.txt
