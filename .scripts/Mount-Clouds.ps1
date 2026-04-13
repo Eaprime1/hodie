@@ -43,6 +43,9 @@ function Mount-CloudService {
 
     try {
         & rclone mount "${RemoteName}:" $MountPath --vfs-cache-mode writes --daemon
+        if ($LASTEXITCODE -ne 0) {
+            throw "rclone mount exited with code $LASTEXITCODE"
+        }
         Write-Host "✓ $ServiceName mounted successfully at $MountPath" -ForegroundColor Green
     } catch {
         Write-Host "✗ Failed to mount $ServiceName : $_" -ForegroundColor Red

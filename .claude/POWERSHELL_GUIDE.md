@@ -342,7 +342,7 @@ find . -name "*.md"  # Still works!
 grep -r "keyword" .
 
 # PowerShell
-Get-ChildItem -Recurse | Select-String -Pattern "keyword"
+Get-ChildItem -Recurse -File | Select-String -Pattern "keyword"
 ```
 
 ### Piping
