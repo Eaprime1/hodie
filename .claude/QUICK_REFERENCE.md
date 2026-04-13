@@ -166,7 +166,7 @@ git config --global user.email "your@email.com"
 ### Permission Denied
 ```bash
 # Fix file permissions
-chmod +x *.sh
+chmod +x setup-wsl.sh
 
 # Fix directory permissions
 find directory/ -type d -exec chmod 755 {} +
