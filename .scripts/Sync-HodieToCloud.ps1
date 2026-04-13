@@ -68,7 +68,8 @@ if (-not $rcloneCmd) {
 
 # ── Preflight: remote configured? ────────────────────────────────────────────
 $remotes = rclone listremotes 2>&1
-if ($remotes -notmatch "^${Remote}:") {
+$expectedRemote = "${Remote}:"
+if ($remotes -notcontains $expectedRemote) {
     Write-Host "✗ rclone remote '$Remote' not configured." -ForegroundColor Red
     Write-Host ""
     Write-Host "Set it up with:"
