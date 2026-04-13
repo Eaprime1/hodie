@@ -1,0 +1,44 @@
+name: Sync hodie from Google Drive
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # noon UTC daily
+  workflow_dispatch:        # manual trigger from the GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed to commit and push synced files back to the repo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sync hodie folder from Google Drive
+        env:
+          GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
+        run: python scripts/sync_hodie.py
+
+      - name: Commit and push synced files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add hodie/
+          if git diff --cached --quiet; then
+            echo "No new files — nothing to commit."
+          else
+            git commit -m "hodie: sync $(date -u '+%Y-%m-%d')"
+            git pull --rebase
+            git push
+          fi
