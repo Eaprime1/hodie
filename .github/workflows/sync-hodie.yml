@@ -13,22 +13,38 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install .
 
       - name: Sync hodie folder from Google Drive
         env:
           GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
-        run: python scripts/sync_hodie.py
+        run: |
+          set -euo pipefail
+
+          if [ -f .scripts/sync_hodie.py ]; then
+            python .scripts/sync_hodie.py
+          elif [ -f .scripts/sync_hodie.sh ]; then
+            bash .scripts/sync_hodie.sh
+          elif [ -f scripts/sync_hodie.py ]; then
+            python scripts/sync_hodie.py
+          elif [ -f scripts/sync_hodie.sh ]; then
+            bash scripts/sync_hodie.sh
+          else
+            echo "No hodie sync implementation found in .scripts/ or scripts/." >&2
+            exit 1
+          fi
 
       - name: Commit and push synced files
         run: |
@@ -46,4 +62,3 @@ jobs:
             git pull --rebase
             git push
           fi
-          
