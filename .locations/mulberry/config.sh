@@ -7,9 +7,9 @@ export LOCATION_ROLE="hq"
 export LOCATION_DEVICE="laptop"
 
 # Paths
-export Q_ROOT="/home/user"
-export Q_PATH="/home/user/Q"
-export HODIE_PATH="/home/user/Q/hodie"
+export Q_ROOT="$HOME"
+export Q_PATH="$HOME/Q"
+export HODIE_PATH="$HOME/Q/hodie"
 
 # HQ capabilities — this machine can run heavy workloads
 export HQ_MULTI_STREAM=true

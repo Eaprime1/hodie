@@ -2,8 +2,13 @@
 # Laptop Session Notes - Add note to current session (Laptop version)
 # Usage: ./laptop_session_notes.sh "Your note here"
 
+if [ -z "$1" ]; then
+    echo "Usage: $0 \"Your note here\"" >&2
+    exit 1
+fi
+
 SESSION_DATE=$(date +%Y-%m-%d)
-NOTES_FILE="/home/user/Q/hodie/.eric/session_notes_${SESSION_DATE}.md"
+NOTES_FILE="$HOME/Q/hodie/.eric/session_notes_${SESSION_DATE}.md"
 
 # Create file if doesn't exist
 if [ ! -f "$NOTES_FILE" ]; then
@@ -12,7 +17,7 @@ if [ ! -f "$NOTES_FILE" ]; then
 # Session Notes - $SESSION_DATE
 
 **Environment**: New Laptop (faster machine)
-**Q Path**: /home/user/Q/
+**Q Path**: $HOME/Q/
 
 ---
 

@@ -15,9 +15,9 @@ if [ -d "/storage/emulated/0/pixel8a" ]; then
 elif [ -n "$CODESPACES" ] || [ -d "/workspaces" ]; then
     export ENV_NAME="codespaces"
     export Q_ROOT="/workspaces"
-elif [ -d "/home/user/Q" ]; then
+elif [ -d "$HOME/Q" ]; then
     export ENV_NAME="mulberry"
-    export Q_ROOT="/home/user"
+    export Q_ROOT="$HOME"
 else
     export ENV_NAME="unknown"
     export Q_ROOT="$HOME"

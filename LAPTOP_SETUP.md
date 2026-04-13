@@ -2,7 +2,7 @@
 
 **Date**: 2026-01-06
 **Environment**: Ubuntu Linux (faster than previous setups)
-**Q Path**: `/home/user/Q/`
+**Q Path**: `$HOME/Q/`
 **Branch**: `claude/quick-wins-repo-org-sJNBp`
 
 ---
@@ -17,8 +17,8 @@
 
 ### 2. Q Folder Structure Created
 ```
-/home/user/Q/
-├── hodie/  → symlink to /home/user/hodie (this repo)
+$HOME/Q/
+├── hodie/  → symlink to $HOME/hodie (this repo)
 └── today/  → new folder for daily work
 ```
 
@@ -60,10 +60,10 @@ bash .scripts/laptop_file_server.sh 8080
 source .scripts/env_setup.sh
 
 # Will set:
-# - Q_ROOT=/home/user
-# - Q_PATH=/home/user/Q
-# - HODIE_PATH=/home/user/Q/hodie
-# - TODAY_PATH=/home/user/Q/today
+# - Q_ROOT=$HOME
+# - Q_PATH=$HOME/Q
+# - HODIE_PATH=$HOME/Q/hodie
+# - TODAY_PATH=$HOME/Q/today
 ```
 
 ---
@@ -88,11 +88,11 @@ rclone config
 # Copy ~/.config/rclone/rclone.conf from sauron to here
 
 # Mount Google Drive
-rclone mount gdrive: /home/user/GoogleDrive --daemon
+rclone mount gdrive: ~/GoogleDrive --daemon
 ```
 
 ### Today Folder Organization
-Create structure in `/home/user/Q/today/`:
+Create structure in `~/Q/today/`:
 - Daily notes
 - Work in progress
 - Quick captures
@@ -104,7 +104,7 @@ Create structure in `/home/user/Q/today/`:
 - Clone additional projects as needed
 
 ### Development Workflow
-1. Work locally in `/home/user/Q/`
+1. Work locally in `~/Q/`
 2. Use laptop scripts for local operations
 3. Commit to git as usual
 4. Push to GitHub branches (starts with `claude/`)
@@ -117,7 +117,7 @@ Create structure in `/home/user/Q/today/`:
 ### Devices
 1. **Pixel 8a** (phone) - `/storage/emulated/0/pixel8a/Q/`
 2. **Ubuntu "sauron"** - (path TBD)
-3. **New Laptop** (this) - `/home/user/Q/`
+3. **New Laptop** (this) - `$HOME/Q/`
 4. **Google Drive** - Central sync point
 
 ### Sync Flow
@@ -147,7 +147,7 @@ All devices also push to GitHub for version control
 
 ```bash
 # Navigate to Q
-cd /home/user/Q
+cd ~/Q
 
 # Check git status
 cd hodie && git status

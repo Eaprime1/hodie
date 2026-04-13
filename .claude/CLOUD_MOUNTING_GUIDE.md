@@ -158,19 +158,22 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/rclone mount gdrive: /home/user/CloudMounts/GoogleDrive \
+ExecStart=/usr/bin/rclone mount gdrive: /home/<username>/CloudMounts/GoogleDrive \
   --vfs-cache-mode writes \
   --vfs-cache-max-age 24h \
   --vfs-read-chunk-size 128M \
   --vfs-read-chunk-size-limit off \
   --buffer-size 256M
-ExecStop=/bin/fusermount -u /home/user/CloudMounts/GoogleDrive
+ExecStop=/bin/fusermount -u /home/<username>/CloudMounts/GoogleDrive
 Restart=on-failure
-User=user
+User=<username>
 
 [Install]
 WantedBy=multi-user.target
 ```
+
+> **Note**: Replace `<username>` with your actual Linux username (you can find it by running `whoami`).
+> Systemd also supports the `%h` specifier for the home directory in user unit files.
 
 Enable and start:
 ```bash
@@ -188,11 +191,13 @@ Once Google Drive is mounted:
 
 ```bash
 # Option 1: Use mounted drive directly
-ln -s ~/CloudMounts/GoogleDrive/Q /home/user/Q_GoogleDrive
+ln -s ~/CloudMounts/GoogleDrive/Q ~/Q_GoogleDrive
 
-# Option 2: Sync bidirectionally
-rclone sync /home/user/Q/today gdrive:Q/today
-rclone sync gdrive:Q/today /home/user/Q/today
+# Option 2: Sync one-way (local → cloud)
+rclone sync ~/Q/today gdrive:Q/today
+
+# Option 3: True bidirectional sync (requires initial --resync)
+rclone bisync ~/Q/today gdrive:Q/today --resync
 ```
 
 ---
@@ -209,24 +214,24 @@ rclone ls dropbox:
 ### Copy Files
 ```bash
 # From local to cloud
-rclone copy /home/user/Q/today gdrive:Q/today
+rclone copy ~/Q/today gdrive:Q/today
 
 # From cloud to local
-rclone copy gdrive:Q/today /home/user/Q/today
+rclone copy gdrive:Q/today ~/Q/today
 ```
 
 ### Sync (Bidirectional)
 ```bash
-# Make destination match source exactly
-rclone sync /home/user/Q/today gdrive:Q/today
+# Make destination match source exactly (one-way)
+rclone sync ~/Q/today gdrive:Q/today
 
-# Sync both ways (careful!)
-rclone bisync /home/user/Q/today gdrive:Q/today --resync
+# True bidirectional sync (requires initial --resync)
+rclone bisync ~/Q/today gdrive:Q/today --resync
 ```
 
 ### Check Differences
 ```bash
-rclone check /home/user/Q/today gdrive:Q/today
+rclone check ~/Q/today gdrive:Q/today
 ```
 
 ---
