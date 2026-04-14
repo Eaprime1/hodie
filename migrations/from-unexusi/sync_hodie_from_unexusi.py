@@ -23,7 +23,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 HODIE_FOLDER_ID = "1tXvubhxXVYld_PgywN1S9XX_Ng6QgqLo"
-HODIE_LOCAL_DIR = Path(__file__).parent.parent / "hodie"
+HODIE_LOCAL_DIR = Path(__file__).parent.parent.parent / "hodie"
 MANIFEST_PATH = HODIE_LOCAL_DIR / ".sync-manifest.json"
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
