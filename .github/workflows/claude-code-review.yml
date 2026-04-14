@@ -26,23 +26,4 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |
             actions: read
-          direct_prompt: |
-            Review this pull request for the HODIE repository.
-
-            HODIE is a staged processing pipeline and universal workshop layer.
-            Key concepts: plexus stages (simplex through omniplex), quanta entities,
-            BBS daily intake, chain of custody migrations, prime progression framework.
-
-            Review priorities:
-            1. Security - credentials, tokens, hardcoded secrets, unsafe patterns
-            2. Portability - no hardcoded paths; use HOME or relative paths
-            3. Chain of custody - migrations should have provenance logs in migrations/
-            4. Plexus correctness - content routed to appropriate stage
-            5. Python hygiene - asyncio patterns, dataclasses, pathlib, type hints
-            6. Bash hygiene - quote variables, use double brackets, set -euo pipefail
-
-            Do NOT flag: prime-progression language, quanta entity names, hodie-specific
-            lexemes (plexus, duplex, simplex, atelier, navigo) - these are intentional
-            domain vocabulary.
-
-            Keep comments concise and actionable.
+          allowed_bots: '*'
