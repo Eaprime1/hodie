@@ -11,7 +11,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 CREDS="${1:-$REPO_ROOT/.secrets/gdrive-key.json}"
 
 echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] Starting hodie sync..."
