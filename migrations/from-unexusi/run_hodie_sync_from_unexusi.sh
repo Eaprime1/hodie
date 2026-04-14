@@ -18,7 +18,7 @@ echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] Starting hodie sync..."
 
 cd "$REPO_ROOT"
 
-python3 scripts/sync_hodie.py --credentials "$CREDS"
+python3 "$SCRIPT_DIR/sync_hodie_from_unexusi.py" --credentials "$CREDS"
 
 git add hodie/
 if git diff --cached --quiet; then
