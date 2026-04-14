@@ -32,7 +32,7 @@ The plexus is the processing pipeline. Every workshop concept has a plexus level
 |-------|---------|--------|----------------|
 | `simplex` | 1 | Single lexeme, infinite depth | Is my copy the same as origin? Yes/No/Maybe |
 | `duplex` | 2 | Shadow + carbon | Keeper of the first duplicate |
-| `triplex` | 3 | Transistor / Superposition gate | Signal routing — small input controls large output flow |
+| `triplex` | 3 | Superposition, triadic core | Relationship mapping opens |
 | `quadroplex` | 4 | Synergy emerges | Four directions held simultaneously |
 | `quintoplex` | 5 | Control pad (four fingers + thumb engage) | Captain's chair — full instrument access |
 | `multiplex` | 5+ | Multi-stage coordination | Streams aligned, error factor intentional |
@@ -56,20 +56,10 @@ The duplicatus is the keeper: first duplicate holder, carbonite, all shadow aspe
 
 Duplex is responsible for balance: preventing excessive copies while measuring which are generative.
 
-### Triplex — Transistor / Superposition Gate
+### Triplex — Superposition
 
-Triplex is the **transistor** of the plexus.
-
-A transistor: small input signal controls large output flow. It doesn't just pass — it gates and amplifies.
-Three streams enter triplex. The triadic relationship determines:
-- Which path amplifies
-- Which attenuates
-- What new signal emerges from the combination
-
-Triplex opens superposition: three-dimensional relationships become possible.
-Connections form across documents. The transistor decides which connection carries current.
-
-Triplex is also the **transition point** — where content stops being a document and becomes a node in a network.
+Triplex opens the superposition. The triadic core aspect.
+Three-dimensional relationships become possible. Connections form across documents.
 
 ### Quadroplex — Synergy
 
