@@ -45,8 +45,12 @@ ai = [
     "openai>=1.0.0",
     "google-generativeai>=0.3.0",
 ]
+drive = [
+    "google-auth>=2.0",
+    "google-api-python-client>=2.0",
+]
 all = [
-    "hodie[dev,ai]",
+    "hodie[dev,ai,drive]",
 ]
 
 [project.scripts]
