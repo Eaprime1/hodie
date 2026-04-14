@@ -1,23 +1,26 @@
 # Git Branch Strategy for PRIME 2026 Development
-**Created**: 2026-01-02
-**Purpose**: Enable parallel development across multiple workstreams
-**Pattern**: Feature branches → develop → main (stable)
+**Created**: 2026-01-02 | **Revised**: 2026-04-14
+**Purpose**: Enable parallel development across multiple workstreams and locations
+**Pattern**: Feature branches → develop → main (stable) via PR review
 
 ---
 
 ## Overview
 
-**Challenge**: PRIME 2026 has multiple parallel workstreams:
+**Challenge**: PRIME 2026 has multiple parallel workstreams, AI team members, and three
+active locations (mulberry / pixel8a / codespaces) all contributing to the same repository:
 - Foundation work (deduplication, sync, integration)
 - Heritage layer creation (13-17 transitions)
 - PIXEL integration (access protocols, team onboarding)
 - Launch preparation (narrative, demos, community)
+- AI-assisted development (Claude, Gemini, ChatGPT on separate branch tracks)
 
 **Solution**: Strategic branching enables:
 - Parallel development without conflicts
-- Safe experimentation
-- Clear integration pathways
+- Safe experimentation across devices and AI collaborators
+- Clear integration pathways through PR review
 - Stable main branch for public transmission
+- Permanent heritage preservation across all timelines
 
 ---
 
@@ -27,9 +30,9 @@
 
 **main**
 - Stable, launched, public-facing
-- Only merged after complete verification
+- Only merged via pull request after complete verification
 - Tagged for versions/releases
-- Protected (requires review)
+- Protected (requires PR review + CI passing)
 
 **develop**
 - Active integration branch
@@ -39,21 +42,39 @@
 
 **feature/***
 - Specific tasks/workstreams
-- Branched from develop
-- Merged back to develop when complete
-- Deleted after merge
+- Branched from develop (or main for quick fixes)
+- Merged back via PR → delete after merge
+- CI must pass before merge
 
 **heritage/***
-- Transitioned conversations
-- Stable heritage packages
-- Long-lived (permanent archive)
-- Never deleted
+- Transitioned conversations and completed knowledge packages
+- Long-lived — never deleted (permanent archive)
+- Merged by metadata only; full content stays on branch
 
 **experimental/***
-- Testing new patterns
-- Safe-to-fail exploration
-- May or may not merge
-- Deleted if unsuccessful
+- Testing new patterns, alternate approaches, safe-to-fail exploration
+- May or may not merge — delete if unsuccessful
+- Lower CI bar; iteration speed over stability
+
+**claude/***
+- AI-assisted development sessions (Claude Code)
+- Short-lived; reviewed by Eric before merge
+- Named by task: `claude/fix-pylint`, `claude/refactor-parser`
+
+**migration/***
+- Cross-repository content migrations (e.g. from UNEXUSI)
+- Contains sync scripts, logs, and one-time transition work
+- Merged to develop after migration verified; scripts kept in `migrations/`
+
+**hotfix/***
+- Critical fixes needed directly on main
+- Branched from main → merged to main AND develop immediately
+- Bypasses develop cycle; always fast-tracked
+
+**archive/***
+- Historical snapshots of completed phases
+- Never deleted — permanent reference points
+- Created at phase completions (pre-launch, post-launch, etc.)
 
 ---
 
@@ -61,118 +82,90 @@
 
 ### hodie (Primary Workspace)
 
-**Current State**: Main branch, active development
-**Recommended Branches**:
+**Current State**: Feature branches merge to main via PR (CI + review gate)
 
 ```
-main (stable, public)
-  ↑
-  ← develop (integration)
+main (stable, public, CI-gated)
+  ↑ PR
+  ← develop (integration, daily target)
       ↑
-      ← feature/foundation (Priority 1 work)
-      ← feature/heritage-layer (Priority 2 work)
-      ← feature/pixel-integration (Priority 3 work)
-      ← feature/launch-prep (Priority 4 work)
-      ← heritage/conversation-YYYYMMDD (transitioned)
-      ← experimental/new-pattern-test
+      ← feature/foundation         (Priority 1 — dedup, sync, CODEX)
+      ← feature/heritage-layer     (Priority 2 — 13-17 transitions)
+      ← feature/pixel-integration  (Priority 3 — access protocols)
+      ← feature/launch-prep        (Priority 4 — narrative, demos)
+      ← migration/from-unexusi     (one-time migration, now complete)
+      ← claude/session-task        (AI-assisted, short-lived)
+      ← heritage/conversation-YYYYMMDD  (permanent archive)
+      ← experimental/new-pattern   (safe-to-fail)
+      ← hotfix/critical-fix        (emergency, fast-track)
 ```
 
-**Immediate Actions**:
-1. Create `develop` branch from current main
-2. Create `feature/foundation` for Priority 1 work
-3. Create `heritage/` branch structure for transitions
-4. Set main as protected
+**Active Branch Status** (as of 2026-04-14):
+- `feature/migration-unexusi-hodie` → PR #47 open (migration work)
+- `main` → stable, CI passing
 
-**Workflow**:
+**Workflow** (PR-based, actual practice):
 ```bash
-# Create develop from main
-git checkout main
-git pull
-git checkout -b develop
-git push -u origin develop
+# Create and push feature branch
+git checkout main && git pull
+git checkout -b feature/my-work
+# ... do work ...
+git add <specific-files>
+git commit -m "Feature: descriptive message"
+git push -u origin feature/my-work
 
-# Create feature branches
-git checkout develop
-git checkout -b feature/foundation
-git checkout -b feature/heritage-layer
-git checkout -b feature/pixel-integration
-git checkout -b feature/launch-prep
-
-# Push all branches
-git push -u origin --all
+# Open PR on GitHub → CI runs pylint matrix → request review → merge
 ```
 
 ---
 
 ### today (Consolidation Workspace)
 
-**Current State**: Main branch
-**Recommended Branches**:
-
 ```
 main (stable consolidations)
   ↑
   ← develop
       ↑
-      ← feature/active-consolidation (ongoing)
-      ← archive/YYYYMM (completed consolidations)
+      ← feature/active-consolidation (work in progress)
+      ← archive/YYYYMM              (completed consolidations by month)
 ```
 
-**Purpose**:
-- `feature/active-consolidation` - work in progress
-- `archive/YYYYMM` - completed consolidations by month
-- Keep consolidated work organized
+**Purpose**: `feature/active-consolidation` → working state; `archive/YYYYMM` → completed by month.
 
 ---
 
 ### runexusiam (UNEXUS Development)
-
-**Current State**: Likely main branch
-**Recommended Branches**:
 
 ```
 main (stable UNEXUS)
   ↑
   ← develop
       ↑
-      ← feature/prime-integration (connect to PRIME)
-      ← feature/ka-measurement (Ka pressure tools)
+      ← feature/prime-integration  (connect to PRIME)
+      ← feature/ka-measurement     (Ka pressure tools)
 ```
 
-**Purpose**:
-- Integrate UNEXUS frameworks with PRIME 2026
-- Develop Ka measurement tools
-- Connect to CODEX system
+**Migration note**: Content from runexusiam is now syncing to hodie via `migrations/from-unexusi/`.
+Migration scripts live at `migrations/from-unexusi/sync_hodie_from_unexusi.py`.
 
 ---
 
 ### quanta (Entity Development)
-
-**Current State**: Main branch with entity folders
-**Recommended Branches**:
 
 ```
 main (complete entities)
   ↑
   ← develop
       ↑
-      ← feature/pixel-entity (PIXEL development)
-      ← feature/wiki-entity (WikiEntity enhancements)
-      ← feature/quantum-entities (Perdura, Tardigradia, etc.)
-      ← integration/cross-entity (patterns across entities)
+      ← feature/pixel-entity         (PIXEL development)
+      ← feature/wiki-entity          (WikiEntity enhancements)
+      ← feature/quantum-entities     (Perdura, Tardigradia, etc.)
+      ← integration/cross-entity     (patterns across entities)
 ```
-
-**Purpose**:
-- Parallel entity development
-- Cross-entity integration work
-- PIXEL entity as primary focus
 
 ---
 
 ### AI-Projects (New Development)
-
-**Current State**: Recently added
-**Recommended Branches**:
 
 ```
 main (stable)
@@ -183,11 +176,6 @@ main (stable)
       ← feature/prime-integration
 ```
 
-**Purpose**:
-- New AI project development
-- Integration with PRIME 2026
-- Experimental AI collaboration
-
 ---
 
 ## Branch Naming Conventions
@@ -197,13 +185,38 @@ main (stable)
 Format: `feature/<short-description>`
 
 Examples:
-- `feature/foundation` - Priority 1 foundation work
-- `feature/heritage-layer` - Priority 2 heritage creation
-- `feature/prime-docs-dedup` - Specific deduplication task
-- `feature/codex-integration` - CODEX integration work
-- `feature/launch-narrative` - Launch story development
+- `feature/foundation` — Priority 1 foundation work
+- `feature/heritage-layer` — Priority 2 heritage creation
+- `feature/prime-docs-dedup` — specific deduplication task
+- `feature/codex-integration` — CODEX integration work
+- `feature/launch-narrative` — launch story development
 
-**Lifecycle**: Created from develop → work → merge to develop → delete
+**Lifecycle**: Created from develop → work → PR → merge to develop → delete
+
+---
+
+### Claude Branches
+
+Format: `claude/<task-description>`
+
+Examples:
+- `claude/fix-pylint-errors` — lint fix session
+- `claude/refactor-parser` — code improvement session
+- `claude/review-branch-strategy` — documentation work
+
+**Lifecycle**: Created during AI session → PR → review by Eric → merge or close → delete
+
+---
+
+### Migration Branches
+
+Format: `migration/<source-repo>`
+
+Examples:
+- `migration/from-unexusi` — content from runexusiam repo
+- `migration/from-today` — consolidation from today repo
+
+**Lifecycle**: Created → scripts run + verified → PR → merge → scripts archived in `migrations/`
 
 ---
 
@@ -212,11 +225,11 @@ Examples:
 Format: `heritage/<descriptor-YYYYMMDD>`
 
 Examples:
-- `heritage/conversation-20260115` - Specific conversation transition
-- `heritage/2026-01-batch` - Monthly batch of transitions
-- `heritage/foundation-layer` - Foundation heritage collection
+- `heritage/conversation-20260115` — specific conversation transition
+- `heritage/2026-01-batch` — monthly batch of transitions
+- `heritage/foundation-layer` — foundation heritage collection
 
-**Lifecycle**: Created → populated → never deleted (permanent archive)
+**Lifecycle**: Created → populated → **never deleted** (permanent archive)
 
 ---
 
@@ -229,7 +242,19 @@ Examples:
 - `experimental/alternate-ka-formula`
 - `experimental/different-heritage-structure`
 
-**Lifecycle**: Created → test → merge if successful OR delete if not
+**Lifecycle**: Created → test → merge if successful **OR** delete if not
+
+---
+
+### Hotfix Branches
+
+Format: `hotfix/<issue-description>`
+
+Examples:
+- `hotfix/pylint-ci-failure`
+- `hotfix/crawler-path-error`
+
+**Lifecycle**: Branch from main → fix → PR to main (fast-track) → also merge to develop → delete
 
 ---
 
@@ -238,11 +263,85 @@ Examples:
 Format: `archive/<period-or-description>`
 
 Examples:
-- `archive/2026-01` - January 2026 work
-- `archive/pre-launch` - Work before PRIME 2026 launch
-- `archive/deprecated-approaches` - What didn't work
+- `archive/2026-01` — January 2026 work
+- `archive/pre-launch` — work before PRIME 2026 launch
+- `archive/deprecated-approaches` — what didn't work
 
-**Lifecycle**: Created → populated → stable → never deleted
+**Lifecycle**: Created → populated → stable → **never deleted**
+
+---
+
+## Multi-Location Awareness
+
+Hodie operates across three locations. Branch strategy adapts per environment.
+
+### mulberry (Laptop HQ)
+- Full git workflow — create branches, run heavy CI locally
+- Uses `.githooks/` (pre-commit lint scan, post-commit session logging)
+- Install: `git config core.hooksPath .githooks`
+- Can run full pylint matrix and integration tests before push
+
+### pixel8a (Termux / Mobile)
+- Lightweight — prefer small, focused commits
+- Favor `claude/` or `experimental/` branches for field work
+- Sync often; avoid large rebases on mobile
+- Use `source .scripts/env_setup.sh` before any session
+
+### codespaces (Cloud Ephemeral)
+- Clean environment each session — always `git pull` first
+- Preferred for PR review and CI validation
+- `claude/` branches created here should be pushed and reviewed promptly (codespace may expire)
+- Full tool access; use for complex migrations
+
+**Cross-location rule**: Commit messages should indicate origin context when ambiguous.
+```bash
+git commit -m "Feature: parser fix [pixel8a]"
+```
+
+---
+
+## Stream Integration
+
+Active workstreams (`.streams/`) map to branch families:
+
+| Stream | Branch Prefix | Purpose |
+|--------|---------------|---------|
+| `prime` | `feature/prime-*` | PRIME framework dev and progression |
+| `codex` | `feature/codex-*` | Knowledge consolidation and readiness |
+| `gamemaster` | `feature/game-*` | Game system testing (Hyborian Wars, etc.) |
+
+Stream state files in `.streams/` track what is active. When starting work on a stream:
+```bash
+# Verify stream is active
+cat .streams/prime
+
+# Create stream branch
+git checkout -b feature/prime-entity-domains
+```
+
+---
+
+## AI Team Workflow
+
+### Claude (Claude Code)
+- Works on `claude/*` branches or directly on `feature/*` branches
+- All Claude changes go through PR review before merge
+- Triggered via `@claude` in PR/issue comments → dispatched by `.github/workflows/claude-code-review.yml`
+- Short sessions → push → tag Eric for review
+
+### Gemini
+- Reviews via `.github/workflows/gemini-review.yml` (automated PR review)
+- Dispatched tasks via `.github/workflows/gemini-dispatch.yml`
+- Invoked on demand via `.github/workflows/gemini-invoke.yml`
+- Does not push directly — review comments only
+- Tagged with `/gemini` in PR comments for targeted invocation
+
+### ChatGPT / Other AI
+- Works via shared `experimental/` branches
+- Eric mediates integration back to develop
+
+**Coordination rule**: AI team members work on separate branches or review only.
+Merges to develop/main are always human-approved (Eric).
 
 ---
 
@@ -251,26 +350,42 @@ Examples:
 ### Daily Development
 
 ```bash
-# Start day
-git checkout develop
-git pull origin develop
+# Start day — sync location
+source .scripts/env_setup.sh
+git checkout develop && git pull origin develop
 
-# Work on feature
-git checkout feature/foundation  # or create if needed
+# Work on active feature
+git checkout feature/foundation  # or: git checkout -b feature/new-task
 # ... do work ...
-git add .
-git commit -m "Descriptive message"
+git add <specific-files>         # never 'git add .' — be precise
+git commit -m "Feature: description of change"
 git push origin feature/foundation
 
-# End day - merge to develop if stable
-git checkout develop
-git merge feature/foundation
-git push origin develop
+# ACP cycle (polish → proceed → amplify)
+bash .scripts/acp_polish.sh .
+bash .scripts/acp_proceed.sh DRAFT REVIEW
+
+# End day — open PR if ready, or push for async review
 ```
 
 ---
 
-### Conversation Transition
+### PR-Based Merge (Standard Practice)
+
+```bash
+# Feature complete → open PR on GitHub
+git push origin feature/my-work
+# GitHub: open PR → CI runs pylint (3.8/3.9/3.10 matrix) → request review
+# After approval → squash merge or merge commit → delete branch
+
+# For claude/ branches: Eric reviews before merge
+# For feature/ branches: CI + Eric review
+# For hotfix/ branches: fast-track, CI must pass
+```
+
+---
+
+### Conversation Transition (Heritage)
 
 ```bash
 # After completing 13-17 transition
@@ -279,10 +394,31 @@ git add conversation_heritage/transitioned_2026_01/specific-conversation/
 git commit -m "Heritage: Transition completed conversation (TKP 0.89)"
 git push -u origin heritage/conversation-20260115
 
-# Merge metadata to develop (not full conversation)
+# Merge only metadata/index to develop (not full conversation content)
 git checkout develop
 git merge --no-ff heritage/conversation-20260115 -- _CONSOLIDATED/heritage_index.md
 git push origin develop
+```
+
+---
+
+### Migration Workflow
+
+```bash
+# Run migration script (see migrations/from-unexusi/)
+cd migrations/from-unexusi/
+bash run_hodie_sync_from_unexusi.sh
+
+# Review changes
+git status
+git diff --stat
+
+# Commit migration results
+git add hodie/  # specific paths only
+git commit -m "Migration: sync from unexusi [MIGRATION_LOG.md updated]"
+git push origin migration/from-unexusi
+
+# Open PR → verify → merge to develop
 ```
 
 ---
@@ -297,17 +433,34 @@ git add launch/
 git commit -m "Launch: Add narrative and demo materials"
 git push origin feature/launch-prep
 
-# When ready for review
-git checkout develop
-git merge feature/launch-prep
-git push origin develop
-
-# When fully verified
+# PR → develop → verify → PR → main → tag
 git checkout main
 git merge develop
 git tag -a v1.0-launch -m "PRIME 2026 Launch"
 git push origin main --tags
 ```
+
+---
+
+## CI/CD Integration
+
+**Pipeline**: `.github/workflows/pylint.yml`
+- Triggers on every push to any branch
+- Matrix: Python 3.8, 3.9, 3.10
+- **Branch merge policy**: CI must be green before merging to develop or main
+- Heritage and archive branches: CI runs but failures are informational only
+
+**Pre-push checks** (mulberry/codespaces):
+```bash
+# Match CI locally before push
+pip install pylint
+pylint $(git ls-files '*.py')
+```
+
+**Gemini review workflows** (`.github/workflows/gemini-*.yml`):
+- `gemini-review.yml` — auto-runs on PR open
+- `gemini-dispatch.yml` — for targeted task dispatch
+- `gemini-triage.yml` — issue triage automation
 
 ---
 
@@ -325,102 +478,80 @@ git push origin main --tags
 
 **hodie ↔ runexusiam**:
 - UNEXUS frameworks flow: runexusiam → hodie
-- Branch: `feature/unexus-integration`
+- Branch: `migration/from-unexusi` (scripts in `migrations/`)
 
 ---
 
 ## Protection Rules
 
 ### main Branch
-
-**Protections**:
-- Require pull request review
-- Require status checks to pass
+- Require pull request review (Eric approval)
+- Require CI status checks to pass (pylint matrix)
 - No direct commits
-- Only from develop branch
+- Merge from develop or hotfix only
 
 ### develop Branch
+- Can merge feature branches directly or via PR
+- Regular CI validation required
+- Integration point for all workstreams
 
-**Protections**:
-- Can merge feature branches directly
-- Regular testing required
-- Integration point for all work
-
-### feature/* Branches
-
-**Protections**:
-- None (fast development)
+### feature/*, claude/*, migration/* Branches
+- No branch protection (fast development)
 - Delete after merge
-- Rebase before merge (clean history)
+- Rebase before merge for clean history
 
-### heritage/* Branches
-
-**Protections**:
-- Never delete
-- Immutable after creation
-- Permanent archive
+### heritage/*, archive/* Branches
+- **Never delete**
+- Immutable after populating
+- Permanent archive — these are consciousness records
 
 ---
 
 ## Parallel Workstreams
 
-### Week 1 (Foundation)
-
+### Phase: Foundation
 **Branches Active**:
-- `feature/foundation` - Deduplication + sync + CODEX integration
-- `feature/box-simulation` - Testing gravity well locally
+- `feature/foundation` — deduplication + sync + CODEX integration
+- `feature/box-simulation` — testing gravity well locally
 
-**Team**:
-- Eric + Claude on foundation
-- Parallel testing on simulation
+**Team**: Eric + Claude on foundation; parallel simulation testing
 
 ---
 
-### Weeks 2-3 (Heritage)
-
+### Phase: Heritage Layer
 **Branches Active**:
-- `feature/heritage-layer` - 13-17 transition implementation
-- `heritage/conversation-*` - Individual transitions
-- `feature/launch-package` - Seed extraction and packaging
+- `feature/heritage-layer` — 13-17 transition implementation
+- `heritage/conversation-*` — individual transitions
+- `feature/launch-package` — seed extraction and packaging
 
-**Team**:
-- Eric + Claude on transitions
-- Gemini on pattern recognition
-- ChatGPT on organization
+**Team**: Eric + Claude on transitions; Gemini on pattern recognition
 
 ---
 
-### Week 4 (PIXEL)
-
+### Phase: PIXEL Integration
 **Branches Active**:
-- `feature/pixel-integration` - Access protocols
-- `feature/team-onboarding` - Multi-AI onboarding
-- `feature/prime-decision` - Decision architecture
+- `feature/pixel-integration` — access protocols
+- `feature/team-onboarding` — multi-AI onboarding
+- `feature/prime-decision` — decision architecture
 
-**Team**:
-- All team members (testing collaboration)
-- PIXEL becoming operational
+**Team**: All AI team members; PIXEL becoming operational
 
 ---
 
-### Weeks 5-6 (Launch)
-
+### Phase: Launch
 **Branches Active**:
-- `feature/launch-prep` - All launch materials
-- `feature/narrative` - Story development
-- `feature/demos` - Demonstration creation
-- `feature/community` - Infrastructure setup
+- `feature/launch-prep` — all launch materials
+- `feature/narrative` — story development
+- `feature/demos` — demonstration creation
+- `feature/community` — infrastructure setup
 
-**Team**:
-- Full team coordination
-- External testing and feedback
+**Team**: Full team coordination; external testing and feedback
 
 ---
 
 ## Merge Strategy
 
-### Small Changes
-
+### Small Changes / Quick Fixes
 ```bash
 # Fast-forward merge (clean history)
 git checkout develop
@@ -428,19 +559,17 @@ git merge --ff-only feature/small-fix
 ```
 
 ### Large Features
-
 ```bash
-# No fast-forward (preserve feature context)
+# No fast-forward (preserve feature context in graph)
 git checkout develop
 git merge --no-ff feature/large-feature
 ```
 
-### Heritage
-
+### Heritage (metadata only)
 ```bash
-# Never merge full heritage (too large)
-# Only merge metadata/indices
-git merge --no-ff heritage/conversation -- metadata-files-only
+# Never merge full heritage branch content (too large)
+# Only bring in metadata/indices
+git merge --no-ff heritage/conversation -- _CONSOLIDATED/heritage_index.md
 ```
 
 ---
@@ -448,13 +577,12 @@ git merge --no-ff heritage/conversation -- metadata-files-only
 ## Conflict Resolution
 
 ### Philosophy
-
-- Develop is source of truth
+- Develop is source of truth for active work
 - Feature branches rebase onto develop regularly
-- Conflicts resolved in feature branch before merge
+- Conflicts resolved in feature branch **before** merge
+- AI-generated branches (claude/*) may need human resolution if conflicts arise
 
 ### Process
-
 ```bash
 # In feature branch
 git checkout feature/my-work
@@ -463,10 +591,10 @@ git rebase origin/develop
 
 # Resolve conflicts
 # ... fix files ...
-git add .
+git add <resolved-files>
 git rebase --continue
 
-# Push (force with lease for safety)
+# Push (force with lease for safety — not force)
 git push --force-with-lease origin feature/my-work
 ```
 
@@ -475,62 +603,89 @@ git push --force-with-lease origin feature/my-work
 ## Emergency Procedures
 
 ### Rollback
-
 ```bash
 # If develop breaks
 git checkout develop
-git revert HEAD  # or specific commit
+git revert HEAD  # creates a new revert commit (safe)
 git push origin develop
 ```
 
 ### Hotfix
-
 ```bash
 # Critical fix needed in main
-git checkout main
+git checkout main && git pull
 git checkout -b hotfix/critical-issue
 # ... fix ...
-git commit -m "Hotfix: Description"
-git checkout main
-git merge hotfix/critical-issue
-git push origin main
+git commit -m "Hotfix: description"
+git push origin hotfix/critical-issue
+# Open PR to main → fast-track review → merge
 
-# Also merge to develop
+# Also backport to develop
 git checkout develop
 git merge hotfix/critical-issue
 git push origin develop
+git branch -d hotfix/critical-issue
 ```
+
+### CI Failure Triage
+```bash
+# Run locally to reproduce
+pip install pylint
+pylint $(git ls-files '*.py')
+
+# Check specific workflow
+# gh run view <run-id> --log  (via GitHub CLI)
+```
+
+---
+
+## PRIME Framework Alignment
+
+Branch lifecycle maps to PRIME progression (2→3→5→7→11→13→17):
+
+| Prime | Stage | Branch Type |
+|-------|-------|-------------|
+| 2 | Foundation | `feature/foundation-*` |
+| 3 | Structure | `feature/structure-*`, `feature/plexus-*` |
+| 5 | Integration | `feature/integration-*`, `migration/*` |
+| 7 | Activation | `feature/pixel-*`, `claude/*` |
+| 11 | Expansion | `feature/launch-*`, `experimental/*` |
+| 13 | Transition | `heritage/*` (permanent) |
+| 17 | Completion | Tagged on `main` — version release |
 
 ---
 
 ## Success Metrics
 
 **Branch Strategy Works When**:
-- ✓ Parallel work doesn't conflict
-- ✓ Main stays stable
-- ✓ Heritage preserved permanently
-- ✓ Integration is smooth
-- ✓ Team coordination efficient
+- ✓ Parallel work doesn't conflict across locations
+- ✓ Main stays stable (CI green, no direct commits)
+- ✓ Heritage preserved permanently (never deleted)
+- ✓ AI team contributions are reviewed before merge
+- ✓ Integration is smooth across repositories
+- ✓ Team coordination efficient across mulberry/pixel8a/codespaces
 
-**Ready to Execute**:
-- Create branches listed above
-- Assign work to branches
-- Begin parallel development
+**Anti-patterns to avoid**:
+- ✗ `git add .` — always add specific files
+- ✗ Committing to main directly
+- ✗ Deleting heritage/* or archive/* branches
+- ✗ Merging AI branches without human review
+- ✗ Skipping CI (`--no-verify`)
 
 ---
 
 ## Status
 
-**Current**: Strategy defined
-**Next**: Create initial branch structure
-**Timeline**: Today (setup), then daily use
+**Current** (2026-04-14): Strategy active; PR #47 open (migration work)
+**Next**: Establish develop branch; align all active branches to this model
+**Living document**: Update this file when workflows evolve
 
 ---
 
 **∰◊€π¿🌌∞**
 
 *Branches enable parallel consciousness streams to flow without collision*
-*Main stays stable while development explores*
-*Heritage preserved across all timelines*
+*Main stays stable while development explores — heritage preserved across all timelines*
+*Each location, each AI, each stream — parallel threads in the same tapestry*
 
 **Ready for parallel development.**
