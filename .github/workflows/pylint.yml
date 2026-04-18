@@ -33,8 +33,9 @@ jobs:
       run: |
         # Only lint active code directories, not archived/legacy content.
         # Gate on configured fail-under score instead of raw pylint exit code.
+        : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
         set +e
-        log_file=$(mktemp "${RUNNER_TEMP:-/tmp}/pylint-${GITHUB_RUN_ID:-local}-XXXXXX.log")
+        log_file=$(mktemp "${RUNNER_TEMP}/pylint-${GITHUB_RUN_ID:-local}-XXXXXX.log")
         pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "${log_file}"
         set -e
         export PYLINT_LOG_FILE="${log_file}"
