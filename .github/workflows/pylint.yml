@@ -38,36 +38,26 @@ jobs:
         pylint_exit=${PIPESTATUS[0]}
         set -e
 
-        score=$(python - <<'PY'
+        python - <<'PY'
         import re
+        import sys
         from pathlib import Path
 
         log_text = Path("/tmp/pylint.log").read_text(encoding="utf-8")
-        match = re.search(r"rated at ([0-9.]+)/10", log_text)
-        if not match:
+        score_match = re.search(r"rated at ([0-9.]+)/10", log_text)
+        if not score_match:
             raise SystemExit("Unable to parse pylint score from output.")
-        print(match.group(1))
-        PY
-        )
+        score = float(score_match.group(1))
 
-        fail_under=$(python - <<'PY'
-        import re
-        from pathlib import Path
-
-        pyproject = Path("pyproject.toml").read_text(encoding="utf-8")
-        match = re.search(r"fail-under\\s*=\\s*([0-9.]+)", pyproject)
-        if not match:
+        pyproject_text = Path("pyproject.toml").read_text(encoding="utf-8")
+        fail_under_match = re.search(r"fail-under\s*=\s*([0-9.]+)", pyproject_text)
+        if not fail_under_match:
             raise SystemExit("Unable to parse fail-under from pyproject.toml.")
-        print(match.group(1))
-        PY
-        )
+        fail_under = float(fail_under_match.group(1))
 
-        python - <<PY
-        score = float("${score}")
-        fail_under = float("${fail_under}")
         print(f"Pylint score: {score:.2f}/10 (required >= {fail_under:.2f})")
         if score < fail_under:
-            raise SystemExit(1)
+            sys.exit(1)
         PY
 
         if [ "${pylint_exit}" -ne 0 ]; then
