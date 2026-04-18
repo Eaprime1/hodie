@@ -46,17 +46,18 @@ jobs:
         import sys
         from pathlib import Path
 
+        PREVIEW_LENGTH = 1000
         report = Path("pylint-report.txt").read_text(encoding="utf-8")
         score_match = re.search(r"rated at ([0-9.]+)/10", report)
         if not score_match:
-            preview = report[-1000:] if report else "<empty report>"
+            preview = report[-PREVIEW_LENGTH:] if report else "<empty report>"
             raise SystemExit(
                 "Unable to parse pylint score from pylint-report.txt. "
                 f"Report tail preview:\n{preview}"
             )
 
         pyproject = Path("pyproject.toml").read_text(encoding="utf-8")
-        threshold_match = re.search(r"(?m)^\\s*fail-under\\s*=\\s*([0-9.]+)\\s*$", pyproject)
+        threshold_match = re.search(r"(?m)^\s*fail-under\s*=\s*([0-9.]+)\s*$", pyproject)
         if not threshold_match:
             raise SystemExit("Unable to parse fail-under from pyproject.toml")
 
