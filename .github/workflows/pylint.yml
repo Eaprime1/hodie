@@ -31,5 +31,36 @@ jobs:
 
     - name: Lint active codebase
       run: |
-        # Only lint active code directories, not archived/legacy content
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc
+        # Only lint active code directories, not archived/legacy content.
+        # Enforce project policy from pyproject.toml: fail-under = 7.0
+        set +e
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc > pylint-report.txt
+        pylint_exit_code=$?
+        set -e
+
+        cat pylint-report.txt
+        echo "Raw pylint exit code: $pylint_exit_code"
+
+        PYLINT_SCORE=$(python - <<'PY'
+        import re
+        from pathlib import Path
+
+        report = Path("pylint-report.txt").read_text(encoding="utf-8")
+        match = re.search(r"rated at ([0-9.]+)/10", report)
+        if not match:
+            raise SystemExit("Unable to parse pylint score from output")
+        print(match.group(1))
+        PY
+        )
+        export PYLINT_SCORE
+
+        python - <<'PY'
+        import os
+        import sys
+
+        score = float(os.environ["PYLINT_SCORE"])
+        threshold = 7.0
+        print(f"Evaluated pylint score: {score:.2f}/10 (required >= {threshold:.1f})")
+        if score < threshold:
+            sys.exit(1)
+        PY
