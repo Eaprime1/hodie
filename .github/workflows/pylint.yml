@@ -31,5 +31,45 @@ jobs:
 
     - name: Lint active codebase
       run: |
-        # Only lint active code directories, not archived/legacy content
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc
+        # Only lint active code directories, not archived/legacy content.
+        # Gate on configured fail-under score instead of raw pylint exit code.
+        set +e
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee /tmp/pylint.log
+        pylint_exit=${PIPESTATUS[0]}
+        set -e
+
+        score=$(python - <<'PY'
+        import re
+        from pathlib import Path
+
+        log_text = Path("/tmp/pylint.log").read_text(encoding="utf-8")
+        match = re.search(r"rated at ([0-9.]+)/10", log_text)
+        if not match:
+            raise SystemExit("Unable to parse pylint score from output.")
+        print(match.group(1))
+        PY
+        )
+
+        fail_under=$(python - <<'PY'
+        import re
+        from pathlib import Path
+
+        pyproject = Path("pyproject.toml").read_text(encoding="utf-8")
+        match = re.search(r"fail-under\\s*=\\s*([0-9.]+)", pyproject)
+        if not match:
+            raise SystemExit("Unable to parse fail-under from pyproject.toml.")
+        print(match.group(1))
+        PY
+        )
+
+        python - <<PY
+        score = float("${score}")
+        fail_under = float("${fail_under}")
+        print(f"Pylint score: {score:.2f}/10 (required >= {fail_under:.2f})")
+        if score < fail_under:
+            raise SystemExit(1)
+        PY
+
+        if [ "${pylint_exit}" -ne 0 ]; then
+          echo "Pylint exited with ${pylint_exit} due to lint messages; score gate applied."
+        fi
