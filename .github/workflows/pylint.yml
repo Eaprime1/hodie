@@ -34,18 +34,25 @@ jobs:
         # Only lint active code directories, not archived/legacy content.
         # Gate on configured fail-under score instead of raw pylint exit code.
         set +e
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee /tmp/pylint.log
+        log_file="${RUNNER_TEMP:-/tmp}/pylint.log"
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "${log_file}"
         set -e
+        export PYLINT_LOG_FILE="${log_file}"
 
         python - <<'PY'
+        import os
         import re
         import sys
         from pathlib import Path
 
-        log_text = Path("/tmp/pylint.log").read_text(encoding="utf-8")
+        log_path = Path(os.environ["PYLINT_LOG_FILE"])
+        log_text = log_path.read_text(encoding="utf-8")
         score_match = re.search(r"rated at ([0-9.]+)/10", log_text)
         if not score_match:
-            raise SystemExit("Unable to parse pylint score from output.")
+            raise SystemExit(
+                f"Unable to parse pylint score from output in {log_path}. "
+                'Expected format: "rated at X/10".'
+            )
         score = float(score_match.group(1))
 
         pyproject_text = Path("pyproject.toml").read_text(encoding="utf-8")
