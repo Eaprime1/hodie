@@ -34,7 +34,7 @@ jobs:
         # Only lint active code directories, not archived/legacy content.
         # Gate on configured fail-under score instead of raw pylint exit code.
         set +e
-        log_file="${RUNNER_TEMP:-/tmp}/pylint.log"
+        log_file="${RUNNER_TEMP:-/tmp}/pylint-${GITHUB_RUN_ID:-local}.log"
         pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "${log_file}"
         set -e
         export PYLINT_LOG_FILE="${log_file}"
@@ -45,9 +45,10 @@ jobs:
         import sys
         from pathlib import Path
 
+        number_pattern = r"[0-9]+(?:\.[0-9]+)?"
         log_path = Path(os.environ["PYLINT_LOG_FILE"])
         log_text = log_path.read_text(encoding="utf-8")
-        score_match = re.search(r"rated at ([0-9.]+)/10", log_text)
+        score_match = re.search(rf"rated at ({number_pattern})/10", log_text)
         if not score_match:
             raise SystemExit(
                 f"Unable to parse pylint score from output in {log_path}. "
@@ -56,7 +57,7 @@ jobs:
         score = float(score_match.group(1))
 
         pyproject_text = Path("pyproject.toml").read_text(encoding="utf-8")
-        fail_under_match = re.search(r"fail-under\s*=\s*([0-9.]+)", pyproject_text)
+        fail_under_match = re.search(rf"fail-under\s*=\s*({number_pattern})", pyproject_text)
         if not fail_under_match:
             raise SystemExit("Unable to parse fail-under from pyproject.toml.")
         fail_under = float(fail_under_match.group(1))
