@@ -41,25 +41,27 @@ jobs:
         cat pylint-report.txt
         echo "Raw pylint exit code: $pylint_exit_code"
 
-        PYLINT_SCORE=$(python - <<'PY'
+        python - <<'PY'
         import re
+        import sys
         from pathlib import Path
 
         report = Path("pylint-report.txt").read_text(encoding="utf-8")
-        match = re.search(r"rated at ([0-9.]+)/10", report)
-        if not match:
-            raise SystemExit("Unable to parse pylint score from output")
-        print(match.group(1))
-        PY
-        )
-        export PYLINT_SCORE
+        score_match = re.search(r"rated at ([0-9.]+)/10", report)
+        if not score_match:
+            preview = report[-1000:] if report else "<empty report>"
+            raise SystemExit(
+                "Unable to parse pylint score from pylint-report.txt. "
+                f"Report tail preview:\n{preview}"
+            )
 
-        python - <<'PY'
-        import os
-        import sys
+        pyproject = Path("pyproject.toml").read_text(encoding="utf-8")
+        threshold_match = re.search(r"(?m)^\\s*fail-under\\s*=\\s*([0-9.]+)\\s*$", pyproject)
+        if not threshold_match:
+            raise SystemExit("Unable to parse fail-under from pyproject.toml")
 
-        score = float(os.environ["PYLINT_SCORE"])
-        threshold = 7.0
+        score = float(score_match.group(1))
+        threshold = float(threshold_match.group(1))
         print(f"Evaluated pylint score: {score:.2f}/10 (required >= {threshold:.1f})")
         if score < threshold:
             sys.exit(1)
