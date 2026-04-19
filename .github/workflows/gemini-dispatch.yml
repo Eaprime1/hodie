@@ -65,8 +65,14 @@ jobs:
             CONTEXT="${COMMENT_BODY#@gemini-cli}"
           fi
 
+          OUTPUT_DELIMITER="GITHUB_OUTPUT_$(openssl rand -hex 16)"
+
           echo "command=${COMMAND}" >> "$GITHUB_OUTPUT"
-          echo "additional_context=${CONTEXT}" >> "$GITHUB_OUTPUT"
+          {
+            echo "additional_context<<${OUTPUT_DELIMITER}"
+            echo "${CONTEXT}"
+            echo "${OUTPUT_DELIMITER}"
+          } >> "$GITHUB_OUTPUT"
 
   review:
     needs: 'dispatch'
