@@ -39,9 +39,12 @@ jobs:
         cat pylint.log
         PY_FAIL_UNDER=$(python - <<'PY'
 import pathlib
-import tomli
+try:
+    import tomllib as toml_loader
+except ModuleNotFoundError:  # Python < 3.11
+    import tomli as toml_loader
 with open(pathlib.Path("pyproject.toml"), "rb") as f:
-    pyproject = tomli.load(f)
+    pyproject = toml_loader.load(f)
 print(pyproject["tool"]["pylint"]["main"]["fail-under"])
 PY
 )
