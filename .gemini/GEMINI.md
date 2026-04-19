@@ -1,7 +1,7 @@
 # GEMINI.md — Hodie Contributor Brief for Gemini
 
 **Read this first in any Gemini session working in this repo.**
-Point: `/home/sauron/HODIE/.gemini/GEMINI.md`
+Point: `.gemini/GEMINI.md`
 
 ## What HODIE Is
 
