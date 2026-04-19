@@ -69,8 +69,17 @@ jobs:
         python - <<'PY' "$SCORE" "$FAIL_UNDER"
         import sys
 
-        score = float(sys.argv[1])
-        fail_under = float(sys.argv[2])
+        try:
+          score = float(sys.argv[1])
+        except ValueError as exc:
+          print(f"Could not parse SCORE as float: {sys.argv[1]!r}")
+          raise SystemExit(1) from exc
+
+        try:
+          fail_under = float(sys.argv[2])
+        except ValueError as exc:
+          print(f"Could not parse FAIL_UNDER as float: {sys.argv[2]!r}")
+          raise SystemExit(1) from exc
 
         if score < fail_under:
           print(f"Score {score:.2f} is below fail-under {fail_under:.2f}")
