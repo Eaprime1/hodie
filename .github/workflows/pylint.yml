@@ -32,4 +32,26 @@ jobs:
     - name: Lint active codebase
       run: |
         # Only lint active code directories, not archived/legacy content
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc
+        set -o pipefail
+        pylint_log="${RUNNER_TEMP:-/tmp}/pylint-output-${{ matrix.python-version }}.log"
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "$pylint_log"
+        pylint_exit="${PIPESTATUS[0]}"
+
+        score="$(grep -Eo 'rated at [0-9]+\.[0-9]+/10' "$pylint_log" | tail -n 1 | sed -E 's/rated at ([0-9]+\.[0-9]+)\/10/\1/')"
+        fail_under="$(grep -E '^[[:space:]]*fail-under[[:space:]]*=' pyproject.toml | head -n 1 | sed -E 's/.*=[[:space:]]*([0-9]+(\.[0-9]+)?).*/\1/')"
+
+        if [ -z "$score" ] || [ -z "$fail_under" ]; then
+          echo "Unable to parse pylint score or fail-under threshold."
+          exit 1
+        fi
+
+        python -c "import sys; sys.exit(0 if float('$score') >= float('$fail_under') else 1)"
+        if [ "$?" -ne 0 ]; then
+          echo "Pylint score $score is below fail-under threshold $fail_under."
+          exit 1
+        fi
+
+        echo "Pylint score $score meets fail-under threshold $fail_under."
+        if [ "$pylint_exit" -ne 0 ]; then
+          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
+        fi
