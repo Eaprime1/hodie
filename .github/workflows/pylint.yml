@@ -35,13 +35,24 @@ jobs:
         # Only lint active code directories, not archived/legacy content.
         # Gate on pyproject's fail-under score instead of raw pylint exit code.
         set -euo pipefail
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc > pylint.log || true
+        set +e
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc > pylint.log
+        PYLINT_EXIT=$?
+        set -e
+        # Fail on fatal/error/usage bits only (1 + 2 + 32 = 35).
+        # Allow warnings/refactors/conventions and score-gate those below.
+        if (( PYLINT_EXIT & 35 )); then
+          cat pylint.log
+          echo "Pylint exited with fatal/error/usage bits set: ${PYLINT_EXIT}"
+          exit "${PYLINT_EXIT}"
+        fi
         cat pylint.log
         PY_FAIL_UNDER=$(python - <<'PY'
 import pathlib
 try:
     import tomllib as toml_loader
 except ModuleNotFoundError:  # Python < 3.11
+    # Fallback for Python < 3.11 where tomllib is unavailable.
     import tomli as toml_loader
 with open(pathlib.Path("pyproject.toml"), "rb") as f:
     pyproject = toml_loader.load(f)
@@ -54,7 +65,10 @@ import re
 text = pathlib.Path("pylint.log").read_text(encoding="utf-8")
 match = re.search(r"rated at ([0-9]+\.[0-9]+)/10", text)
 if not match:
-    raise SystemExit("Unable to parse pylint score from output.")
+    raise SystemExit(
+        "Unable to parse pylint score from output. "
+        "The log may be truncated or pylint may have crashed."
+    )
 print(match.group(1))
 PY
 )
