@@ -32,4 +32,49 @@ jobs:
     - name: Lint active codebase
       run: |
         # Only lint active code directories, not archived/legacy content
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc
+        set +e
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee pylint-output.txt
+        PYLINT_EXIT=${PIPESTATUS[0]}
+        set -e
+
+        SCORE=$(python - <<'PY'
+        import re
+        from pathlib import Path
+
+        output = Path("pylint-output.txt").read_text(encoding="utf-8")
+        match = re.search(r"rated at ([0-9.]+)/10", output)
+        print(match.group(1) if match else "")
+        PY
+        )
+
+        FAIL_UNDER=$(python - <<'PY'
+        import tomllib
+        from pathlib import Path
+
+        config = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+        print(config["tool"]["pylint"]["main"]["fail-under"])
+        PY
+        )
+
+        if [ -z "$SCORE" ]; then
+          echo "Could not parse pylint score from output."
+          echo "pylint exit code: ${PYLINT_EXIT}"
+          exit 1
+        fi
+
+        echo "pylint exit code: ${PYLINT_EXIT}"
+        echo "pylint score: ${SCORE}"
+        echo "required fail-under: ${FAIL_UNDER}"
+
+        python - <<'PY' "$SCORE" "$FAIL_UNDER"
+        import sys
+
+        score = float(sys.argv[1])
+        fail_under = float(sys.argv[2])
+
+        if score < fail_under:
+          print(f"Score {score:.2f} is below fail-under {fail_under:.2f}")
+          raise SystemExit(1)
+
+        print(f"Score {score:.2f} meets fail-under {fail_under:.2f}")
+        PY
