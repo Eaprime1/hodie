@@ -100,7 +100,8 @@ def _build_service(credentials_path):
         from googleapiclient.discovery import build
     except ImportError:
         print(
-            "ERROR: google-api-python-client is not installed. Run: pip install -r requirements.txt",
+            'ERROR: Google Drive support dependencies are not installed. '
+            'Run: pip install ".[drive]"',
             file=sys.stderr,
         )
         sys.exit(1)
