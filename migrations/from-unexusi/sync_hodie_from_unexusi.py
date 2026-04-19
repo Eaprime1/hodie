@@ -44,7 +44,11 @@ def _build_credentials(credentials_path):
     try:
         from google.oauth2 import service_account
     except ImportError:
-        print("ERROR: google-auth is not installed. Run: pip install -r requirements.txt", file=sys.stderr)
+        print(
+            'ERROR: google-auth is not installed. Install Google Drive support with: '
+            'pip install ".[drive]"',
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     env_key = os.environ.get("GDRIVE_SERVICE_ACCOUNT_KEY")
