@@ -1,12 +1,12 @@
 #!/bin/bash
-# run_hodie_sync.sh — Server/cron wrapper for syncing the hodie folder from Google Drive
+# run_hodie_sync_from_unexusi.sh — Server/cron wrapper for syncing the hodie folder from Google Drive
 #
 # Usage:
-#   bash scripts/run_hodie_sync.sh                          # uses .secrets/gdrive-key.json
-#   bash scripts/run_hodie_sync.sh /path/to/key.json        # explicit credentials path
+#   bash migrations/from-unexusi/run_hodie_sync_from_unexusi.sh                   # uses .secrets/gdrive-key.json
+#   bash migrations/from-unexusi/run_hodie_sync_from_unexusi.sh /path/to/key.json # explicit credentials path
 #
 # Cron example (noon UTC daily):
-#   0 12 * * * /path/to/UNEXUSI/scripts/run_hodie_sync.sh >> /var/log/hodie-sync.log 2>&1
+#   0 12 * * * /path/to/UNEXUSI/migrations/from-unexusi/run_hodie_sync_from_unexusi.sh >> /var/log/hodie-sync.log 2>&1
 
 set -euo pipefail
 

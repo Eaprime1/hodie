@@ -1,7 +1,7 @@
 # NAVIGO — HODIE Navigation Document
 **Navigo**: *I sail. I navigate.*
 **Repo**: `github.com/Eaprime1/hodie`
-**Home**: `/home/sauron/HODIE/`
+**Home**: `<HODIE_ROOT>/`
 **Status**: Living Document — Session 2026-04-14
 **Peers**: MANDELBROT (structure) | primehaven (framework) — affinity, not hierarchy
 
