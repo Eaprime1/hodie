@@ -106,7 +106,7 @@ def list_folder(service, folder_id: str) -> list[dict]:
         resp = (
             service.files()
             .list(
-                q=f"'{folder_id}' in parents and trashed=false",
+                q=f"'{folder_id}' in parents and trashed=false and mimeType != 'application/vnd.google-apps.folder'",
                 fields="nextPageToken, files(id, name, mimeType, modifiedTime, size)",
                 pageToken=page_token,
                 pageSize=100,
