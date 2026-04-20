@@ -179,7 +179,7 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
 def load_manifest() -> dict:
     if MANIFEST_PATH.exists():
         try:
-            return json.loads(MANIFEST_PATH.read_text())
+            return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             return {}
     return {}
