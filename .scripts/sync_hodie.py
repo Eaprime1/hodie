@@ -187,7 +187,7 @@ def load_manifest() -> dict:
 
 def save_manifest(manifest: dict) -> None:
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2))
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
 # ── Main sync ──────────────────────────────────────────────────────────────────
