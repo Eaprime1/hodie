@@ -19,7 +19,7 @@ Then restart computer.
 ```bash
 cd ~
 curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
-less setup-wsl.sh   # Review before running
+cat setup-wsl.sh    # Review before running
 bash setup-wsl.sh
 ```
 
