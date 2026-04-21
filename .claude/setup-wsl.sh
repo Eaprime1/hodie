@@ -101,7 +101,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        backup_suffix="$(date +%Y%m%d%H%M%S)"
+        backup_suffix="$(date +%Y%m%d%H%M%S%N)"
         mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_suffix".backup
         if [ -f ~/.ssh/id_ed25519.pub ]; then
             mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_suffix".backup
