@@ -18,7 +18,8 @@ Then restart computer.
 **In WSL Ubuntu terminal**:
 ```bash
 cd ~
-curl -O https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+less setup-wsl.sh   # review before running
 bash setup-wsl.sh
 ```
 

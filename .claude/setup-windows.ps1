@@ -132,16 +132,16 @@ Created: $(Get-Date -Format "yyyy-MM-dd")
 
 In WSL/Ubuntu, access this directory with:
 
-``````bash
+```bash
 cd /mnt/$($driveLetter.ToLower())/Development
-``````
+```
 
 Add to ~/.bashrc for quick access:
 
-``````bash
+```bash
 export DEV_HOME="/mnt/$($driveLetter.ToLower())/Development"
 alias devhome="cd `$DEV_HOME/Projects"
-``````
+```
 
 "@
         Set-Content -Path "$devPath\README.txt" -Value $readmeContent
@@ -167,7 +167,8 @@ Write-Host "  3. Ubuntu will complete its setup (username & password)" -Foregrou
 Write-Host "  4. Run the WSL setup script:" -ForegroundColor White
 Write-Host ""
 Write-Host "     cd ~" -ForegroundColor Cyan
-Write-Host "     curl -O https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh" -ForegroundColor Cyan
+Write-Host "     curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh" -ForegroundColor Cyan
+Write-Host "     less setup-wsl.sh   # review before running" -ForegroundColor Cyan
 Write-Host "     bash setup-wsl.sh" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "📖 Documentation:" -ForegroundColor Yellow

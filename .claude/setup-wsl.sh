@@ -93,27 +93,39 @@ echo ""
 print_status "Setting up SSH key for GitHub..."
 echo ""
 
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
 if [ -f ~/.ssh/id_ed25519 ]; then
     print_warning "SSH key already exists at ~/.ssh/id_ed25519"
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.backup
-        mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub.backup
+        backup_suffix="$(date +%Y%m%d%H%M%S)"
+        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_suffix".backup
+        if [ -f ~/.ssh/id_ed25519.pub ]; then
+            mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_suffix".backup
+        fi
         print_success "Old keys backed up"
     else
         print_warning "Skipping SSH key generation"
         echo ""
-        print_status "Your existing public key:"
-        cat ~/.ssh/id_ed25519.pub
-        echo ""
-        print_warning "Add this key to GitHub: https://github.com/settings/keys"
+        if [ -f ~/.ssh/id_ed25519.pub ]; then
+            print_status "Your existing public key:"
+            cat ~/.ssh/id_ed25519.pub
+            echo ""
+            print_warning "Add this key to GitHub: https://github.com/settings/keys"
+        else
+            print_warning "No public key found. Generate a new key to continue."
+        fi
         echo ""
     fi
 fi
 
 if [ ! -f ~/.ssh/id_ed25519 ]; then
     ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519
+    chmod 600 ~/.ssh/id_ed25519
+    chmod 644 ~/.ssh/id_ed25519.pub
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_ed25519
 
@@ -130,6 +142,10 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "  2. Click 'New SSH key'"
     echo "  3. Paste the key above"
     echo "  4. Click 'Add SSH key'"
+    if command -v clip.exe >/dev/null 2>&1; then
+        cat ~/.ssh/id_ed25519.pub | clip.exe
+        print_success "Public key copied to Windows clipboard."
+    fi
     echo ""
     read -p "Press Enter after you've added the key to GitHub..."
     echo ""
