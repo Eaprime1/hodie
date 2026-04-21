@@ -168,7 +168,7 @@ Write-Host "  4. Run the WSL setup script:" -ForegroundColor White
 Write-Host ""
 Write-Host "     cd ~" -ForegroundColor Cyan
 Write-Host "     curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh" -ForegroundColor Cyan
-Write-Host "     less setup-wsl.sh   # review script content: verify sudo commands and external downloads" -ForegroundColor Cyan
+Write-Host "     less setup-wsl.sh   # Review script content: verify sudo commands and external downloads" -ForegroundColor Cyan
 Write-Host "     bash setup-wsl.sh" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "📖 Documentation:" -ForegroundColor Yellow

@@ -103,6 +103,8 @@ copy_public_key_to_clipboard() {
         else
             print_warning "Could not copy key to Windows clipboard. Use manual copy if needed."
         fi
+    else
+        print_warning "clip.exe not found. Copy the public key manually."
     fi
 }
 
@@ -133,7 +135,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
             print_warning "Add this key to GitHub: https://github.com/settings/keys"
             copy_public_key_to_clipboard
         else
-            print_warning "Private key exists but public key is missing. Generate a new key pair."
+            print_warning "Private key exists but public key is missing. Re-run and choose key generation."
         fi
         echo ""
     fi
