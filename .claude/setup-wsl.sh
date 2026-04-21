@@ -143,7 +143,7 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "  3. Paste the key above"
     echo "  4. Click 'Add SSH key'"
     if command -v clip.exe >/dev/null 2>&1; then
-        cat ~/.ssh/id_ed25519.pub | clip.exe
+        clip.exe < ~/.ssh/id_ed25519.pub
         print_success "Public key copied to Windows clipboard."
     fi
     echo ""
