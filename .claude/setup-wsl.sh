@@ -96,21 +96,31 @@ echo ""
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
+copy_public_key_to_clipboard() {
+    if command -v clip.exe >/dev/null 2>&1; then
+        if clip.exe < ~/.ssh/id_ed25519.pub; then
+            print_success "Public key copied to Windows clipboard."
+        else
+            print_warning "Could not copy key to Windows clipboard. Use manual copy if needed."
+        fi
+    fi
+}
+
 if [ -f ~/.ssh/id_ed25519 ]; then
     print_warning "SSH key already exists at ~/.ssh/id_ed25519"
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         backup_suffix="$(date +%Y%m%d%H%M%S)"
-        backup_tag="$backup_suffix"
+        backup_label="$backup_suffix"
         backup_index=0
-        while [ -e ~/.ssh/id_ed25519."$backup_tag".backup ]; do
+        while [ -e ~/.ssh/id_ed25519."$backup_label".backup ]; do
             backup_index=$((backup_index + 1))
-            backup_tag="${backup_suffix}_$backup_index"
+            backup_label="${backup_suffix}_$backup_index"
         done
-        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_tag".backup
+        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_label".backup
         if [ -f ~/.ssh/id_ed25519.pub ]; then
-            mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_tag".backup
+            mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_label".backup
         fi
         print_success "Old keys backed up"
     else
@@ -121,6 +131,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
             cat ~/.ssh/id_ed25519.pub
             echo ""
             print_warning "Add this key to GitHub: https://github.com/settings/keys"
+            copy_public_key_to_clipboard
         else
             print_warning "Private key exists but public key is missing. Generate a new key pair."
         fi
@@ -148,13 +159,7 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "  2. Click 'New SSH key'"
     echo "  3. Paste the key above"
     echo "  4. Click 'Add SSH key'"
-    if command -v clip.exe >/dev/null 2>&1; then
-        if clip.exe < ~/.ssh/id_ed25519.pub; then
-            print_success "Public key copied to Windows clipboard."
-        else
-            print_warning "Could not copy key to Windows clipboard. Use manual copy if needed."
-        fi
-    fi
+    copy_public_key_to_clipboard
     echo ""
     read -p "Press Enter after you've added the key to GitHub..."
     echo ""
