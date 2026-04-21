@@ -97,6 +97,11 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 copy_public_key_to_clipboard() {
+    if [ ! -f ~/.ssh/id_ed25519.pub ]; then
+        print_warning "Public key file not found for clipboard copy."
+        return
+    fi
+
     if command -v clip.exe >/dev/null 2>&1; then
         if clip.exe < ~/.ssh/id_ed25519.pub; then
             print_success "Public key copied to Windows clipboard."
@@ -116,8 +121,13 @@ if [ -f ~/.ssh/id_ed25519 ]; then
         backup_suffix="$(date +%Y%m%d%H%M%S)"
         backup_label="$backup_suffix"
         backup_index=0
+        max_backup_attempts=100
         while [ -e ~/.ssh/id_ed25519."$backup_label".backup ]; do
             backup_index=$((backup_index + 1))
+            if [ "$backup_index" -ge "$max_backup_attempts" ]; then
+                print_warning "Unable to find unique backup name after $max_backup_attempts attempts."
+                exit 1
+            fi
             backup_label="${backup_suffix}_$backup_index"
         done
         mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_label".backup
