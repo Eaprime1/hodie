@@ -125,8 +125,9 @@ if [ -f ~/.ssh/id_ed25519 ]; then
         while [ -e ~/.ssh/id_ed25519."$backup_label".backup ]; do
             backup_index=$((backup_index + 1))
             if [ "$backup_index" -ge "$max_backup_attempts" ]; then
-                print_warning "Unable to find unique backup name after $max_backup_attempts attempts."
-                exit 1
+                backup_label="${backup_suffix}_$$_fallback"
+                print_warning "Using fallback backup suffix after $max_backup_attempts collisions."
+                break
             fi
             backup_label="${backup_suffix}_$backup_index"
         done
@@ -145,7 +146,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
             print_warning "Add this key to GitHub: https://github.com/settings/keys"
             copy_public_key_to_clipboard
         else
-            print_warning "Private key exists but public key is missing. Re-run and choose key generation."
+            print_warning "Private key exists but public key is missing. Re-run and choose key generation (this run will not generate one)."
         fi
         echo ""
     fi
