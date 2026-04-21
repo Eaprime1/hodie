@@ -101,10 +101,16 @@ if [ -f ~/.ssh/id_ed25519 ]; then
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        backup_suffix="$(date +%Y%m%d%H%M%S)_$RANDOM"
-        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_suffix".backup
+        backup_suffix="$(date +%Y%m%d%H%M%S)"
+        backup_tag="$backup_suffix"
+        backup_index=0
+        while [ -e ~/.ssh/id_ed25519."$backup_tag".backup ]; do
+            backup_index=$((backup_index + 1))
+            backup_tag="${backup_suffix}_$backup_index"
+        done
+        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_tag".backup
         if [ -f ~/.ssh/id_ed25519.pub ]; then
-            mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_suffix".backup
+            mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_tag".backup
         fi
         print_success "Old keys backed up"
     else
@@ -116,7 +122,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
             echo ""
             print_warning "Add this key to GitHub: https://github.com/settings/keys"
         else
-            print_warning "No public key found. Generate a new key to continue."
+            print_warning "Private key exists but public key is missing. Generate a new key pair."
         fi
         echo ""
     fi
@@ -146,7 +152,7 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
         if clip.exe < ~/.ssh/id_ed25519.pub; then
             print_success "Public key copied to Windows clipboard."
         else
-            print_warning "Could not copy key to Windows clipboard (clip.exe failed)."
+            print_warning "Could not copy key to Windows clipboard. Use manual copy if needed."
         fi
     fi
     echo ""
