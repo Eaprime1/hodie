@@ -101,7 +101,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        backup_suffix="$(date +%Y%m%d%H%M%S%N)"
+        backup_suffix="$(date +%Y%m%d%H%M%S)_$RANDOM"
         mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_suffix".backup
         if [ -f ~/.ssh/id_ed25519.pub ]; then
             mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_suffix".backup
@@ -143,8 +143,11 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "  3. Paste the key above"
     echo "  4. Click 'Add SSH key'"
     if command -v clip.exe >/dev/null 2>&1; then
-        clip.exe < ~/.ssh/id_ed25519.pub
-        print_success "Public key copied to Windows clipboard."
+        if clip.exe < ~/.ssh/id_ed25519.pub; then
+            print_success "Public key copied to Windows clipboard."
+        else
+            print_warning "Could not copy key to Windows clipboard (clip.exe failed)."
+        fi
     fi
     echo ""
     read -p "Press Enter after you've added the key to GitHub..."
