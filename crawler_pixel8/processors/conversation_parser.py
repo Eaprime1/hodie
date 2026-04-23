@@ -50,7 +50,7 @@ class ConversationParser(LocalProcessor):
             # Try to detect format from content
             return await self._parse_auto_detect(file_path)
 
-        except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+        except (OSError, ValueError) as exc:
             self.logger.error("Failed to parse %s: %s", file_path, exc)
             # Fall back to single part
             return await super()._parse_file(file_path)
