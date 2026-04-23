@@ -38,15 +38,13 @@ jobs:
       contents: 'read'
       pull-requests: 'read'
       issues: 'read'
-    env:
-      IS_AUTHORIZED: '${{ contains(fromJSON(''["OWNER", "MEMBER", "COLLABORATOR"]''), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association) }}'
     outputs:
       command: '${{ steps.parse.outputs.command }}'
       additional_context: '${{ steps.parse.outputs.additional_context }}'
     steps:
       - name: 'Log event type'
         run: |-
-          echo "Event: ${{ github.event_name }}, Action: ${{ github.event.action }}, Authorized: ${IS_AUTHORIZED}"
+          echo "Event: ${{ github.event_name }}, Action: ${{ github.event.action }}"
 
       - name: 'Parse command'
         id: 'parse'
@@ -70,15 +68,14 @@ jobs:
             COMMAND="triage"
             CONTEXT="${COMMENT_BODY#@gemini-cli triage}"
           elif [[ "${COMMENT_BODY}" == "@gemini-cli"* ]]; then
-            SUBCOMMAND="${COMMENT_BODY#@gemini-cli}"
-            SUBCOMMAND="${SUBCOMMAND## }"
-            SUBCOMMAND="${SUBCOMMAND%% *}"
+            RAW_CONTEXT="${COMMENT_BODY#@gemini-cli}"
+            IFS=$' \t\n' read -r SUBCOMMAND _ <<< "${RAW_CONTEXT}"
             if [[ -z "${SUBCOMMAND}" || "${SUBCOMMAND}" == "invoke" ]]; then
               COMMAND="invoke"
-              CONTEXT="${COMMENT_BODY#@gemini-cli}"
+              CONTEXT="${RAW_CONTEXT}"
             else
-              COMMAND="reject"
-              echo "Unknown @gemini-cli subcommand: '${SUBCOMMAND}'. Valid usage: '@gemini-cli review', '@gemini-cli triage', or '@gemini-cli [prompt]'"
+              echo "Unknown @gemini-cli subcommand: '${SUBCOMMAND}'. Valid usage: '@gemini-cli review', '@gemini-cli triage', or '@gemini-cli [prompt]'" >&2
+              exit 1
             fi
           fi
 
@@ -88,10 +85,13 @@ jobs:
           fi
 
           echo "command=${COMMAND}" >> "$GITHUB_OUTPUT"
+          OUTPUT_DELIMITER="HODIE_OUTPUT_$(head -c 32 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 16)"
+          # Ensure the delimiter cannot appear inside CONTEXT (strip it out if present)
+          SAFE_CONTEXT="${CONTEXT//${OUTPUT_DELIMITER}/}"
           {
-            echo "additional_context<<EOF"
-            echo "${CONTEXT}"
-            echo "EOF"
+            echo "additional_context<<${OUTPUT_DELIMITER}"
+            echo "${SAFE_CONTEXT}"
+            echo "${OUTPUT_DELIMITER}"
           } >> "$GITHUB_OUTPUT"
 
   review:
