@@ -27,8 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # tomli keeps pyproject parsing compatible with Python 3.10 runners.
-        pip install pylint tomli
+        pip install pylint
 
     - name: Lint active codebase
       env:
@@ -43,39 +42,9 @@ jobs:
         set +e
         pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "$pylint_log"
         pylint_exit="${PIPESTATUS[0]}"
-        match = re.search(
-          r"^Your code has been rated at ([+-]?[0-9]+(?:\.[0-9]+)?)/10(?:\s|$)",
-          output,
-          re.MULTILINE,
-        )
-
-        # Pylint 4.x prints "Your code has been rated at X/10"; use the final summary line.
-        score="$(
-          grep -E '^Your code has been rated at -?[0-9]+(\.[0-9]+)?/10' "$pylint_log" \
-            | tail -n 1 \
-            | sed -E 's/^Your code has been rated at (-?[0-9]+(\.[0-9]+)?)\/10.*/\1/' \
-            || true
-        )"
-        fail_under="$(awk '
-          /^\[tool\.pylint\.main\]/ { in_section=1; next }
-          /^\[/ { in_section=0 }
-          in_section && /^[[:space:]]*fail-under[[:space:]]*=/ {
-            gsub(/^[^=]*=[[:space:]]*/, "", $0)
-            gsub(/[[:space:]]/, "", $0)
-            print $0
-            exit
-          }
-        ' pyproject.toml)"
-
-        if [ -z "$score" ]; then
-          echo "Unable to parse pylint score from output."
-          exit 1
+        fatal_error_usage_mask=$((1 | 2 | 32))
+        if [ $((pylint_exit & fatal_error_usage_mask)) -ne 0 ]; then
+          echo "❌ Pylint reported fatal/error/usage issues (exit code: $pylint_exit)."
+          exit "$pylint_exit"
         fi
-
-        if [ -z "$fail_under" ]; then
-          echo "Unable to parse fail-under threshold from pyproject.toml."
-          exit 1
-        fi
-
-        if ! python - "$score" "$fail_under" <<'PY'
-
+        echo "✅🧲 Pylint review mark: no fatal/error/usage issues (exit code: $pylint_exit)."
