@@ -1,0 +1,35 @@
+#!/bin/bash
+# run_hodie_sync_from_unexusi.sh — Server/cron wrapper for syncing the hodie folder from Google Drive
+#
+# Usage:
+#   bash migrations/from-unexusi/run_hodie_sync_from_unexusi.sh                   # uses .secrets/gdrive-key.json
+#   bash migrations/from-unexusi/run_hodie_sync_from_unexusi.sh /path/to/key.json # explicit credentials path
+#
+# Cron example (noon UTC daily):
+#   0 12 * * * /path/to/UNEXUSI/migrations/from-unexusi/run_hodie_sync_from_unexusi.sh >> /var/log/hodie-sync.log 2>&1
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+CREDS="${1:-$REPO_ROOT/.secrets/gdrive-key.json}"
+
+echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] Starting hodie sync..."
+
+cd "$REPO_ROOT"
+
+python3 "$SCRIPT_DIR/sync_hodie_from_unexusi.py" --credentials "$CREDS"
+
+git add hodie/
+if git diff --cached --quiet; then
+    echo "No new files — nothing to commit."
+else
+    git config user.name "Hodie Sync"
+    git config user.email "hodie-sync@localhost"
+    git commit -m "hodie: sync $(date -u '+%Y-%m-%d')"
+    git pull --rebase || { git rebase --abort; exit 1; }
+    git push
+    echo "Committed and pushed synced files."
+fi
+
+echo "[$(date -u '+%Y-%m-%d %H:%M:%S UTC')] Done."

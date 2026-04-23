@@ -72,11 +72,20 @@ bash .scripts/mulberry_setup.sh
 source .scripts/env_setup.sh
 ```
 
-## CI/CD
+## CI/CD & AI Review
 
-- **GitHub Actions**: `.github/workflows/pylint.yml`
-- Runs `pylint` on every push against Python 3.8, 3.9, 3.10 matrix
-- No automated tests or deployment pipelines yet
+- **Claude Code Review**: `.github/workflows/claude-code-review.yml`
+  Triggers on every PR (opened, synchronized, ready_for_review).
+  Secret required: `CLAUDE_CODE_OAUTH_TOKEN`
+- **Claude Interactive**: `.github/workflows/claude.yml`
+  Triggered by `@claude` in PR/issue comments.
+- **Gemini Review**: `.github/workflows/gemini-dispatch.yml` (dispatch hub)
+  Calls `gemini-review.yml`, `gemini-triage.yml`, `gemini-invoke.yml`
+  Trigger: `@gemini-cli review/triage/[prompt]` in comments, or auto on PR open.
+  Secret required: `GEMINI_API_KEY`
+- **Pylint**: `.github/workflows/pylint.yml`
+  Runs on every push, Python 3.8/3.9/3.10 matrix.
+- Style guide for AI reviewers: `.gemini/styleguide.md`
 
 ## Code Conventions
 

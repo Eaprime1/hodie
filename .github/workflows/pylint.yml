@@ -30,42 +30,68 @@ jobs:
         pip install pylint
 
     - name: Lint active codebase
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
       run: |
-        # Only lint active code directories, not archived/legacy content.
-        # Gate on configured fail-under score instead of raw pylint exit code.
+        # Only lint active code directories, not archived/legacy content
+        set -o pipefail
         : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
+        safe_python_version="${PYTHON_VERSION//./-}"
+        pylint_log="$(mktemp "${RUNNER_TEMP}/pylint-output-${safe_python_version}-XXXXXX.log")"
+        trap 'rm -f "$pylint_log"' EXIT
         set +e
-        log_file=$(mktemp "${RUNNER_TEMP}/pylint-${GITHUB_RUN_ID:-local}-XXXXXX.log")
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "${log_file}"
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "$pylint_log"
+        pylint_exit="${PIPESTATUS[0]}"
         set -e
-        export PYLINT_LOG_FILE="${log_file}"
 
-        python - <<'PY'
-        import os
-        import re
-        import sys
-        from pathlib import Path
+        # Pylint 4.x prints "Your code has been rated at X/10"; use the final summary line.
+        score="$(
+          grep -E '^Your code has been rated at -?[0-9]+(\.[0-9]+)?/10' "$pylint_log" \
+            | tail -n 1 \
+            | sed -E 's/^Your code has been rated at (-?[0-9]+(\.[0-9]+)?)\/10.*/\1/' \
+            || true
+        )"
+        fail_under="$(awk '
+          /^\[tool\.pylint\.main\]/ { in_section=1; next }
+          /^\[/ { in_section=0 }
+          in_section && /^[[:space:]]*fail-under[[:space:]]*=/ {
+            gsub(/^[^=]*=[[:space:]]*/, "", $0)
+            gsub(/[[:space:]]/, "", $0)
+            print $0
+            exit
+          }
+        ' pyproject.toml)"
 
-        number_pattern = r"[0-9]+(?:\.[0-9]+)?"
-        error_context_lines = 5
-        log_path = Path(os.environ["PYLINT_LOG_FILE"])
-        log_text = log_path.read_text(encoding="utf-8")
-        score_match = re.search(rf"rated at ({number_pattern})/10", log_text)
-        if not score_match:
-            excerpt = "\n".join(log_text.strip().splitlines()[-error_context_lines:])
-            raise SystemExit(
-                f"Unable to parse pylint score from output in {log_path}. "
-                f'Expected format: "rated at X/10". Last log lines:\n{excerpt}'
-            )
-        score = float(score_match.group(1))
+        if [ -z "$score" ]; then
+          echo "Unable to parse pylint score from output."
+          exit 1
+        fi
 
-        pyproject_text = Path("pyproject.toml").read_text(encoding="utf-8")
-        fail_under_match = re.search(rf"fail-under\s*=\s*({number_pattern})", pyproject_text)
-        if not fail_under_match:
-            raise SystemExit("Unable to parse fail-under from pyproject.toml.")
-        fail_under = float(fail_under_match.group(1))
+        if [ -z "$fail_under" ]; then
+          echo "Unable to parse fail-under threshold from pyproject.toml."
+          exit 1
+        fi
 
-        print(f"Pylint score: {score:.2f}/10 (required >= {fail_under:.2f})")
-        if score < fail_under:
-            sys.exit(1)
-        PY
+        if ! python - "$score" "$fail_under" <<'PY'
+import sys
+
+score_value = sys.argv[1]
+threshold_value = sys.argv[2]
+
+try:
+    score = float(score_value)
+    threshold = float(threshold_value)
+except ValueError as exc:
+    raise SystemExit(f"Invalid numeric value for score/threshold: {exc}")
+
+raise SystemExit(0 if score >= threshold else 1)
+PY
+        then
+          echo "Pylint score $score is below fail-under threshold $fail_under."
+          exit 1
+        fi
+
+        echo "Pylint score $score meets fail-under threshold $fail_under."
+        if [ "$pylint_exit" -ne 0 ]; then
+          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
+        fi
