@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-04-23
+
+- Required `RUNNER_TEMP` to be set in pylint workflow temp file setup; removed silent
+  fallback to `$TMPDIR`/`/tmp` so misconfigurations are caught immediately with a clear error.
+
 ## 2026-04-18
 
 - Repaired pylint CI behavior to gate on configured `fail-under` score from `pyproject.toml`
