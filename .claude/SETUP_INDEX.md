@@ -74,7 +74,8 @@ cd path\to\hodie\.claude
 ```bash
 # In WSL/Ubuntu terminal
 cd ~
-curl -O https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+cat setup-wsl.sh    # Review before running
 bash setup-wsl.sh
 ```
 
@@ -98,7 +99,8 @@ bash setup-wsl.sh
 3. **In WSL/Ubuntu Terminal**:
    ```bash
    cd ~
-   curl -O https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+   curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+   cat setup-wsl.sh    # Review before running
    bash setup-wsl.sh
    ```
 
