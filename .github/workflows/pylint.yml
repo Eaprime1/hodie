@@ -66,6 +66,10 @@ jobs:
         echo "pylint score: ${SCORE}"
         echo "required fail-under: ${FAIL_UNDER}"
 
+        if (( PYLINT_EXIT & 35 )); then
+          echo "pylint reported fatal/error/usage conditions (exit code: ${PYLINT_EXIT})."
+          exit 1
+        fi
         python - <<'PY' "$SCORE" "$FAIL_UNDER"
         import sys
 
