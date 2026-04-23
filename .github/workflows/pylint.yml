@@ -31,22 +31,27 @@ jobs:
         python -m pip install pylint
 
     - name: Lint active codebase
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
       run: |
         # Only lint active code directories, not archived/legacy content.
         # Gate on pyproject's fail-under score instead of raw pylint exit code.
         set -euo pipefail
+        : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
+        safe_python_version="${PYTHON_VERSION//./-}"
+        pylint_log="$(mktemp "${RUNNER_TEMP}/pylint-output-${safe_python_version}-XXXXXX.log")"
+        trap 'rm -f "$pylint_log"' EXIT
         set +e
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc > pylint.log 2>&1
-        PYLINT_EXIT=$?
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc 2>&1 | tee "$pylint_log"
+        pylint_exit="${PIPESTATUS[0]}"
         set -e
         # Fail on fatal/error/usage bits only (1 + 2 + 32 = 35).
         # Allow warnings/refactors/conventions and score-gate those below.
-        if (( PYLINT_EXIT & 35 )); then
-          cat pylint.log
-          echo "Pylint exited with fatal/error/usage bits set: ${PYLINT_EXIT}"
-          exit "${PYLINT_EXIT}"
+        if (( pylint_exit & 35 )); then
+          cat "$pylint_log"
+          echo "Pylint exited with fatal/error/usage bits set: ${pylint_exit}"
+          exit "${pylint_exit}"
         fi
-        cat pylint.log
         PY_FAIL_UNDER=$(python - <<'PY'
 import pathlib
 try:
@@ -59,10 +64,10 @@ with open(pathlib.Path("pyproject.toml"), "rb") as f:
 print(pyproject["tool"]["pylint"]["main"]["fail-under"])
 PY
 )
-        PY_SCORE=$(python - <<'PY'
+        PY_SCORE=$(python - <<PY
 import pathlib
 import re
-text = pathlib.Path("pylint.log").read_text(encoding="utf-8")
+text = pathlib.Path("${pylint_log}").read_text(encoding="utf-8")
 match = re.search(r"rated at (-?[0-9]+(?:\.[0-9]+)?)/10", text)
 if not match:
     raise SystemExit(
@@ -81,3 +86,6 @@ if score < required:
     raise SystemExit(f"Pylint score {score}/10 is below required {required}/10.")
 print("Pylint score threshold satisfied.")
 PY
+        if [ "$pylint_exit" -ne 0 ]; then
+          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
+        fi
