@@ -25,40 +25,31 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install .
+          python -m pip install ".[drive]"
 
       - name: Sync hodie folder from Google Drive
         env:
           GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
-        run: |
-          set -euo pipefail
-
-          if [ -f .scripts/sync_hodie.py ]; then
-            python .scripts/sync_hodie.py
-          elif [ -f .scripts/sync_hodie.sh ]; then
-            bash .scripts/sync_hodie.sh
-          elif [ -f scripts/sync_hodie.py ]; then
-            python scripts/sync_hodie.py
-          elif [ -f scripts/sync_hodie.sh ]; then
-            bash scripts/sync_hodie.sh
-          else
-            echo "No hodie sync implementation found in .scripts/ or scripts/." >&2
-            exit 1
-          fi
+        run: python -m crawler_pixel8.scripts.sync_hodie
 
       - name: Commit and push synced files
         run: |
+          set -euo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          
           if [ -d hodie ]; then
             git add hodie/
           else
             echo "hodie/ does not exist — nothing to stage."
+            exit 0
           fi
+          
           if git diff --cached --quiet; then
-            echo "No new files — nothing to commit."
-          else
-            git commit -m "hodie: sync $(date -u '+%Y-%m-%d')"
-            git pull --rebase
-            git push
+            echo "No changes — skipping commit."
+            exit 0
           fi
+          
+          git commit -m "hodie: sync $(date -u '+%Y-%m-%d')"
+          git pull --rebase --autostash
+          git push

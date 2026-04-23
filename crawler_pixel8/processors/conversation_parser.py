@@ -3,7 +3,7 @@ Conversation Parser for PIXEL8 Crawler
 Parses various conversation export formats into ConversationParts
 """
 
-from typing import AsyncIterable, Optional
+from typing import AsyncIterable
 from pathlib import Path
 import json
 import re
@@ -43,16 +43,15 @@ class ConversationParser(LocalProcessor):
         try:
             if suffix == '.json':
                 return await self._parse_json(file_path)
-            elif suffix == '.md':
+            if suffix == '.md':
                 return await self._parse_markdown(file_path)
-            elif suffix in ['.txt', '.text']:
+            if suffix in ['.txt', '.text']:
                 return await self._parse_text(file_path)
-            else:
-                # Try to detect format from content
-                return await self._parse_auto_detect(file_path)
+            # Try to detect format from content
+            return await self._parse_auto_detect(file_path)
 
-        except Exception as e:
-            self.logger.error(f"Failed to parse {file_path}: {e}")
+        except (OSError, ValueError) as exc:
+            self.logger.error("Failed to parse %s: %s", file_path, exc)
             # Fall back to single part
             return await super()._parse_file(file_path)
 
@@ -120,7 +119,7 @@ class ConversationParser(LocalProcessor):
                     timestamp = datetime.fromtimestamp(ts_field)
                 else:
                     timestamp = datetime.fromisoformat(str(ts_field))
-            except:
+            except (ValueError, OSError, OverflowError, TypeError):
                 pass
 
         # Extract metadata
@@ -259,12 +258,19 @@ class ConversationParser(LocalProcessor):
         """
         try:
             return await self._parse_json(file_path)
-        except:
+        except (
+            json.JSONDecodeError,
+            ValueError,
+            TypeError,
+            AttributeError,
+            OSError,
+            IOError,
+        ):
             pass
 
         try:
             return await self._parse_markdown(file_path)
-        except:
+        except (ValueError, IOError):
             pass
 
         return await self._parse_text(file_path)

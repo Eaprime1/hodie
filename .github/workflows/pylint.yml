@@ -27,9 +27,69 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+        python -m pip install tomli
+        python -m pip install pylint
 
     - name: Lint active codebase
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
       run: |
-        # Only lint active code directories, not archived/legacy content
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc
+        # Only lint active code directories, not archived/legacy content.
+        # Gate on pyproject's fail-under score instead of raw pylint exit code.
+        set -euo pipefail
+        : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
+        safe_python_version="${PYTHON_VERSION//./-}"
+        if [[ ! "$safe_python_version" =~ ^[[:alnum:]-]+$ ]]; then
+          echo "Invalid PYTHON_VERSION value for temp log path: ${PYTHON_VERSION}"
+          exit 1
+        fi
+        pylint_log="$(mktemp "${RUNNER_TEMP}/pylint-output-${safe_python_version}-XXXXXX.log")"
+        trap 'rm -f "$pylint_log"' EXIT
+        set +e
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc 2>&1 | tee "$pylint_log"
+        pylint_exit="${PIPESTATUS[0]}"
+        set -e
+        # Fail on fatal/error/usage bits only (1 + 2 + 32 = 35).
+        # Allow warnings/refactors/conventions and score-gate those below.
+        if (( pylint_exit & 35 )); then
+          cat "$pylint_log"
+          echo "Pylint exited with fatal/error/usage bits set: ${pylint_exit}"
+          exit "${pylint_exit}"
+        fi
+        PY_FAIL_UNDER=$(python - <<'PY'
+import pathlib
+try:
+    import tomllib as toml_loader
+except ModuleNotFoundError:  # Python < 3.11
+    # Fallback for Python < 3.11 where tomllib is unavailable.
+    import tomli as toml_loader
+with open(pathlib.Path("pyproject.toml"), "rb") as f:
+    pyproject = toml_loader.load(f)
+print(pyproject["tool"]["pylint"]["main"]["fail-under"])
+PY
+)
+        PY_SCORE=$(python - <<PY
+import pathlib
+import re
+text = pathlib.Path("${pylint_log}").read_text(encoding="utf-8")
+match = re.search(r"rated at (-?[0-9]+(?:\.[0-9]+)?)/10", text)
+if not match:
+    raise SystemExit(
+        "Unable to parse pylint score from output. "
+        "The log may be truncated or pylint may have crashed."
+    )
+print(match.group(1))
+PY
+)
+        echo "Pylint score: ${PY_SCORE}/10 (required: ${PY_FAIL_UNDER}/10)"
+        python - <<'PY' "${PY_SCORE}" "${PY_FAIL_UNDER}"
+import sys
+score = float(sys.argv[1])
+required = float(sys.argv[2])
+if score < required:
+    raise SystemExit(f"Pylint score {score}/10 is below required {required}/10.")
+print("Pylint score threshold satisfied.")
+PY
+        if [ "$pylint_exit" -ne 0 ]; then
+          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
+        fi
