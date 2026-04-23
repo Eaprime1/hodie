@@ -18,6 +18,7 @@ defaults:
 
 jobs:
   dispatch:
+    timeout-minutes: 2
     if: |-
       (
         github.event_name == 'pull_request' &&
@@ -27,6 +28,8 @@ jobs:
         contains(fromJSON('["opened", "reopened"]'), github.event.action)
       ) || (
         github.event.sender.type == 'User' &&
+        github.event.sender.login != 'dependabot[bot]' &&
+        github.event.sender.login != 'renovate[bot]' &&
         startsWith(github.event.comment.body || github.event.review.body || github.event.issue.body || '', '@gemini-cli') &&
         contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association)
       )
@@ -39,6 +42,10 @@ jobs:
       command: '${{ steps.parse.outputs.command }}'
       additional_context: '${{ steps.parse.outputs.additional_context }}'
     steps:
+      - name: 'Log event type'
+        run: |-
+          echo "Event: ${{ github.event_name }}, Action: ${{ github.event.action }}"
+
       - name: 'Parse command'
         id: 'parse'
         env:
@@ -61,16 +68,29 @@ jobs:
             COMMAND="triage"
             CONTEXT="${COMMENT_BODY#@gemini-cli triage}"
           elif [[ "${COMMENT_BODY}" == "@gemini-cli"* ]]; then
-            COMMAND="invoke"
-            CONTEXT="${COMMENT_BODY#@gemini-cli}"
+            RAW_CONTEXT="${COMMENT_BODY#@gemini-cli}"
+            IFS=$' \t\n' read -r SUBCOMMAND _ <<< "${RAW_CONTEXT}"
+            if [[ -z "${SUBCOMMAND}" || "${SUBCOMMAND}" == "invoke" ]]; then
+              COMMAND="invoke"
+              CONTEXT="${RAW_CONTEXT}"
+            else
+              echo "Unknown @gemini-cli subcommand: '${SUBCOMMAND}'. Valid usage: '@gemini-cli review', '@gemini-cli triage', or '@gemini-cli [prompt]'" >&2
+              exit 1
+            fi
           fi
 
-          OUTPUT_DELIMITER="GITHUB_OUTPUT_$(openssl rand -hex 16)"
+          if [[ ${#CONTEXT} -gt 500 ]]; then
+            echo "Context length (${#CONTEXT}) exceeds 500 characters; truncating."
+            CONTEXT="${CONTEXT:0:500}"
+          fi
 
           echo "command=${COMMAND}" >> "$GITHUB_OUTPUT"
+          OUTPUT_DELIMITER="HODIE_OUTPUT_$(head -c 32 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 16)"
+          # Ensure the delimiter cannot appear inside CONTEXT (strip it out if present)
+          SAFE_CONTEXT="${CONTEXT//${OUTPUT_DELIMITER}/}"
           {
             echo "additional_context<<${OUTPUT_DELIMITER}"
-            echo "${CONTEXT}"
+            echo "${SAFE_CONTEXT}"
             echo "${OUTPUT_DELIMITER}"
           } >> "$GITHUB_OUTPUT"
 
