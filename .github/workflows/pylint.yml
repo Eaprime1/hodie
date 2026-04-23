@@ -49,6 +49,12 @@ jobs:
           re.MULTILINE,
         )
 
+        fatal_bits=$((1 | 2 | 32))
+        if (( pylint_exit & fatal_bits )); then
+          echo "Pylint exited with fatal/error/usage status: ${pylint_exit}"
+          exit "${pylint_exit}"
+        fi
+
         # Pylint 4.x prints "Your code has been rated at X/10"; use the final summary line.
         score="$(
           grep -E '^Your code has been rated at -?[0-9]+(\.[0-9]+)?/10' "$pylint_log" \
