@@ -1,15 +1,15 @@
 """
-sync_hodie.py — Download files from the Google Drive 'hodie' folder into hodie/
+sync_hodie_from_unexusi.py — Download files from the UNEXUSI Drive folder into hodie/
 
 Authentication (pick one):
   Local/server: --credentials /path/to/service-account-key.json
   GitHub Actions: set env var GDRIVE_SERVICE_ACCOUNT_KEY to the JSON key contents
 
 Usage:
-  python scripts/sync_hodie.py
-  python scripts/sync_hodie.py --credentials .secrets/gdrive-key.json
-  python scripts/sync_hodie.py --dry-run
-  python scripts/sync_hodie.py --folder-id <other-folder-id>
+  python migrations/from-unexusi/sync_hodie_from_unexusi.py
+  python migrations/from-unexusi/sync_hodie_from_unexusi.py --credentials .secrets/gdrive-key.json
+  python migrations/from-unexusi/sync_hodie_from_unexusi.py --dry-run
+  python migrations/from-unexusi/sync_hodie_from_unexusi.py --folder-id <other-folder-id>
 """
 
 import argparse
@@ -192,6 +192,8 @@ def download_file(service, file_meta, dest_dir, dry_run=False):
 
     except HttpError as e:
         return "error", str(e)
+    except OSError as e:
+        return "error", str(e)
 
 
 # ---------------------------------------------------------------------------
@@ -201,14 +203,15 @@ def download_file(service, file_meta, dest_dir, dry_run=False):
 def load_manifest():
     if MANIFEST_PATH.exists():
         try:
-            return json.loads(MANIFEST_PATH.read_text())
+            return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             return {}
     return {}
 
 
 def save_manifest(manifest):
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2))
+    MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------

@@ -119,7 +119,7 @@ class ConversationParser(LocalProcessor):
                     timestamp = datetime.fromtimestamp(ts_field)
                 else:
                     timestamp = datetime.fromisoformat(str(ts_field))
-            except (ValueError, OSError):
+            except (ValueError, OSError, OverflowError, TypeError):
                 pass
 
         # Extract metadata
@@ -258,7 +258,7 @@ class ConversationParser(LocalProcessor):
         """
         try:
             return await self._parse_json(file_path)
-        except (json.JSONDecodeError, ValueError, IOError):
+        except Exception:  # pylint: disable=broad-exception-caught
             pass
 
         try:
