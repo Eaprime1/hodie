@@ -35,10 +35,9 @@ jobs:
       run: |
         # Only lint active code directories, not archived/legacy content
         set -o pipefail
-        temp_dir="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
-        mkdir -p "$temp_dir"
+        : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
         safe_python_version="${PYTHON_VERSION//./-}"
-        pylint_log="$(mktemp "$temp_dir/pylint-output-${safe_python_version}-XXXXXX.log")"
+        pylint_log="$(mktemp "${RUNNER_TEMP}/pylint-output-${safe_python_version}-XXXXXX.log")"
         trap 'rm -f "$pylint_log"' EXIT
         set +e
         pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "$pylint_log"
