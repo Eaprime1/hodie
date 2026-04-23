@@ -39,6 +39,10 @@ jobs:
         set -euo pipefail
         : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
         safe_python_version="${PYTHON_VERSION//./-}"
+        if [[ ! "$safe_python_version" =~ ^[[:alnum:]-]+$ ]]; then
+          echo "Invalid PYTHON_VERSION value for temp log path: ${PYTHON_VERSION}"
+          exit 1
+        fi
         pylint_log="$(mktemp "${RUNNER_TEMP}/pylint-output-${safe_python_version}-XXXXXX.log")"
         trap 'rm -f "$pylint_log"' EXIT
         set +e
