@@ -36,7 +36,7 @@ jobs:
         # Gate on pyproject's fail-under score instead of raw pylint exit code.
         set -euo pipefail
         set +e
-        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc > pylint.log
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc > pylint.log 2>&1
         PYLINT_EXIT=$?
         set -e
         # Fail on fatal/error/usage bits only (1 + 2 + 32 = 35).
