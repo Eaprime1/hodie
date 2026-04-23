@@ -48,11 +48,32 @@ jobs:
         )
 
         FAIL_UNDER=$(python - <<'PY'
-        import tomllib
+        import re
         from pathlib import Path
 
-        config = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
-        print(config["tool"]["pylint"]["main"]["fail-under"])
+        pyproject_text = Path("pyproject.toml").read_text(encoding="utf-8")
+        config = None
+        try:
+          import tomllib  # Python 3.11+
+          config = tomllib.loads(pyproject_text)
+        except ModuleNotFoundError:
+          try:
+            import tomli as tomllib  # type: ignore[import-not-found]
+            config = tomllib.loads(pyproject_text)
+          except ModuleNotFoundError:
+            config = None
+
+        if config is not None:
+          print(config["tool"]["pylint"]["main"]["fail-under"])
+        else:
+          match = re.search(
+            r"^\s*fail-under\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*$",
+            pyproject_text,
+            re.MULTILINE,
+          )
+          if not match:
+            raise SystemExit("Could not parse fail-under from pyproject.toml")
+          print(match.group(1))
         PY
         )
 
