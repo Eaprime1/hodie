@@ -258,7 +258,14 @@ class ConversationParser(LocalProcessor):
         """
         try:
             return await self._parse_json(file_path)
-        except Exception:  # pylint: disable=broad-exception-caught
+        except (
+            json.JSONDecodeError,
+            ValueError,
+            TypeError,
+            AttributeError,
+            OSError,
+            IOError,
+        ):
             pass
 
         try:
