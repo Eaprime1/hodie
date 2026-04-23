@@ -106,7 +106,7 @@ def list_folder(service, folder_id: str) -> list[dict]:
         resp = (
             service.files()
             .list(
-                q=f"'{folder_id}' in parents and trashed=false",
+                q=f"'{folder_id}' in parents and trashed=false and mimeType != 'application/vnd.google-apps.folder'",
                 fields="nextPageToken, files(id, name, mimeType, modifiedTime, size)",
                 pageToken=page_token,
                 pageSize=100,
@@ -179,7 +179,7 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
 def load_manifest() -> dict:
     if MANIFEST_PATH.exists():
         try:
-            return json.loads(MANIFEST_PATH.read_text())
+            return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             return {}
     return {}
@@ -187,7 +187,7 @@ def load_manifest() -> dict:
 
 def save_manifest(manifest: dict) -> None:
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2))
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
 # ── Main sync ──────────────────────────────────────────────────────────────────
