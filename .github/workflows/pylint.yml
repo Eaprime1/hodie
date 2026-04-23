@@ -27,6 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        # tomli keeps pyproject parsing compatible with Python 3.10 runners.
         pip install pylint tomli
 
     - name: Lint active codebase
@@ -54,7 +55,12 @@ jobs:
         try:
           import tomllib  # Python 3.11+
         except ModuleNotFoundError:
-          import tomli as tomllib  # type: ignore[import-not-found]
+          try:
+            import tomli as tomllib  # type: ignore[import-not-found]
+          except ModuleNotFoundError as exc:
+            raise SystemExit(
+              "No TOML parser available: install tomli on Python <3.11."
+            ) from exc
 
         config = tomllib.loads(pyproject_text)
         print(config["tool"]["pylint"]["main"]["fail-under"])
