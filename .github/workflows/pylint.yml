@@ -1,4 +1,5 @@
 name: Pylint
+# ♓
 
 on:
   push:
@@ -56,40 +57,11 @@ jobs:
           echo "Pylint exited with fatal/error/usage bits set: ${pylint_exit}"
           exit "${pylint_exit}"
         fi
-        PY_FAIL_UNDER=$(python - <<'PY'
-import pathlib
-try:
-    import tomllib as toml_loader
-except ModuleNotFoundError:  # Python < 3.11
-    # Fallback for Python < 3.11 where tomllib is unavailable.
-    import tomli as toml_loader
-with open(pathlib.Path("pyproject.toml"), "rb") as f:
-    pyproject = toml_loader.load(f)
-print(pyproject["tool"]["pylint"]["main"]["fail-under"])
-PY
-)
-        PY_SCORE=$(python - <<PY
-import pathlib
-import re
-text = pathlib.Path("${pylint_log}").read_text(encoding="utf-8")
-match = re.search(r"rated at (-?[0-9]+(?:\.[0-9]+)?)/10", text)
-if not match:
-    raise SystemExit(
-        "Unable to parse pylint score from output. "
-        "The log may be truncated or pylint may have crashed."
-    )
-print(match.group(1))
-PY
-)
+        PY_FAIL_UNDER=$(python -c "import sys; t=__import__('tomllib' if sys.version_info>=(3,11) else 'tomli'); d=t.load(open('pyproject.toml','rb')); print(d['tool']['pylint']['main']['fail-under'])")
+        PY_SCORE=$(python -c "import re, pathlib, sys; m=re.search(r'rated at (-?[0-9]+(?:\.[0-9]+)?)/10', pathlib.Path('${pylint_log}').read_text(encoding='utf-8')); sys.exit('Unable to parse pylint score; log may be truncated') if not m else print(m.group(1))")
         echo "Pylint score: ${PY_SCORE}/10 (required: ${PY_FAIL_UNDER}/10)"
-        python - <<'PY' "${PY_SCORE}" "${PY_FAIL_UNDER}"
-import sys
-score = float(sys.argv[1])
-required = float(sys.argv[2])
-if score < required:
-    raise SystemExit(f"Pylint score {score}/10 is below required {required}/10.")
-print("Pylint score threshold satisfied.")
-PY
+        python -c "import sys; s,r=float('${PY_SCORE}'),float('${PY_FAIL_UNDER}'); print('Pylint score threshold satisfied.') if s>=r else sys.exit(f'Pylint score {s}/10 is below required {r}/10.')"
         if [ "$pylint_exit" -ne 0 ]; then
           echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
         fi
+
