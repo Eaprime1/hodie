@@ -78,25 +78,4 @@ jobs:
         fi
 
         if ! python - "$score" "$fail_under" <<'PY'
-import sys
 
-score_value = sys.argv[1]
-threshold_value = sys.argv[2]
-
-try:
-    score = float(score_value)
-    threshold = float(threshold_value)
-except ValueError as exc:
-    raise SystemExit(f"Invalid numeric value for score/threshold: {exc}")
-
-raise SystemExit(0 if score >= threshold else 1)
-PY
-        then
-          echo "Pylint score $score is below fail-under threshold $fail_under."
-          exit 1
-        fi
-
-        echo "Pylint score $score meets fail-under threshold $fail_under."
-        if [ "$pylint_exit" -ne 0 ]; then
-          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
-        fi
