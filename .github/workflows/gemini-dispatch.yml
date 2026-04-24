@@ -6,7 +6,7 @@ on:
   pull_request_review:
     types: ['submitted']
   pull_request:
-    types: ['opened']
+    types: ['opened', 'synchronize', 'reopened']
   issues:
     types: ['opened', 'reopened']
   issue_comment:
