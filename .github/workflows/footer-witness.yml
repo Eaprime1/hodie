@@ -45,10 +45,11 @@ jobs:
       - name: Run Prima Witness Scanner
         id: witness
         # --strict causes exit 1 when newly introduced files lack witness.
-        # The quepad/ state file is NOT persisted between runs in this
-        # stateless CI context, so every file appears "new" on each run.
-        # To track incremental state, commit quepad/state.json to the repo
-        # or restore it from a cache/artifact.
+        # The scanner uses the checked-in quepad/state.json on startup when
+        # that file exists in the repository checkout. However, this CI job
+        # does not automatically write updated state back to the repo between
+        # runs, so state only advances when quepad/state.json is committed or
+        # restored from a cache/artifact.
         run: |
           python scripts/footer_witness.py --root . --strict
         continue-on-error: true
