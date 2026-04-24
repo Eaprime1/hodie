@@ -123,10 +123,6 @@ async def _run(args: argparse.Namespace) -> int:
     # Build and run pipeline
     pipeline = ConversationParser(config) + PatternExtractor(config)
     result = await pipeline.process_file(input_file)
-    result.aggregate_patterns()
-    result.aggregate_entities()
-    result.aggregate_topics()
-    result.generate_verification_seal()
 
     # Save result
     out_file = config.summaries_dir / f"{input_file.stem}_result.json"
