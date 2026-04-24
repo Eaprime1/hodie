@@ -105,7 +105,7 @@ PRIME_CATEGORIES = {
 def load_catalog():
     """Load REDUNDANCY catalog"""
     print(f"\n📋 Loading REDUNDANCY catalog...")
-    with open(CATALOG_FILE, 'r') as f:
+    with open(CATALOG_FILE, 'r', encoding='utf-8') as f:
         catalog = json.load(f)
     print(f"   ✓ Loaded {len(catalog):,} unique file families")
     return catalog
@@ -196,7 +196,7 @@ def classify_to_prime(file_info):
 
 def create_prime_structure():
     """Create 13 PRIME directory structure"""
-    print(f"\n🏗️  Creating 13 PRIME pyramidic structure...")
+    print("\n🏗️  Creating 13 PRIME pyramidic structure...")
 
     for prime, info in PRIME_CATEGORIES.items():
         prime_dir = os.path.join(PRIME_ROOT, f"PRIME_{prime:02d}_{info['name']}")
@@ -253,7 +253,7 @@ def generate_seed_file(prime, files_in_category):
         ext_display = ext if ext else 'no extension'
         seed_content += f"- {ext_display}: {count:,} files\n"
 
-    seed_content += f"""
+    seed_content += """
 
 ---
 
@@ -333,7 +333,7 @@ Navigate by extension or explore freely.
 
     # Write seed file
     seed_path = os.path.join(prime_dir, "seed_idea.md")
-    with open(seed_path, 'w') as f:
+    with open(seed_path, 'w', encoding='utf-8') as f:
         f.write(seed_content)
 
     return seed_path
@@ -367,17 +367,17 @@ def organize_by_prime(catalog):
         except Exception as e:
             stats['errors'].append({'hash': file_hash, 'error': str(e)})
 
-    print(f"\n✅ Classification complete!")
+    print("\n✅ Classification complete!")
 
     # Show distribution
-    print(f"\n📊 PRIME Distribution:")
+    print("\n📊 PRIME Distribution:")
     for prime in sorted(prime_assignments.keys()):
         info = PRIME_CATEGORIES[prime]
         count = len(prime_assignments[prime])
         print(f"   PRIME {prime:02d} ({info['name']:15s}): {count:5,} files ({count/len(catalog)*100:5.1f}%)")
 
     # Create symlinks for each PRIME
-    print(f"\n🔗 Creating organized structure...")
+    print("\n🔗 Creating organized structure...")
 
     for prime, files in prime_assignments.items():
         info = PRIME_CATEGORIES[prime]
@@ -426,7 +426,7 @@ def organize_by_prime(catalog):
 
 def create_master_index(prime_assignments):
     """Generate master INDEX_PRIME.md"""
-    print(f"\n📖 Creating master index...")
+    print("\n📖 Creating master index...")
 
     index_content = f"""# 13 PRIME Pyramidic Index
 
@@ -538,7 +538,7 @@ def create_master_index(prime_assignments):
 """
 
     index_path = os.path.join(PRIME_ROOT, "INDEX_PRIME.md")
-    with open(index_path, 'w') as f:
+    with open(index_path, 'w', encoding='utf-8') as f:
         f.write(index_content)
 
     print(f"   ✓ Index created: {index_path}")

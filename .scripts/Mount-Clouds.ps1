@@ -33,18 +33,22 @@ function Mount-CloudService {
 
     Write-Host "📂 Mounting $ServiceName..." -ForegroundColor Cyan
 
-    $processCheck = Get-Process rclone -ErrorAction SilentlyContinue |
-                    Where-Object { $_.CommandLine -like "*$MountPath*" }
+    # Check if MountPath is already a mount point via the `mount` command.
+    # This works reliably on Linux/PowerShell Core where Get-Process does not
+    # expose a CommandLine property. The standard Linux mount output format is:
+    # "device on /mount/path type fstype (options)"
+    $isMounted = & mount 2>$null | Where-Object { $_ -match (" on " + [regex]::Escape($MountPath) + '\b') }
 
-    if ($processCheck) {
+    if ($isMounted) {
         Write-Host "⚠ $ServiceName already mounted at $MountPath" -ForegroundColor Yellow
         return
     }
 
-    $cmd = "rclone mount ${RemoteName}: $MountPath --vfs-cache-mode writes --daemon"
-
     try {
-        Invoke-Expression $cmd
+        & rclone mount "${RemoteName}:" $MountPath --vfs-cache-mode writes --daemon
+        if ($LASTEXITCODE -ne 0) {
+            throw "rclone mount exited with code $LASTEXITCODE"
+        }
         Write-Host "✓ $ServiceName mounted successfully at $MountPath" -ForegroundColor Green
     } catch {
         Write-Host "✗ Failed to mount $ServiceName : $_" -ForegroundColor Red
@@ -98,9 +102,13 @@ if ($Unmount) {
 }
 
 Write-Host "`n=== Mount Status ===" -ForegroundColor Magenta
-Get-Process rclone -ErrorAction SilentlyContinue |
-    Select-Object Id, ProcessName, @{Name="Runtime";Expression={(Get-Date) - $_.StartTime}} |
-    Format-Table -AutoSize
+# rclone mounts appear as type 'fuse.rclone' in mount output on Linux
+$activeMounts = & mount 2>$null | Where-Object { $_ -match "fuse\.rclone" }
+if ($activeMounts) {
+    $activeMounts | ForEach-Object { Write-Host "  $_" -ForegroundColor Green }
+} else {
+    Write-Host "  No rclone mounts active" -ForegroundColor Gray
+}
 
 Write-Host "`nTip: Access your clouds at:" -ForegroundColor Cyan
 Write-Host "  Google Drive: $MountBase/GoogleDrive"
