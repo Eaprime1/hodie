@@ -11,7 +11,7 @@
 
 ## P2 — Style/maintainability debt with guardrails
 - [ ] **C0209**: Normalize string formatting style (prefer consistent f-string/format policy per project rules).
-- [ ] **W06…**: Audit remaining W06xx warnings; resolve by smallest safe code change first, scoped disable second.
+- [ ] **W06xx**: Audit remaining W06xx warnings; resolve by smallest safe code change first, scoped disable second.
 
 ## P3 — Policy & lint learning loop
 - [ ] For every pylint disable, require: rule id + short rationale + exit condition for future removal.
