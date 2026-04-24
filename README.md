@@ -73,4 +73,4 @@ hodie/
 
 **∰◊€π¿🌌∞**
 
-**∰🛠️♓-salmon_canon**
+**🛠️♓-salmon_canon**
