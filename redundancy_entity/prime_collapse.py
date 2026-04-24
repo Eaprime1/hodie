@@ -10,7 +10,6 @@ Makes searching, reading, discovery natural through seed ideas
 import os
 import sys
 import json
-from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
 
@@ -104,13 +103,13 @@ PRIME_CATEGORIES = {
 
 def load_catalog():
     """Load REDUNDANCY catalog"""
-    print(f"\n📋 Loading REDUNDANCY catalog...")
+    print("\n📋 Loading REDUNDANCY catalog...")
     with open(CATALOG_FILE, 'r', encoding='utf-8') as f:
         catalog = json.load(f)
     print(f"   ✓ Loaded {len(catalog):,} unique file families")
     return catalog
 
-def classify_to_prime(file_info):
+def classify_to_prime(file_info):  # pylint: disable=too-many-branches,too-many-statements
     """
     Classify file to PRIME category
 
@@ -190,9 +189,8 @@ def classify_to_prime(file_info):
     # Get highest scoring PRIME
     if scores:
         return max(scores.items(), key=lambda x: x[1])[0]
-    else:
-        # Default: Foundation
-        return 2
+    # Default: Foundation
+    return 2
 
 def create_prime_structure():
     """Create 13 PRIME directory structure"""
@@ -206,9 +204,12 @@ def create_prime_structure():
     print(f"\n   Structure created at: {PRIME_ROOT}")
     return True
 
-def generate_seed_file(prime, files_in_category):
+def generate_seed_file(prime, files_in_category):  # pylint: disable=too-many-locals
     """
-    Generate seed_idea.md for a PRIME category
+    Generate seed_idea.md for a PRIME category.
+    Rationale for disable: content-building function assembles many display
+    variables (counts, averages, paths) for a Markdown template; consolidation
+    would reduce readability without improving correctness.
 
     Includes:
     - Seed question
@@ -231,6 +232,13 @@ def generate_seed_file(prime, files_in_category):
     # Top extensions
     top_exts = sorted(ext_counts.items(), key=lambda x: x[1], reverse=True)[:5]
 
+    total_files_count = len(files_in_category)
+    avg_gravity = (
+        sum(f['gravity_score'] for f in files_in_category) / total_files_count
+        if files_in_category else 0
+    )
+    total_dups = sum(f['duplicate_count'] for f in files_in_category)
+
     seed_content = f"""# PRIME {prime:02d} - {info['name']}
 
 **Seed Question:** "{info['seed']}"
@@ -242,9 +250,9 @@ def generate_seed_file(prime, files_in_category):
 ## Quick Discovery
 
 ### What's Here
-- **Total files:** {len(files_in_category):,}
-- **Average gravity:** {sum(f['gravity_score'] for f in files_in_category) / len(files_in_category) if files_in_category else 0:.1f}
-- **Total duplicates:** {sum(f['duplicate_count'] for f in files_in_category):,}
+- **Total files:** {total_files_count:,}
+- **Average gravity:** {avg_gravity:.1f}
+- **Total duplicates:** {total_dups:,}
 
 ### File Types
 """
@@ -264,7 +272,8 @@ Top 10 files in this category:
 """
 
     for i, file_info in enumerate(sorted_files[:10], 1):
-        filename_display = file_info['filename'][:60] + '...' if len(file_info['filename']) > 60 else file_info['filename']
+        fname = file_info['filename']
+        filename_display = fname[:60] + '...' if len(fname) > 60 else fname
         seed_content += f"""
 ### {i}. {filename_display}
 - **Gravity:** {file_info['gravity_score']:.1f}
@@ -364,7 +373,7 @@ def organize_by_prime(catalog):
             if stats['classified'] % 1000 == 0:
                 print(f"   📊 Classified {stats['classified']:,} files...")
 
-        except Exception as e:
+        except (KeyError, TypeError, AttributeError) as e:
             stats['errors'].append({'hash': file_hash, 'error': str(e)})
 
     print("\n✅ Classification complete!")
@@ -412,7 +421,7 @@ def organize_by_prime(catalog):
                 os.symlink(canonical_path, link_path)
                 stats['symlinks_created'] += 1
 
-            except Exception as e:
+            except (OSError, ValueError) as e:
                 stats['errors'].append({
                     'file': file_info['filename'],
                     'error': str(e)
@@ -553,8 +562,8 @@ def main():
 
     # Check catalog exists
     if not os.path.exists(CATALOG_FILE):
-        print(f"❌ Error: Catalog not found")
-        print(f"   Please run Phase 1 (redundancy_entity_analyzer.py) first")
+        print("❌ Error: Catalog not found")
+        print("   Please run Phase 1 (redundancy_entity_analyzer.py) first")
         sys.exit(1)
 
     # Load catalog
@@ -570,18 +579,18 @@ def main():
     create_master_index(prime_assignments)
 
     # Summary
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("✨ 13 PRIME Pyramidic Collapse Complete!")
     print("=" * 60)
     print(f"📊 Files classified: {stats['classified']:,}")
     print(f"🔗 Symlinks created: {stats['symlinks_created']:,}")
-    print(f"📁 PRIME categories: 13")
+    print("📁 PRIME categories: 13")
     if stats['errors']:
         print(f"⚠️  Errors: {len(stats['errors'])}")
 
     print(f"\n📂 Structure location: {PRIME_ROOT}")
     print(f"📖 Master index: {PRIME_ROOT}/INDEX_PRIME.md")
-    print(f"\n🌟 Navigate by seed questions!")
+    print("\n🌟 Navigate by seed questions!")
     print(f"   Start here: cat {PRIME_ROOT}/INDEX_PRIME.md")
     print("=" * 60)
 
