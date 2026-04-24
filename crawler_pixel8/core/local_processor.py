@@ -112,6 +112,13 @@ class LocalProcessor(ABC):
             error_msg = f"Error processing {file_path}: {str(e)}"
             self.logger.error(error_msg)
             result.add_error(error_msg)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # process_file() is the per-file fault boundary; unexpected parser or
+            # processor failures should be recorded on the result instead of
+            # propagating and aborting batch processing.
+            error_msg = f"Unexpected error processing {file_path}: {str(e)}"
+            self.logger.exception(error_msg)
+            result.add_error(error_msg)
 
         result.processing_time = time.time() - start_time
         return result
