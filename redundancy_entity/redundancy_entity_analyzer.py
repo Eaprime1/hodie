@@ -13,10 +13,10 @@ Philosophy:
 
 import os
 import sys
+import re
 import hashlib
 import json
 import time
-from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
 
@@ -45,7 +45,7 @@ def calculate_hash(filepath, chunk_size=8192):
             while chunk := f.read(chunk_size):
                 hasher.update(chunk)
         return hasher.hexdigest()
-    except Exception as e:
+    except (OSError, PermissionError) as e:
         print(f"   ⚠️  Hash error {filepath}: {e}")
         return None
 
@@ -72,7 +72,6 @@ def assess_filename_quality(filename):
         score -= 20
 
     # Bonus for timestamps/dates in name
-    import re
     if re.search(r'\d{8}|\d{6}|202\d', filename):
         score += 15
 
@@ -121,7 +120,7 @@ def scan_beasis(root_path, progress_interval=1000):
     Scan beasis directory and build inventory
     Returns: hash_map with all file instances
     """
-    print(f"\n🔍 REDUNDANCY ENTITY - Scanning beasis...")
+    print("\n🔍 REDUNDANCY ENTITY - Scanning beasis...")
     print(f"   Root: {root_path}\n")
 
     hash_map = defaultdict(list)
@@ -129,7 +128,7 @@ def scan_beasis(root_path, progress_interval=1000):
     total_size = 0
     start_time = time.time()
 
-    for dirpath, dirnames, filenames in os.walk(root_path):
+    for dirpath, _, filenames in os.walk(root_path):
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
             total_files += 1
@@ -163,12 +162,12 @@ def scan_beasis(root_path, progress_interval=1000):
 
                 hash_map[file_hash].append(file_info)
 
-            except Exception as e:
+            except (OSError, PermissionError) as e:
                 print(f"   ⚠️  Error scanning {filepath}: {e}")
                 continue
 
     elapsed = time.time() - start_time
-    print(f"\n✅ Scan complete!")
+    print("\n✅ Scan complete!")
     print(f"   Total files: {total_files:,}")
     print(f"   Total size: {total_size / (1024**3):.2f} GB")
     print(f"   Time: {elapsed:.1f} seconds")
@@ -183,7 +182,7 @@ def build_catalog(hash_map):
     Each entry represents a unique file family
     Duplicates are counted and contribute to GRAVITY
     """
-    print(f"\n📋 Building REDUNDANCY catalog...")
+    print("\n📋 Building REDUNDANCY catalog...")
 
     catalog = {}
     stats = {
@@ -282,7 +281,7 @@ Files by copy count:
         families = stats['duplicate_distribution'][count]
         report += f"- **{count} {'copy' if count == 1 else 'copies'}:** {families:,} file families\n"
 
-    report += f"""
+    report += """
 
 ---
 
@@ -299,7 +298,7 @@ The top 100 files by gravity score (duplicate count significantly increases grav
         ext = os.path.splitext(entry['filename'])[1] or 'none'
         report += f"| {i} | `{filename_display}` | {entry['gravity']:.1f} | {entry['duplicates']} | {ext} |\n"
 
-    report += f"""
+    report += """
 
 *Showing top 50 of 100 high-gravity files*
 
@@ -434,13 +433,13 @@ def main():
     catalog, stats = build_catalog(hash_map)
 
     # Phase 1C: Save catalog
-    print(f"\n💾 Saving catalog...")
-    with open(CATALOG_FILE, 'w') as f:
+    print("\n💾 Saving catalog...")
+    with open(CATALOG_FILE, 'w', encoding='utf-8') as f:
         json.dump(catalog, f, indent=2)
     print(f"   ✓ Catalog: {CATALOG_FILE}")
 
     # Phase 1D: Save chain of custody inventory
-    print(f"💾 Saving chain of custody...")
+    print("💾 Saving chain of custody...")
     custody_data = {
         'generated': datetime.now().isoformat(),
         'beasis_root': BEASIS_ROOT,
@@ -454,19 +453,19 @@ def main():
             'total_gravity': stats['total_gravity']
         }
     }
-    with open(INVENTORY_FILE, 'w') as f:
+    with open(INVENTORY_FILE, 'w', encoding='utf-8') as f:
         json.dump(custody_data, f, indent=2)
     print(f"   ✓ Inventory: {INVENTORY_FILE}")
 
     # Phase 1E: Generate report
-    print(f"📄 Generating report...")
+    print("📄 Generating report...")
     report = generate_report(catalog, stats, total_files, total_size)
-    with open(REPORT_FILE, 'w') as f:
+    with open(REPORT_FILE, 'w', encoding='utf-8') as f:
         f.write(report)
     print(f"   ✓ Report: {REPORT_FILE}")
 
     # Summary
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("✨ REDUNDANCY ENTITY - Phase 1 Complete!")
     print("=" * 60)
     print(f"📊 Analyzed: {total_files:,} files")
@@ -474,10 +473,10 @@ def main():
     print(f"🔄 Duplicates: {stats['duplicate_files']:,} ({stats['duplicate_files']/total_files*100:.1f}%)")
     print(f"⚖️  Total gravity: {stats['total_gravity']:,.0f}")
     print(f"\n📂 Output directory: {OUTPUT_DIR}")
-    print(f"   - beasis_catalog.json (complete inventory)")
-    print(f"   - chain_of_custody.json (metadata)")
-    print(f"   - REDUNDANCY_REPORT.md (analysis)")
-    print(f"\n▶️  Next: Review REDUNDANCY_REPORT.md")
+    print("   - beasis_catalog.json (complete inventory)")
+    print("   - chain_of_custody.json (metadata)")
+    print("   - REDUNDANCY_REPORT.md (analysis)")
+    print("\n▶️  Next: Review REDUNDANCY_REPORT.md")
     print("=" * 60)
 
 if __name__ == "__main__":

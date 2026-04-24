@@ -4,11 +4,12 @@ Simplified processor pattern without cloud dependencies
 Adapted from genai-processors Processor concept
 """
 
+import asyncio
+import logging
+import time
 from abc import ABC, abstractmethod
 from typing import AsyncIterable, Optional
 from pathlib import Path
-import logging
-import time
 
 from .content_types import ConversationPart, ProcessingResult
 from .stream_utils import stream_content
@@ -28,7 +29,8 @@ class LocalProcessor(ABC):
         Args:
             config: Crawler configuration (uses default if not provided)
         """
-        from ..config import default_config
+        from ..config import default_config  # pylint: disable=import-outside-toplevel
+        # Lazy import avoids circular dependency at module load time
         self.config = config or default_config
         self.logger = self._setup_logger()
 
@@ -61,7 +63,6 @@ class LocalProcessor(ABC):
         Yields:
             Processed ConversationParts
         """
-        pass
 
     async def process_file(self, file_path: Path) -> ProcessingResult:
         """
@@ -106,7 +107,8 @@ class LocalProcessor(ABC):
             )
             self.logger.info(f"Verification seal: {result.verification_seal}")
 
-        except Exception as e:
+        except (OSError, RuntimeError, TypeError, ValueError) as e:
+            # Broad boundary catch: file-processing errors should not crash the pipeline
             error_msg = f"Error processing {file_path}: {str(e)}"
             self.logger.error(error_msg)
             result.add_error(error_msg)
@@ -152,8 +154,6 @@ class LocalProcessor(ABC):
         Returns:
             List of ProcessingResults
         """
-        import asyncio
-
         max_concurrent = max_concurrent or self.config.max_concurrent
 
         self.logger.info(
