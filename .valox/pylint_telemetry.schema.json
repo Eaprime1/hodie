@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Valox Pylint Telemetry",
+  "type": "object",
+  "required": ["meta", "events"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["project", "version", "concepts", "generated_at"],
+      "properties": {
+        "project": { "type": "string" },
+        "version": { "type": "string" },
+        "concepts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["vincere", "victoria", "vici", "facilis"]
+        },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "commit": { "type": "string" },
+        "pr_number": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rule_id",
+          "message",
+          "path",
+          "line",
+          "category",
+          "severity",
+          "fix_strategy",
+          "status"
+        ],
+        "properties": {
+          "rule_id": { "type": "string", "examples": ["W1309", "W1514", "W0718", "C0415", "W0611"] },
+          "message": { "type": "string" },
+          "path": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "symbol": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["correctness", "safety", "style", "maintainability", "performance", "security"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["low", "inference", "high", "certain"]
+          },
+          "fix_strategy": {
+            "type": "string",
+            "enum": ["code_change", "refactor", "disable_scoped", "disable_file", "defer"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["open", "fixed", "accepted_disable", "wont_fix", "deferred"]
+          },
+          "rationale": { "type": "string" },
+          "owner": { "type": "string" },
+          "time_to_fix_minutes": { "type": "number", "minimum": 0 },
+          "regression_risk": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "mustard_traits": {
+            "type": "object",
+            "properties": {
+              "quality": { "type": "string" },
+              "flavor": { "type": "string" },
+              "ingredients": { "type": "array", "items": { "type": "string" } },
+              "region": { "type": "string" },
+              "base": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
