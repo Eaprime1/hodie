@@ -21,13 +21,6 @@ if (-not $isAdmin) {
 Write-Host "✓ Running as Administrator" -ForegroundColor Green
 Write-Host ""
 
-# Function to check if feature is enabled
-function Test-WindowsFeature {
-    param($FeatureName)
-    $feature = Get-WindowsOptionalFeature -Online -FeatureName $FeatureName -ErrorAction SilentlyContinue
-    return ($feature -and $feature.State -eq "Enabled")
-}
-
 # Install WSL
 Write-Host "📦 Installing WSL2..." -ForegroundColor Cyan
 
@@ -139,16 +132,16 @@ Created: $(Get-Date -Format "yyyy-MM-dd")
 
 In WSL/Ubuntu, access this directory with:
 
-``````bash
+```bash
 cd /mnt/$($driveLetter.ToLower())/Development
-``````
+```
 
 Add to ~/.bashrc for quick access:
 
-``````bash
+```bash
 export DEV_HOME="/mnt/$($driveLetter.ToLower())/Development"
 alias devhome="cd `$DEV_HOME/Projects"
-``````
+```
 
 "@
         Set-Content -Path "$devPath\README.txt" -Value $readmeContent
@@ -174,7 +167,8 @@ Write-Host "  3. Ubuntu will complete its setup (username & password)" -Foregrou
 Write-Host "  4. Run the WSL setup script:" -ForegroundColor White
 Write-Host ""
 Write-Host "     cd ~" -ForegroundColor Cyan
-Write-Host "     curl -O https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh" -ForegroundColor Cyan
+Write-Host "     curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh" -ForegroundColor Cyan
+Write-Host "     cat setup-wsl.sh    # Review script before execution: check sudo usage and downloads" -ForegroundColor Cyan
 Write-Host "     bash setup-wsl.sh" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "📖 Documentation:" -ForegroundColor Yellow

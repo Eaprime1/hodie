@@ -3,7 +3,7 @@
 # Usage: ./laptop_file_server.sh [port]
 
 PORT="${1:-8080}"
-SERVE_DIR="/home/user/Q"
+SERVE_DIR="$HOME/Q"
 
 echo "📂 Starting Laptop File Server..."
 echo "Port: $PORT"
@@ -19,8 +19,8 @@ echo ""
 
 # Check if python available
 if ! command -v python3 >/dev/null 2>&1; then
-    echo "✗ Python not found. Installing..."
-    apt-get install -y python3
+    echo "✗ Python3 not found. Please install it (e.g., 'sudo apt-get install -y python3') and try again." >&2
+    exit 1
 fi
 
 echo "🚀 Starting server..."

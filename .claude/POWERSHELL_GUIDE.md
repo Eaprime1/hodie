@@ -226,13 +226,13 @@ Write-Host "Welcome to Q/ workspace!" -ForegroundColor Cyan
 # Custom aliases
 Set-Alias -Name note -Value Add-SessionNote.ps1
 
-# Custom functions
-function q { Set-Location /home/user/Q }
-function hodie { Set-Location /home/user/Q/hodie }
-function today { Set-Location /home/user/Q/today }
-
 # Environment
-$env:Q_PATH = "/home/user/Q"
+$env:Q_PATH = "$HOME/Q"
+
+# Custom functions
+function q { Set-Location $env:Q_PATH }
+function hodie { Set-Location (Join-Path $env:Q_PATH "hodie") }
+function today { Set-Location (Join-Path $env:Q_PATH "today") }
 ```
 
 ---
@@ -318,7 +318,7 @@ Get-Help Get-ChildItem -Examples
 
 ```powershell
 # Both work the same
-cd /home/user
+cd ~
 pwd
 ls
 ```
@@ -342,7 +342,7 @@ find . -name "*.md"  # Still works!
 grep -r "keyword" .
 
 # PowerShell
-Select-String -Path . -Pattern "keyword" -Recurse
+Get-ChildItem -Recurse -File | Select-String -Pattern "keyword"
 ```
 
 ### Piping

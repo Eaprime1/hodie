@@ -9,7 +9,7 @@ param(
 
 $SessionDate = Get-Date -Format "yyyy-MM-dd"
 $Timestamp = Get-Date -Format "HH:mm:ss"
-$NotesFile = "/home/user/Q/hodie/.eric/session_notes_$SessionDate.md"
+$NotesFile = "$HOME/Q/hodie/.eric/session_notes_$SessionDate.md"
 
 # Create file if doesn't exist
 if (-not (Test-Path $NotesFile)) {
@@ -17,7 +17,7 @@ if (-not (Test-Path $NotesFile)) {
 # Session Notes - $SessionDate
 
 **Environment**: New Laptop (faster machine)
-**Q Path**: /home/user/Q/
+**Q Path**: $HOME/Q/
 **Shell**: PowerShell $($PSVersionTable.PSVersion)
 
 ---

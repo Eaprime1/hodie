@@ -18,7 +18,8 @@ Then restart computer.
 **In WSL Ubuntu terminal**:
 ```bash
 cd ~
-curl -O https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+curl -fsSLo setup-wsl.sh https://raw.githubusercontent.com/Eaprime1/hodie/main/.claude/setup-wsl.sh
+cat setup-wsl.sh    # Review before running
 bash setup-wsl.sh
 ```
 
@@ -166,10 +167,11 @@ git config --global user.email "your@email.com"
 ### Permission Denied
 ```bash
 # Fix file permissions
-chmod +x filename.sh
+chmod +x setup-wsl.sh
 
 # Fix directory permissions
-chmod -R 755 directory/
+find directory/ -type d -exec chmod 755 {} +
+find directory/ -type f -exec chmod 644 {} +
 ```
 
 ---

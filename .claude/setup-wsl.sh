@@ -55,8 +55,17 @@ read -p "Install Node.js LTS? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_status "Installing Node.js LTS..."
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt install -y nodejs
+    # Add NodeSource GPG key for package verification
+    sudo apt-get install -y ca-certificates gnupg
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+    sudo chmod a+r /etc/apt/keyrings/nodesource.gpg
+    # Add NodeSource repository (Node.js 20 LTS)
+    NODE_MAJOR=20
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+    # Update and install
+    sudo apt-get update
+    sudo apt-get install -y nodejs
     print_success "Node.js installed: $(node --version)"
     print_success "npm installed: $(npm --version)"
     echo ""
@@ -84,27 +93,69 @@ echo ""
 print_status "Setting up SSH key for GitHub..."
 echo ""
 
-if [ -f ~/.ssh/id_ed25519 ]; then
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
+copy_public_key_to_clipboard() {
+    if [ ! -f ~/.ssh/id_ed25519.pub ]; then
+        print_warning "Public key file not found for clipboard copy."
+        return
+    fi
+
+    if command -v clip.exe >/dev/null 2>&1; then
+        if clip.exe < ~/.ssh/id_ed25519.pub; then
+            print_success "Public key copied to Windows clipboard."
+        else
+            print_warning "Could not copy key to Windows clipboard. Use manual copy if needed."
+        fi
+    else
+        print_warning "clip.exe not found. Copy the public key manually."
+    fi
+}
+
+if [[ -f ~/.ssh/id_ed25519 ]]; then
     print_warning "SSH key already exists at ~/.ssh/id_ed25519"
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.backup
-        mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub.backup
+        backup_suffix="$(date +%Y%m%d%H%M%S)"
+        backup_label="$backup_suffix"
+        backup_index=0
+        max_backup_attempts=100
+        while [ -e ~/.ssh/id_ed25519."$backup_label".backup ]; do
+            backup_index=$((backup_index + 1))
+            if [ "$backup_index" -ge "$max_backup_attempts" ]; then
+                backup_label="${backup_suffix}_$$_fallback"
+                print_warning "Using fallback backup suffix after $max_backup_attempts collisions."
+                break
+            fi
+            backup_label="${backup_suffix}_$backup_index"
+        done
+        mv ~/.ssh/id_ed25519 ~/.ssh/id_ed25519."$backup_label".backup
+        if [ -f ~/.ssh/id_ed25519.pub ]; then
+            mv ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519.pub."$backup_label".backup
+        fi
         print_success "Old keys backed up"
     else
         print_warning "Skipping SSH key generation"
         echo ""
-        print_status "Your existing public key:"
-        cat ~/.ssh/id_ed25519.pub
-        echo ""
-        print_warning "Add this key to GitHub: https://github.com/settings/keys"
+        if [ -f ~/.ssh/id_ed25519.pub ]; then
+            print_status "Your existing public key:"
+            cat ~/.ssh/id_ed25519.pub
+            echo ""
+            print_warning "Add this key to GitHub: https://github.com/settings/keys"
+            copy_public_key_to_clipboard
+        else
+            print_warning "Private key exists but public key is missing. Re-run and choose key generation (this run will not generate one)."
+        fi
         echo ""
     fi
 fi
 
 if [ ! -f ~/.ssh/id_ed25519 ]; then
-    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519 -N ""
+    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519
+    chmod 600 ~/.ssh/id_ed25519
+    chmod 644 ~/.ssh/id_ed25519.pub
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_ed25519
 
@@ -121,6 +172,7 @@ if [ ! -f ~/.ssh/id_ed25519 ]; then
     echo "  2. Click 'New SSH key'"
     echo "  3. Paste the key above"
     echo "  4. Click 'Add SSH key'"
+    copy_public_key_to_clipboard
     echo ""
     read -p "Press Enter after you've added the key to GitHub..."
     echo ""
