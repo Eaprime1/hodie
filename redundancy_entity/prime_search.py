@@ -12,7 +12,7 @@ from collections import defaultdict
 
 # prime_collapse lives in the same directory and is not a package-level dep;
 # importing at module level so it is visible to pylint (avoids C0415).
-from prime_collapse import classify_to_prime  # pylint: disable=import-outside-toplevel
+from prime_collapse import classify_to_prime
 
 # === CONFIGURATION ===
 REDUNDANCY_DIR = "/storage/emulated/0/pixel8a/Q/redundancy_entity"
