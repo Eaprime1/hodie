@@ -12,10 +12,16 @@ from pathlib import Path
 from crawler_pixel8.config import CrawlerConfig, KNOWN_LOCATIONS
 from crawler_pixel8.processors.conversation_parser import ConversationParser
 from crawler_pixel8.processors.pattern_extractor import PatternExtractor
+from crawler_pixel8.processors.one_hertz import PLEXUS_STAGES
+
+_STAGE_COUNT = len(PLEXUS_STAGES)  # 1-based max for --stage
 
 
 def _build_parser() -> argparse.ArgumentParser:
     """Build and return the argument parser."""
+    stage_names = ", ".join(
+        f"{i + 1}={name}" for i, name in enumerate(PLEXUS_STAGES)
+    )
     parser = argparse.ArgumentParser(
         prog="hodie",
         description="Hodie PIXEL8 Crawler — staged conversation processor (∰◊€π¿🌌∞)",
@@ -24,7 +30,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "Examples:\n"
             "  hodie --file conversation.json\n"
             "  hodie --location mulberry --file chat.json --output ./results\n"
-            "  hodie --location codespaces --file data.md --stage 2\n"
+            f"  hodie --location codespaces --file data.md --stage 2  # 2=duplex\n"
         ),
     )
     parser.add_argument(
@@ -64,9 +70,9 @@ def _build_parser() -> argparse.ArgumentParser:
         default=1,
         metavar="STAGE",
         help=(
-            "Plexus stage number (1–8). "
-            "1=simplex, 2=duplex, … 6=omniplex. "
-            "Reserved for One Hertz cycle targeting. Default: 1."
+            f"Plexus stage number (1–{_STAGE_COUNT}): {stage_names}. "
+            "Labels the processing context; use with `one_hertz` for full "
+            "One Hertz cycle processing. Default: 1 (simplex)."
         ),
     )
     return parser
@@ -84,6 +90,16 @@ async def _run(args: argparse.Namespace) -> int:
         os.environ["HODIE_LOCATION"] = args.location
 
     config = CrawlerConfig()
+
+    # Validate and resolve plexus stage
+    if not 1 <= args.stage <= _STAGE_COUNT:
+        print(
+            f"Error: --stage must be between 1 and {_STAGE_COUNT} "
+            f"(got {args.stage}). "
+            f"Stages: {', '.join(f'{i+1}={s}' for i, s in enumerate(PLEXUS_STAGES))}"
+        )
+        return 1
+    stage_name = PLEXUS_STAGES[args.stage - 1]
 
     # Override output directory if specified
     if args.output:
@@ -117,7 +133,7 @@ async def _run(args: argparse.Namespace) -> int:
     print(f"  Location : {location_label}")
     print(f"  File     : {input_file.name}")
     print(f"  Output   : {config.crawler_output}")
-    print(f"  Stage    : {args.stage}")
+    print(f"  Stage    : {args.stage} ({stage_name})")
     print("-" * 50)
 
     # Build and run pipeline

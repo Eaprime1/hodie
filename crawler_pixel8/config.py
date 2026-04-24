@@ -5,15 +5,23 @@ Pixel8-specific paths and settings for conversation processing
 
 from pathlib import Path
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Dict, List, Optional
 import logging
 import os
 import re
 
 
+#: Locations that have a corresponding .locations/{name}/config.sh file.
+KNOWN_LOCATIONS = ("mulberry", "pixel8a", "codespaces")
+
+
+@lru_cache(maxsize=None)
 def _parse_location_config(location: str) -> Dict[str, str]:
     """
     Parse a .locations/{location}/config.sh file and extract exported variables.
+
+    Results are cached — the file is read at most once per location per process.
 
     Looks for lines of the form:
         export VARIABLE_NAME="value"
@@ -21,11 +29,16 @@ def _parse_location_config(location: str) -> Dict[str, str]:
         export VARIABLE_NAME=value
 
     Args:
-        location: Location name (e.g. "mulberry", "pixel8a", "codespaces")
+        location: Location name. Must be one of KNOWN_LOCATIONS; unknown values
+            return an empty dict immediately (path-traversal guard).
 
     Returns:
         Dict of variable names to their string values. Empty dict on any error.
     """
+    # Guard: reject unknown/untrusted location strings before touching the filesystem
+    if location not in KNOWN_LOCATIONS:
+        return {}
+
     # Search relative to this file's repo root, then cwd
     repo_root = Path(__file__).resolve().parent.parent
     config_file = repo_root / ".locations" / location / "config.sh"
@@ -58,10 +71,6 @@ def _parse_location_config(location: str) -> Dict[str, str]:
     return result
 
 
-#: Locations that have a corresponding .locations/{name}/config.sh file.
-KNOWN_LOCATIONS = ("mulberry", "pixel8a", "codespaces")
-
-
 def _resolve_hodie_path() -> Path:
     """
     Resolve the hodie directory.
@@ -85,7 +94,11 @@ def _resolve_hodie_path() -> Path:
 
 
 def _resolve_base_dir() -> Path:
-    """Resolve the Q root directory (parent of hodie_dir).
+    """Resolve the Q root directory (the workspace root that contains hodie/).
+
+    This returns Q_ROOT — the top-level directory shared across streams and
+    projects.  It is *not* guaranteed to be the direct parent of hodie_dir;
+    the relationship depends on how each location organises its workspace.
 
     Priority:
     1. Q_ROOT env var (explicit override)
