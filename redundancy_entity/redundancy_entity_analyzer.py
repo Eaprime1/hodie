@@ -45,7 +45,7 @@ def calculate_hash(filepath, chunk_size=8192):
             while chunk := f.read(chunk_size):
                 hasher.update(chunk)
         return hasher.hexdigest()
-    except (OSError, PermissionError) as e:
+    except OSError as e:
         print(f"   ⚠️  Hash error {filepath}: {e}")
         return None
 
