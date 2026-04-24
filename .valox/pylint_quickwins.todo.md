@@ -38,5 +38,5 @@
 - Default action: delete import
 - Allowed keep case: explicit re-export in `__init__.py` with comment
 
-### W1309
+### C0209 (consider-using-f-string)
 - Align with project formatting rule and apply consistently in touched scope first
