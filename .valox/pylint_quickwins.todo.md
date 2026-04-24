@@ -10,7 +10,7 @@
 - [ ] **W0718**: If broad catch remains, log context + re-raise or convert to typed domain error with rationale.
 
 ## P2 — Style/maintainability debt with guardrails
-- [ ] **W1309**: Normalize string formatting style (prefer consistent f-string/format policy per project rules).
+- [ ] **C0209**: Normalize string formatting style (prefer consistent f-string/format policy per project rules).
 - [ ] **W06…**: Audit remaining W06xx warnings; resolve by smallest safe code change first, scoped disable second.
 
 ## P3 — Policy & lint learning loop
