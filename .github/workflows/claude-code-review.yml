@@ -6,6 +6,11 @@ on:
 
 jobs:
   claude-review:
+    if: >
+      github.actor != 'copilot[bot]' &&
+      github.actor != 'github-actions[bot]' &&
+      github.actor != 'dependabot[bot]' &&
+      github.actor != 'Copilot'
     runs-on: ubuntu-latest
     permissions:
       contents: read
