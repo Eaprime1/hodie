@@ -17,10 +17,10 @@ async def test_crawler(  # pylint: disable=too-many-statements
     test_file: Path = None, prompt_folder: bool = False, search_dir: Path = None
 ):
     """
-    Test crawler with a single file
-    # pylint: disable=too-many-statements
-    # Rationale: sequential CLI reporting function; splitting into sub-functions
-    # would fragment the user-facing output narrative without improving logic.
+    Test crawler with a single file.
+    Rationale for disable: sequential CLI reporting function; splitting into
+    sub-functions would fragment the user-facing output narrative without
+    improving logic.
 
     Args:
         test_file: Path to test conversation file (auto-detects if not provided)

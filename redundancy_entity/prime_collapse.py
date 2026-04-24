@@ -206,11 +206,10 @@ def create_prime_structure():
 
 def generate_seed_file(prime, files_in_category):  # pylint: disable=too-many-locals
     """
-    Generate seed_idea.md for a PRIME category
-    # pylint: disable=too-many-locals
-    # Rationale: content-building function assembles many display variables
-    # (counts, averages, paths) for a Markdown template; consolidation
-    # would reduce readability without improving correctness.
+    Generate seed_idea.md for a PRIME category.
+    Rationale for disable: content-building function assembles many display
+    variables (counts, averages, paths) for a Markdown template; consolidation
+    would reduce readability without improving correctness.
 
     Includes:
     - Seed question

@@ -10,9 +10,8 @@ import sys
 import json
 from collections import defaultdict
 
-# pylint: disable=import-outside-toplevel
 # prime_collapse lives in the same directory and is not a package-level dep;
-# this import is deferred to top-module level here so it is visible to pylint.
+# importing at module level so it is visible to pylint (avoids C0415).
 from prime_collapse import classify_to_prime  # pylint: disable=import-outside-toplevel
 
 # === CONFIGURATION ===

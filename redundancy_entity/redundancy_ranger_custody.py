@@ -196,6 +196,9 @@ def apply_dup_prefix(original_filename):
 def take_custody(catalog, dry_run=True, max_files=None):  # pylint: disable=too-many-locals,too-many-statements
     """
     Ranger takes custody of duplicates
+    Rationale for disable: custody operation is inherently stateful — tracking
+    multiple counters (families, duplicates, large files, space, errors) and
+    routing logic cannot be split without losing clarity of the single-pass algorithm.
 
     Process:
     1. Select canonical copy (stays in place)
@@ -209,10 +212,6 @@ def take_custody(catalog, dry_run=True, max_files=None):  # pylint: disable=too-
         dry_run: If True, only simulate (no actual moves)
         max_files: Limit number of families to process (for testing)
     """
-    # pylint: disable=too-many-locals,too-many-statements
-    # Rationale: custody operation is inherently stateful — tracking multiple
-    # counters (families, duplicates, large files, space, errors) and routing
-    # logic cannot be split without losing clarity of the single-pass algorithm.
     print("\n🔍 RANGER - Beginning custody operations...")
     print(f"   Mode: {'DRY RUN (simulation)' if dry_run else 'LIVE (actual moves)'}")
 
@@ -512,9 +511,9 @@ Each duplicate continues to contribute to the original's importance score.
 
 def main():  # pylint: disable=too-many-statements
     """Main execution — interactive custody mode selection and reporting.
-    # pylint: disable=too-many-statements
-    # Rationale: interactive CLI flow with three distinct mode branches;
-    # extracting sub-functions would obscure the sequential user workflow."""
+    Rationale for disable: interactive CLI flow with three distinct mode branches;
+    extracting sub-functions would obscure the sequential user workflow.
+    """
     print("=" * 60)
     print("REDUNDANCY ENTITY - Ranger Custody Operations")
     print("Phase 2: Duplicate Custody & Nani Discovery")

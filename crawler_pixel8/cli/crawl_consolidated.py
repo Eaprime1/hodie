@@ -28,10 +28,9 @@ async def crawl_consolidated(  # pylint: disable=too-many-locals
     """
     Crawl all processable files in consolidated_dir.
     Returns a summary dict with counts, top patterns, topics, entities.
-    # pylint: disable=too-many-locals
-    # Rationale: accumulating multiple aggregate counters/collections
-    # (patterns, topics, entities, errors) across a batch is inherently
-    # multi-variable; extraction would obscure the single-pass logic.
+    Rationale for disable: accumulating multiple aggregate counters/collections
+    (patterns, topics, entities, errors) across a batch is inherently
+    multi-variable; extraction would obscure the single-pass logic.
     """
     # Find all processable files recursively
     files = []
