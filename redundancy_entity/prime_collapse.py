@@ -111,7 +111,9 @@ def load_catalog():
 
 def classify_to_prime(file_info):  # pylint: disable=too-many-branches,too-many-statements
     """
-    Classify file to PRIME category
+    Classify file to PRIME category.
+    Rationale for disable: heuristic classification logic requires multiple
+    conditional checks; splitting would fragment the semantic mapping rules.
 
     Uses multiple signals:
     - Filename keywords
