@@ -8,18 +8,18 @@ name: Prima Witness Footer Check
 on:
   push:
     paths:
-      - '**.md'
-      - '**.txt'
-      - '**.rst'
-      - '**.py'
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.rst'
+      - '**/*.py'
       - 'scripts/footer_witness.py'
       - '.github/workflows/footer-witness.yml'
   pull_request:
     paths:
-      - '**.md'
-      - '**.txt'
-      - '**.rst'
-      - '**.py'
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.rst'
+      - '**/*.py'
       - 'scripts/footer_witness.py'
       - '.github/workflows/footer-witness.yml'
   workflow_dispatch:
