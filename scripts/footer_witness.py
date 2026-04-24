@@ -37,10 +37,12 @@ BBS/FidoNet-style flow.
 ARCHITECTURE NOTE — 100-MINUTE CLOCK
 --------------------------------------
 A future conversion adaptor will map canonical timestamps to decimal/centesimal
-time (100-minute clock), where 1 day = 10 centesimal hours × 100 centesimal
-minutes (= 1 000 centesimal minutes/day vs. 1 440 standard minutes/day).
+time (100-minute clock). In this representation, 1 day = 10 centesimal hours,
+each centesimal hour = 100 centesimal subunits, for a total of 10 000
+centesimal day-units per day.
 
-Conversion from canonical HH:MM:SS to centesimal minutes:
+Conversion from canonical HH:MM:SS to centesimal day-units ("cmin" in this
+module's current naming):
   total_seconds      = HH * 3600 + MM * 60 + SS
   centesimal_minutes = total_seconds / 86400 * 10000   (range 0 – 9999.99…)
 
