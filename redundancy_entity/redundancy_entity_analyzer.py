@@ -162,7 +162,7 @@ def scan_beasis(root_path, progress_interval=1000):
 
                 hash_map[file_hash].append(file_info)
 
-            except (OSError, PermissionError) as e:
+            except OSError as e:
                 print(f"   ⚠️  Error scanning {filepath}: {e}")
                 continue
 
