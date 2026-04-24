@@ -35,7 +35,7 @@
           "status"
         ],
         "properties": {
-          "rule_id": { "type": "string", "examples": ["W1309", "W1514", "W0718", "C0415", "W0611"] },
+          "rule_id": { "type": "string", "examples": ["C0209", "W1514", "W0718", "C0415", "W0611"] },
           "message": { "type": "string" },
           "path": { "type": "string" },
           "line": { "type": "integer", "minimum": 1 },
