@@ -158,7 +158,7 @@ Wants=network-online.target
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/rclone mount gdrive: /home/<username>/CloudMounts/GoogleDrive \
+ExecStart=/usr/bin/rclone mount gdrive: %h/CloudMounts/GoogleDrive \
   --vfs-cache-mode writes \
   --vfs-cache-max-age 24h \
   --vfs-read-chunk-size 128M \
