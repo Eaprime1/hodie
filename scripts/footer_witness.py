@@ -66,9 +66,11 @@ from typing import Dict, List, Optional, Tuple
 
 WITNESS_SYMBOL = "∰"
 
-# Canonical pattern: ∰ <space(s)> YYYYMMDDHHMMSSMS (17 digits)
+# Canonical pattern: ∰ <space/tab(s)> YYYYMMDDHHMMSSMS (17 digits)
+# Use horizontal whitespace only so a witness split across lines is not
+# treated as valid when matching against a multi-line footer string.
 WITNESS_PATTERN = re.compile(
-    r"∰\s+(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})"
+    r"∰[ \t]+(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})"
 )
 
 # Number of lines from end of file to consider as "footer"
