@@ -12,8 +12,7 @@
         "version": { "type": "string" },
         "concepts": {
           "type": "array",
-          "items": { "type": "string" },
-          "default": ["vincere", "victoria", "vici", "facilis"]
+          "items": { "type": "string" }
         },
         "generated_at": { "type": "string", "format": "date-time" },
         "commit": { "type": "string" },
