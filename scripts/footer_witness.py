@@ -69,8 +69,9 @@ WITNESS_SYMBOL = "∰"
 # Canonical pattern: ∰ <space/tab(s)> YYYYMMDDHHMMSSMS (17 digits)
 # Use horizontal whitespace only so a witness split across lines is not
 # treated as valid when matching against a multi-line footer string.
+# Enforce full-token match: no trailing digits or trailing text.
 WITNESS_PATTERN = re.compile(
-    r"∰[ \t]+(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})"
+    r"∰[ \t]+(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})(?!\d|\S)"
 )
 
 # Number of lines from end of file to consider as "footer"
