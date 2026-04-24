@@ -164,7 +164,7 @@ ExecStart=/usr/bin/rclone mount gdrive: %h/CloudMounts/GoogleDrive \
   --vfs-read-chunk-size 128M \
   --vfs-read-chunk-size-limit off \
   --buffer-size 256M
-ExecStop=/bin/fusermount -u /home/<username>/CloudMounts/GoogleDrive
+ExecStop=/bin/fusermount -u %h/CloudMounts/GoogleDrive
 Restart=on-failure
 User=<username>
 
