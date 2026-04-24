@@ -124,10 +124,11 @@ def is_valid_timestamp(stamp: str) -> bool:
         month = int(stamp[4:6])
         day = int(stamp[6:8])
         hour = int(stamp[8:10])
-        minute = int(stamp[10:12])
+        minutes = int(stamp[10:12])
         second = int(stamp[12:14])
-        # ms = int(stamp[14:17])  # 0–999, always valid if isdigit passed
-        datetime(year, month, day, hour, minute, second)
+        # Milliseconds (stamp[14:17], range 000-999): no further validation
+        # needed beyond the isdigit() check already performed above.
+        datetime(year, month, day, hour, minutes, second)
         return True
     except ValueError:
         return False

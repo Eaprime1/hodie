@@ -48,8 +48,8 @@ class TestNowWitnessStamp:
 
     def test_multiple_stamps_are_unique_or_increasing(self):
         stamps = [now_witness_stamp() for _ in range(5)]
-        # All stamps must be unique or at least non-decreasing
-        assert stamps == sorted(stamps) or len(set(stamps)) >= 1
+        # Timestamps must be non-decreasing (same-millisecond ties are OK)
+        assert stamps == sorted(stamps)
 
 
 class TestIsValidTimestamp:
@@ -122,7 +122,7 @@ class TestWitnessPattern:
         assert WITNESS_PATTERN.search("∰") is None
 
     def test_does_not_match_16_digits(self):
-        # 16 digits — too short (MS is only 2 digits)
+        # 16 digits — too short (MS must be 3 digits: 000–999)
         assert WITNESS_PATTERN.search("∰ 2026042402472012") is None
 
     def test_does_not_match_text_after_symbol(self):
@@ -164,9 +164,10 @@ class TestCheckFileWitness:
         assert ok is True
 
     def test_witness_outside_footer_not_detected(self, tmp_path):
-        # Witness is in the middle, not the footer (more than 15 lines from end)
+        # Witness is at line 0; with 21 total lines and FOOTER_LINES=15,
+        # the witness falls before the footer window → not detected.
         lines = ["line " + str(i) for i in range(20)]
-        lines.insert(0, "∰ 20260424024720123")
+        lines.insert(0, "∰ 20260424024720123")  # 21 total lines; witness at index 0
         f = tmp_path / "doc.txt"
         f.write_text("\n".join(lines), encoding="utf-8")
         ok, witness = check_file_witness(f)

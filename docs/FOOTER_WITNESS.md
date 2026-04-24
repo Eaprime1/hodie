@@ -143,7 +143,7 @@ Conversion formula:
 centesimal_minutes = (HH × 3600 + MM × 60 + SS) / 86400 × 10000
 ```
 
-Example: `02:47:20` UTC → `1 166.43…` centesimal minutes.
+Example: `02:47:20` UTC → `1 162.04…` centesimal minutes.
 
 **Design decision:** Canonical witness stamps are always stored in standard
 SI time (YYYYMMDDHHMMSSMS) for interoperability and future-proofing.
