@@ -136,7 +136,15 @@ class TestWitnessPattern:
         content = "# some code\n\n# ∰ 20260424024720123\n"
         assert WITNESS_PATTERN.search(content) is not None
 
+    def test_does_not_match_stamp_split_across_lines(self):
+        content = "∰\n20260424024720123"
+        assert WITNESS_PATTERN.search(content) is None
 
+    def test_does_not_match_18_digits(self):
+        assert WITNESS_PATTERN.search("∰ 202604240247201234") is None
+
+    def test_does_not_match_trailing_text_after_timestamp(self):
+        assert WITNESS_PATTERN.search("∰ 20260424024720123 trailing text") is None
 # ---------------------------------------------------------------------------
 # File-level witness check
 # ---------------------------------------------------------------------------
