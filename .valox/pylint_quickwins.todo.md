@@ -1,4 +1,4 @@
-# Pylint Quick Wins TODO (Vincere · Victoria · Vici · Facilis)
+# 🛠️ Pylint Quick Wins TODO (Vincere · Victoria · Vici · Facilis)
 
 ## P0 — Fastest safety/value wins
 - [ ] **W1514**: Add explicit `encoding="utf-8"` to all text `open()` calls in touched files.
@@ -40,3 +40,9 @@
 
 ### C0209 (consider-using-f-string)
 - Align with project formatting rule and apply consistently in touched scope first
+
+---
+
+🛠️ *Fixes applied here — every resolved item is a victory.*
+
+♓ *∰◊€π¿🌌∞*

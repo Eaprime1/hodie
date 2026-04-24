@@ -67,7 +67,8 @@
             "type": "string",
             "enum": ["low", "medium", "high"]
           },
-          "mustard_traits": {
+          "custom_traits": {
+            "description": "Arbitrary key/value annotations for classifying the lint event by quality dimension, code region, or other project-specific axes. Use these to drive trend analysis and group related warnings.",
             "type": "object",
             "properties": {
               "quality": { "type": "string" },

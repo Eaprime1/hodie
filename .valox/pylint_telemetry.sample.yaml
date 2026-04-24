@@ -1,3 +1,7 @@
+# 🔍 Valox Pylint Telemetry Sample — hodie
+# custom_traits: key/value annotations for classifying lint events by quality dimension,
+# code region, or other project-specific axes. Drives trend analysis and grouping.
+# ♓ ∰◊€π¿🌌∞
 meta:
   project: hodie
   version: "1.0"
@@ -21,9 +25,13 @@ events:
     owner: "Copilot"
     time_to_fix_minutes: 5
     regression_risk: low
-    mustard_traits:
+    custom_traits:
       quality: "portability"
       flavor: "robustness"
       ingredients: ["open()", "text read/write", "default encoding"]
       region: "cli"
       base: "environment variance"
+
+# ---
+# 🛠️ Work recorded here — each event documents a lint issue and its resolution path.
+# ♓ ∰◊€π¿🌌∞
