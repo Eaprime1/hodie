@@ -71,6 +71,28 @@ hodie/
 
 ---
 
+## Prima Witness footer check (local quick use)
+
+To avoid CI failures from missing witness footers, run the scanner locally before push:
+
+```bash
+python scripts/footer_witness.py --root . --strict
+```
+
+Generate a fresh witness stamp when you need to append one:
+
+```bash
+python scripts/footer_witness.py --stamp
+```
+
+Canonical footer format for new/changed scannable files (`.py`, `.md`, `.txt`, `.rst`):
+
+```text
+∰ YYYYMMDDHHMMSSMS
+```
+
+---
+
 **∰◊€π¿🌌∞**
 
 **∰🛠️♓-salmon_canon**
