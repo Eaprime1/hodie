@@ -75,6 +75,12 @@ credentials/
 # PWD reports (generated)
 PWD_REPORT.txt
 
+# quepad — generated scan artefacts (keep README.md and state.json)
+quepad/compliance_report.md
+quepad/new_docs_report.md
+quepad/flagged_report.md
+quepad/egressum-Q-*.md
+
 # Sensitive Personal Data - Added 2026-01-02
 /storage/emulated/0/pixel8a/Q/no_sync_private/
 **/medical_record/

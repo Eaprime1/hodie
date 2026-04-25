@@ -10,25 +10,27 @@ Usage:
 """
 
 import asyncio
+import argparse
 import json
 import sys
 from pathlib import Path
 from datetime import datetime
-
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from crawler_pixel8.config import CrawlerConfig
 from crawler_pixel8.processors.conversation_parser import ConversationParser
 from crawler_pixel8.processors.pattern_extractor import PatternExtractor
 
 
-async def crawl_consolidated(
+async def crawl_consolidated(  # pylint: disable=too-many-locals
     consolidated_dir: Path,
     config: CrawlerConfig
 ) -> dict:
     """
     Crawl all processable files in consolidated_dir.
     Returns a summary dict with counts, top patterns, topics, entities.
+    Rationale for disable: accumulating multiple aggregate counters/collections
+    (patterns, topics, entities, errors) across a batch is inherently
+    multi-variable; extraction would obscure the single-pass logic.
     """
     # Find all processable files recursively
     files = []
@@ -44,7 +46,7 @@ async def crawl_consolidated(
     files = sorted(files)
 
     total = len(files)
-    print(f"\n∰ PIXEL8 Crawler — _CONSOLIDATED batch")
+    print("\n∰ PIXEL8 Crawler — _CONSOLIDATED batch")
     print(f"  Found {total} files to process")
     print(f"  Output → {config.summaries_dir}")
     print("-" * 60)
@@ -135,14 +137,13 @@ def _print_summary(summary: dict) -> None:
         print(f"  - {e}")
 
     print()
-    print(f"  Full summary → crawler_output/consolidated_crawl_summary.json")
-    print(f"  Individual results → crawler_output/summaries/")
+    print("  Full summary → crawler_output/consolidated_crawl_summary.json")
+    print("  Individual results → crawler_output/summaries/")
     print("=" * 60)
     print()
 
 
 def main():
-    import argparse
     parser = argparse.ArgumentParser(description="Batch crawl _CONSOLIDATED directory")
     parser.add_argument(
         "--dir", "-d",

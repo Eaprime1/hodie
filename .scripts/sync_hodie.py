@@ -23,7 +23,6 @@ does not fail on repositories that have not yet configured the secret.
 from __future__ import annotations
 
 import argparse
-import io
 import json
 import os
 import sys
@@ -67,8 +66,24 @@ def _build_credentials(credentials_path: str | None = None):
             print(f"ERROR: GDRIVE_SERVICE_ACCOUNT_KEY is not valid JSON: {exc}", file=sys.stderr)
             sys.exit(1)
     elif credentials_path:
-        with open(credentials_path) as fh:
-            info = json.load(fh)
+        try:
+            with open(credentials_path, encoding="utf-8") as fh:
+                info = json.load(fh)
+        except FileNotFoundError:
+            print(f"ERROR: Credentials file not found: {credentials_path}", file=sys.stderr)
+            sys.exit(1)
+        except json.JSONDecodeError as exc:
+            print(
+                f"ERROR: Credentials file is not valid JSON: {credentials_path}: {exc}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        except OSError as exc:
+            print(
+                f"ERROR: Could not read credentials file {credentials_path}: {exc}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
     else:
         # No credentials — skip gracefully so CI does not fail on unconfigured repos
         print(
