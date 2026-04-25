@@ -113,7 +113,7 @@ copy_public_key_to_clipboard() {
     fi
 }
 
-if [ -f ~/.ssh/id_ed25519 ]; then
+if [[ -f ~/.ssh/id_ed25519 ]]; then
     print_warning "SSH key already exists at ~/.ssh/id_ed25519"
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo

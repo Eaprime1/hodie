@@ -5,21 +5,22 @@ Quick test with a single conversation file
 """
 
 import asyncio
+import argparse
 from pathlib import Path
-import sys
-import json
-
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from crawler_pixel8.config import CrawlerConfig
 from crawler_pixel8.processors.conversation_parser import ConversationParser
 from crawler_pixel8.processors.pattern_extractor import PatternExtractor
 
 
-async def test_crawler(test_file: Path = None, prompt_folder: bool = False, search_dir: Path = None):
+async def test_crawler(  # pylint: disable=too-many-statements
+    test_file: Path = None, prompt_folder: bool = False, search_dir: Path = None
+):
     """
-    Test crawler with a single file
+    Test crawler with a single file.
+    Rationale for disable: sequential CLI reporting function; splitting into
+    sub-functions would fragment the user-facing output narrative without
+    improving logic.
 
     Args:
         test_file: Path to test conversation file (auto-detects if not provided)
@@ -65,7 +66,7 @@ async def test_crawler(test_file: Path = None, prompt_folder: bool = False, sear
     # Chain processors: parse → extract patterns
     pipeline = parser + extractor
 
-    print(f"✓ Pipeline: ConversationParser → PatternExtractor")
+    print("✓ Pipeline: ConversationParser → PatternExtractor")
     print()
 
     # Process file
@@ -109,7 +110,7 @@ async def test_crawler(test_file: Path = None, prompt_folder: bool = False, sear
 
     # Show sample parts
     print()
-    print(f"📝 Sample Parts (first 3):")
+    print("📝 Sample Parts (first 3):")
     print("-" * 60)
     for i, part in enumerate(result.parts[:3]):
         print(f"\nPart {i+1} (Turn {part.turn_number}):")
@@ -128,7 +129,6 @@ async def test_crawler(test_file: Path = None, prompt_folder: bool = False, sear
 
 def main():
     """Main entry point for CLI"""
-    import argparse
 
     parser = argparse.ArgumentParser(description="Test PIXEL8 Crawler")
     parser.add_argument(
