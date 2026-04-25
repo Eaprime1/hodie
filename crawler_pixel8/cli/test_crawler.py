@@ -13,9 +13,14 @@ from crawler_pixel8.processors.conversation_parser import ConversationParser
 from crawler_pixel8.processors.pattern_extractor import PatternExtractor
 
 
-async def test_crawler(test_file: Path = None, prompt_folder: bool = False, search_dir: Path = None):
+async def test_crawler(  # pylint: disable=too-many-statements
+    test_file: Path = None, prompt_folder: bool = False, search_dir: Path = None
+):
     """
-    Test crawler with a single file
+    Test crawler with a single file.
+    Rationale for disable: sequential CLI reporting function; splitting into
+    sub-functions would fragment the user-facing output narrative without
+    improving logic.
 
     Args:
         test_file: Path to test conversation file (auto-detects if not provided)

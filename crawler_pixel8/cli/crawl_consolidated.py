@@ -21,13 +21,16 @@ from crawler_pixel8.processors.conversation_parser import ConversationParser
 from crawler_pixel8.processors.pattern_extractor import PatternExtractor
 
 
-async def crawl_consolidated(
+async def crawl_consolidated(  # pylint: disable=too-many-locals
     consolidated_dir: Path,
     config: CrawlerConfig
 ) -> dict:
     """
     Crawl all processable files in consolidated_dir.
     Returns a summary dict with counts, top patterns, topics, entities.
+    Rationale for disable: accumulating multiple aggregate counters/collections
+    (patterns, topics, entities, errors) across a batch is inherently
+    multi-variable; extraction would obscure the single-pass logic.
     """
     # Find all processable files recursively
     files = []
