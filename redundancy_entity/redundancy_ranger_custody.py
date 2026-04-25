@@ -18,7 +18,6 @@ import os
 import sys
 import json
 import shutil
-from pathlib import Path
 from datetime import datetime
 
 # === CONFIGURATION ===
@@ -47,8 +46,8 @@ LARGE_FILE_THRESHOLD = 10 * 1024 * 1024  # 10MB threshold
 
 def load_catalog():
     """Load the Phase 1 catalog"""
-    print(f"\n📋 Loading REDUNDANCY catalog...")
-    with open(CATALOG_FILE, 'r') as f:
+    print("\n📋 Loading REDUNDANCY catalog...")
+    with open(CATALOG_FILE, 'r', encoding='utf-8') as f:
         catalog = json.load(f)
     print(f"   ✓ Loaded {len(catalog):,} unique file families")
     return catalog
@@ -60,7 +59,7 @@ def initialize_carrier_structure():
     Carrier organizes custody into logical categories
     Mancers will operate within these structures
     """
-    print(f"\n🚚 Initializing Carrier entity structure...")
+    print("\n🚚 Initializing Carrier entity structure...")
 
     for category, subdir in CARRIER_STRUCTURE.items():
         path = os.path.join(CUSTODY_ROOT, subdir)
@@ -69,7 +68,7 @@ def initialize_carrier_structure():
 
     # Create README for custody archive
     readme_path = os.path.join(CUSTODY_ROOT, "README.md")
-    with open(readme_path, 'w') as f:
+    with open(readme_path, 'w', encoding='utf-8') as f:
         f.write(f"""# REDUNDANCY Entity - Custody Archive
 
 **Created:** {datetime.now().isoformat()}
@@ -122,7 +121,7 @@ The nani can:
 
 €(redundancy_custody_archive)
 """)
-    print(f"   ✓ Created custody archive README")
+    print("   ✓ Created custody archive README")
 
     return True
 
@@ -194,9 +193,12 @@ def apply_dup_prefix(original_filename):
     """
     return f"dup_{original_filename}"
 
-def take_custody(catalog, dry_run=True, max_files=None):
+def take_custody(catalog, dry_run=True, max_files=None):  # pylint: disable=too-many-locals,too-many-statements
     """
     Ranger takes custody of duplicates
+    Rationale for disable: custody operation is inherently stateful — tracking
+    multiple counters (families, duplicates, large files, space, errors) and
+    routing logic cannot be split without losing clarity of the single-pass algorithm.
 
     Process:
     1. Select canonical copy (stays in place)
@@ -210,7 +212,7 @@ def take_custody(catalog, dry_run=True, max_files=None):
         dry_run: If True, only simulate (no actual moves)
         max_files: Limit number of families to process (for testing)
     """
-    print(f"\n🔍 RANGER - Beginning custody operations...")
+    print("\n🔍 RANGER - Beginning custody operations...")
     print(f"   Mode: {'DRY RUN (simulation)' if dry_run else 'LIVE (actual moves)'}")
 
     stats = {
@@ -320,7 +322,7 @@ def take_custody(catalog, dry_run=True, max_files=None):
                     'dup_prefix_applied': dup_filename
                 })
 
-            except Exception as e:
+            except (OSError, shutil.Error) as e:
                 stats['errors'].append({
                     'file': original_path,
                     'error': str(e)
@@ -337,12 +339,12 @@ def take_custody(catalog, dry_run=True, max_files=None):
             custody_records.append(record)
             stats['custody_records_created'] += 1
 
-    print(f"\n✅ Ranger custody operations complete!")
+    print("\n✅ Ranger custody operations complete!")
     return stats, custody_records
 
 def save_custody_records(records):
     """Save chain of custody records"""
-    print(f"\n💾 Saving chain of custody records...")
+    print("\n💾 Saving chain of custody records...")
 
     custody_records_dir = os.path.join(
         CUSTODY_ROOT,
@@ -352,7 +354,7 @@ def save_custody_records(records):
 
     # Save complete records
     records_file = os.path.join(custody_records_dir, "custody_log.json")
-    with open(records_file, 'w') as f:
+    with open(records_file, 'w', encoding='utf-8') as f:
         json.dump({
             'generated': datetime.now().isoformat(),
             'total_records': len(records),
@@ -507,8 +509,11 @@ Each duplicate continues to contribute to the original's importance score.
 
     return report
 
-def main():
-    """Main execution"""
+def main():  # pylint: disable=too-many-statements
+    """Main execution — interactive custody mode selection and reporting.
+    Rationale for disable: interactive CLI flow with three distinct mode branches;
+    extracting sub-functions would obscure the sequential user workflow.
+    """
     print("=" * 60)
     print("REDUNDANCY ENTITY - Ranger Custody Operations")
     print("Phase 2: Duplicate Custody & Nani Discovery")
@@ -517,7 +522,7 @@ def main():
     # Check catalog exists
     if not os.path.exists(CATALOG_FILE):
         print(f"❌ Error: Catalog not found at {CATALOG_FILE}")
-        print(f"   Please run Phase 1 (redundancy_entity_analyzer.py) first")
+        print("   Please run Phase 1 (redundancy_entity_analyzer.py) first")
         sys.exit(1)
 
     # Load catalog
@@ -564,18 +569,18 @@ def main():
 
     # Save custody records (even for dry run)
     if records:
-        records_file = save_custody_records(records)
+        save_custody_records(records)
 
     # Generate report
-    print(f"\n📄 Generating custody report...")
+    print("\n📄 Generating custody report...")
     report = generate_custody_report(stats, records)
     report_file = os.path.join(REDUNDANCY_DIR, "CUSTODY_OPERATIONS_REPORT.md")
-    with open(report_file, 'w') as f:
+    with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
     print(f"   ✓ Report: {report_file}")
 
     # Summary
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("✨ REDUNDANCY ENTITY - Phase 2 Complete!")
     print("=" * 60)
     print(f"📊 Families processed: {stats['families_processed']:,}")
@@ -590,7 +595,7 @@ def main():
     print(f"   - Regular duplicates: {CUSTODY_ROOT}/dup_collection/")
     print(f"   - Large files: {CUSTODY_ROOT}/large_file_custody/")
     print(f"📋 Custody records: {CUSTODY_ROOT}/custody_records/")
-    print(f"\n▶️  Next: Review CUSTODY_OPERATIONS_REPORT.md")
+    print("\n▶️  Next: Review CUSTODY_OPERATIONS_REPORT.md")
     print("=" * 60)
 
 if __name__ == "__main__":

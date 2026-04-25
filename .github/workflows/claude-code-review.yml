@@ -6,6 +6,7 @@ on:
 
 jobs:
   claude-review:
+    if: ${{ !contains(fromJSON('["Copilot","copilot[bot]","github-actions[bot]"]'), github.actor) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,3 +28,5 @@ jobs:
           additional_permissions: |
             actions: read
           allowed_bots: '*'
+
+# ∰🛠️♓-salmon_canon
