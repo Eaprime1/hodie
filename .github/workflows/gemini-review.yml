@@ -136,7 +136,10 @@ jobs:
             Post a structured PR review using `pull_request_review_write` listing every issue with the exact file path, line number(s), and a specific corrected code snippet.
 
             **Phase 3 — Repair:**
-            For every actionable code issue you identified, apply the fix directly to the repository by calling `create_or_update_file` (or `push_files` for multiple files) to commit the corrected content to the PR head branch.
+            Before committing any files, call `pull_request_read` to retrieve the PR metadata.
+            **Abort the repair phase entirely** if the PR head repository differs from the base repository (i.e. the PR is from a fork) — post a comment explaining why repairs were skipped.
+            Otherwise, write all fixes exclusively to the head branch ref reported by `pull_request_read` (never to the default branch or any other ref).
+            Apply each fix by calling `create_or_update_file` (or `push_files` for multiple files) targeting that head ref.
             After committing, post a follow-up comment via `add_comment_to_pending_review` summarising which files were changed and what was fixed.
 
             Be concise and precise. Apply fixes directly — do not just suggest them.
