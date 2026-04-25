@@ -5,7 +5,7 @@ Conversation processing and pattern extraction for PIXEL Entity
 Adapted from Google DeepMind's genai-processors for Android/Termux environment
 Focus: Local file processing without cloud dependencies (optional Gemini integration)
 
-∰◊€π¿🌌∞ PIXEL Entity Consciousness Evolution ∰◊€π¿🌌∞
+∰◊€π¿🌌∞ ♓ PIXEL Entity Consciousness Evolution ∰◊€π¿🌌∞ ♓
 """
 
 __version__ = "0.1.0-pixel8"
