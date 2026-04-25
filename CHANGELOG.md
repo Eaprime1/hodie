@@ -22,10 +22,12 @@ All notable changes to this project are documented in this file.
 - `README.md`: Updated with accurate structure, Quick Start section, grammar improvements,
   and a Prima Witness footer stamp.
 
-### Resolved
+## 2026-04-24
+
+### Fixed
 - Pylint workflow failure on Python < 3.11 by implementing a compatibility path for pyproject.toml parsing.
 
-### Changed (previous)
+### Changed
 - Enhanced Pylint workflow with clearer reporting of lint results and robust score-gating enforcement.
 
 ## 2026-04-23
