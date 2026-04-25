@@ -11,6 +11,7 @@ on:
     types: ['opened', 'reopened']
   issue_comment:
     types: ['created']
+  workflow_dispatch: {}
 
 defaults:
   run:
@@ -132,4 +133,28 @@ jobs:
     with:
       additional_context: '${{ needs.dispatch.outputs.additional_context }}'
     secrets: 'inherit'
+
+  conclude:
+    name: 'Conclude'
+    runs-on: 'ubuntu-latest'
+    needs: ['dispatch', 'review', 'triage', 'invoke']
+    if: '!cancelled()'
+    permissions: {}
+    steps:
+      - name: 'Check for upstream failures'
+        env:
+          DISPATCH_RESULT: '${{ needs.dispatch.result }}'
+          REVIEW_RESULT: '${{ needs.review.result }}'
+          TRIAGE_RESULT: '${{ needs.triage.result }}'
+          INVOKE_RESULT: '${{ needs.invoke.result }}'
+        run: |-
+          echo "dispatch=${DISPATCH_RESULT} review=${REVIEW_RESULT} triage=${TRIAGE_RESULT} invoke=${INVOKE_RESULT}"
+          results=("${DISPATCH_RESULT}" "${REVIEW_RESULT}" "${TRIAGE_RESULT}" "${INVOKE_RESULT}")
+          for r in "${results[@]}"; do
+            if [[ "${r}" == "failure" ]]; then
+              echo "::error::Upstream job failed (result=${r})." >&2
+              exit 1
+            fi
+          done
+          echo "All jobs either succeeded or were skipped."
 # ∰🛠️♓-salmon_canon
