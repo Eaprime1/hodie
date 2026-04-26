@@ -129,7 +129,7 @@ async def _run(args: argparse.Namespace) -> int:
         return 1
 
     location_label = args.location or os.getenv("HODIE_LOCATION", "unknown")
-    print(f"∰ Hodie PIXEL8 Crawler")
+    print("∰ Hodie PIXEL8 Crawler")
     print(f"  Location : {location_label}")
     print(f"  File     : {input_file.name}")
     print(f"  Output   : {config.crawler_output}")
