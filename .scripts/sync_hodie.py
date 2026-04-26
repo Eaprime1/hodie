@@ -23,7 +23,6 @@ does not fail on repositories that have not yet configured the secret.
 from __future__ import annotations
 
 import argparse
-import io
 import json
 import os
 import sys
@@ -67,8 +66,24 @@ def _build_credentials(credentials_path: str | None = None):
             print(f"ERROR: GDRIVE_SERVICE_ACCOUNT_KEY is not valid JSON: {exc}", file=sys.stderr)
             sys.exit(1)
     elif credentials_path:
-        with open(credentials_path) as fh:
-            info = json.load(fh)
+        try:
+            with open(credentials_path, encoding="utf-8") as fh:
+                info = json.load(fh)
+        except FileNotFoundError:
+            print(f"ERROR: Credentials file not found: {credentials_path}", file=sys.stderr)
+            sys.exit(1)
+        except json.JSONDecodeError as exc:
+            print(
+                f"ERROR: Credentials file is not valid JSON: {credentials_path}: {exc}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        except OSError as exc:
+            print(
+                f"ERROR: Could not read credentials file {credentials_path}: {exc}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
     else:
         # No credentials — skip gracefully so CI does not fail on unconfigured repos
         print(
@@ -106,7 +121,7 @@ def list_folder(service, folder_id: str) -> list[dict]:
         resp = (
             service.files()
             .list(
-                q=f"'{folder_id}' in parents and trashed=false",
+                q=f"'{folder_id}' in parents and trashed=false and mimeType != 'application/vnd.google-apps.folder'",
                 fields="nextPageToken, files(id, name, mimeType, modifiedTime, size)",
                 pageToken=page_token,
                 pageSize=100,
@@ -179,7 +194,7 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
 def load_manifest() -> dict:
     if MANIFEST_PATH.exists():
         try:
-            return json.loads(MANIFEST_PATH.read_text())
+            return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             return {}
     return {}
@@ -187,7 +202,7 @@ def load_manifest() -> dict:
 
 def save_manifest(manifest: dict) -> None:
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2))
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
 # ── Main sync ──────────────────────────────────────────────────────────────────

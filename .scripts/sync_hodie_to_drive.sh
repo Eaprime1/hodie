@@ -91,8 +91,7 @@ RCLONE_FLAGS=(
     --exclude "**/*~"
     --exclude "**/*.tmp"
     --exclude ".server_root/**"
-    # crawler_output/summaries can be large; exclude individual JSONs
-    # but keep the master summary and maps
+    # crawler_output/summaries can be large; exclude the whole directory
     --exclude "crawler_output/summaries/**"
 )
 

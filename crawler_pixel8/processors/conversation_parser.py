@@ -50,8 +50,8 @@ class ConversationParser(LocalProcessor):
             # Try to detect format from content
             return await self._parse_auto_detect(file_path)
 
-        except Exception as e:
-            self.logger.error(f"Failed to parse {file_path}: {e}")
+        except (OSError, ValueError) as exc:
+            self.logger.error("Failed to parse %s: %s", file_path, exc)
             # Fall back to single part
             return await super()._parse_file(file_path)
 
@@ -119,7 +119,7 @@ class ConversationParser(LocalProcessor):
                     timestamp = datetime.fromtimestamp(ts_field)
                 else:
                     timestamp = datetime.fromisoformat(str(ts_field))
-            except (ValueError, OSError):
+            except (ValueError, OSError, OverflowError, TypeError):
                 pass
 
         # Extract metadata
@@ -258,7 +258,14 @@ class ConversationParser(LocalProcessor):
         """
         try:
             return await self._parse_json(file_path)
-        except (json.JSONDecodeError, ValueError, IOError):
+        except (
+            json.JSONDecodeError,
+            ValueError,
+            TypeError,
+            AttributeError,
+            OSError,
+            IOError,
+        ):
             pass
 
         try:
