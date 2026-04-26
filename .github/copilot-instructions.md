@@ -107,10 +107,11 @@ This fails on mulberry and Codespaces.
 - Fall back to `Path.cwd()` if unset
 - Keep all existing defaults as pixel8a fallback
 
-### 3. Add tests/
+### 3. Maintain and expand test coverage
 **Setup already in pyproject.toml** — `asyncio_mode = "auto"`, testpaths = `["tests"]`
-**Missing**: the `tests/` directory itself
-**Priority tests**:
+**Status**: the `tests/` directory is present; continue improving coverage and keeping
+the suite aligned with current pipeline behavior.
+**Coverage priorities**:
 - `test_conversation_parser.py` — round-trip JSON parse, markdown parse
 - `test_pattern_extractor.py` — entity extraction, topic detection
 - `test_processor_chain.py` — `+` chaining, batch processing
