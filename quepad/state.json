@@ -172,8 +172,8 @@
       "last_seen": "20260425172311973"
     },
     "README.md": {
-      "compliant": false,
-      "witness": null,
+      "compliant": true,
+      "witness": "∰ 20260424000000000",
       "last_seen": "20260425172311973"
     },
     "_TODAY/README.md": {
