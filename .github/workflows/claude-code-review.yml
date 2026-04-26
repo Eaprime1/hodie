@@ -6,7 +6,7 @@ on:
 
 jobs:
   claude-review:
-    if: ${{ !contains(fromJSON('["Copilot","copilot[bot]","github-actions[bot]"]'), github.actor) }}
+    if: ${{ !contains(fromJSON('["Copilot","copilot[bot]","github-actions[bot]","dependabot[bot]"]'), github.actor) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
