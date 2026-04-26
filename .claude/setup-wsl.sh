@@ -122,7 +122,7 @@ if [[ -f ~/.ssh/id_ed25519 ]]; then
         backup_label="$backup_suffix"
         backup_index=0
         max_backup_attempts=100
-        while [ -e ~/.ssh/id_ed25519."$backup_label".backup ]; do
+        while [[ -e ~/.ssh/id_ed25519."$backup_label".backup ]]; do
             backup_index=$((backup_index + 1))
             if [ "$backup_index" -ge "$max_backup_attempts" ]; then
                 backup_label="${backup_suffix}_$$_fallback"
