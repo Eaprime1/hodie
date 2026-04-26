@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 - Resolved Pylint workflow failure on Python < 3.11 by implementing a compatibility path for pyproject.toml parsing.
+- Added credential guard (`if: secrets.GEMINI_API_KEY || vars.GCP_WIF_PROVIDER`) to the "Run Gemini CLI" step in `gemini-invoke.yml` so the workflow skips gracefully when Gemini credentials are not configured, preventing noisy failures in unconfigured environments.
 
 ### Changed
 - Enhanced Pylint workflow with clearer reporting of lint results and robust score gating enforcement.
@@ -22,3 +23,5 @@ All notable changes to this project are documented in this file.
 - Improved workflow diagnostics by requiring RUNNER_TEMP for temp file setup and printing parsed pylint score and threshold in job output.
 - Fixed repository metadata by removing invalid gitlink entry `plexus (1)` that caused
   GitHub Actions post-job submodule cleanup warnings.
+
+♓ 20260426012957375
