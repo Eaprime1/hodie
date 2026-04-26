@@ -660,11 +660,6 @@
       "compliant": true,
       "witness": "∰ 20260425173027000",
       "last_seen": "20260426005457493"
-    },
-    "SECURITY.md": {
-      "compliant": false,
-      "witness": null,
-      "last_seen": "20260426005457493"
     }
   }
 }
