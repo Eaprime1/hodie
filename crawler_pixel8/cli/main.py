@@ -30,7 +30,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "Examples:\n"
             "  hodie --file conversation.json\n"
             "  hodie --location mulberry --file chat.json --output ./results\n"
-            f"  hodie --location codespaces --file data.md --stage 2  # 2=duplex\n"
+            "  hodie --location codespaces --file data.md --stage 2  # 2=duplex\n"
         ),
     )
     parser.add_argument(
@@ -129,7 +129,7 @@ async def _run(args: argparse.Namespace) -> int:
         return 1
 
     location_label = args.location or os.getenv("HODIE_LOCATION", "unknown")
-    print(f"∰ Hodie PIXEL8 Crawler")
+    print("∰ Hodie PIXEL8 Crawler")
     print(f"  Location : {location_label}")
     print(f"  File     : {input_file.name}")
     print(f"  Output   : {config.crawler_output}")
@@ -163,3 +163,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+# ♓-salmon_canon
+# ∰ 20260425173027000
