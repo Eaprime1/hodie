@@ -30,4 +30,6 @@ min-similarity-lines=6
 
 [TYPECHECK]
 # Ignore missing imports for optional dependencies
-ignored-modules=google.genai,google.generativeai
+ignored-modules=google.genai,google.generativeai,googleapiclient,googleapiclient.discovery,googleapiclient.errors,googleapiclient.http
+
+# ∰🔍🛠️-salmon_canon
