@@ -1,8 +1,8 @@
 # Copilot Instructions — Hodie Repository
 
-**Date**: 2026-04-10
-**Branch**: `claude/upgrade-hodie-repo-XEFEy` (active development)
-**Phase**: 1 complete → Phase 2 in progress
+**Date**: 2026-04-26
+**Branch**: `revert-123-main` (active development)
+**Phase**: 1 complete — Phase 2 largely complete, Phase 3 planned
 
 Read this file before suggesting changes. It contains the architecture map,
 active tasks, known issues, and workflows for this project.
@@ -38,7 +38,8 @@ crawler_pixel8/
 │   ├── conversation_parser.py # Multi-format parser: JSON, Markdown, plain text
 │   └── pattern_extractor.py   # Rule-based entity/topic/pattern extraction
 └── cli/
-    └── test_crawler.py        # CLI entry point for testing
+    ├── main.py            # Primary CLI entry point (hodie command)
+    └── test_crawler.py    # Legacy CLI tool (hodie-crawler command)
 
 redundancy_entity/             # Gravity-based deduplication system (Beasis)
 quanta/                        # 16 entity domains with origin stories and development docs
@@ -81,24 +82,17 @@ result = await pipeline.process_file(Path("conversation.json"))
 - Batch processing with asyncio semaphore concurrency control
 - CI: pylint on Python 3.10/3.11/3.12
 
-### Phase 2 — In Progress
+### Phase 2 — Complete
 - Gemini API integration (`AdvancedPatternExtractor`, feature-flagged)
 - Location-aware config (`.locations/` → `CrawlerConfig` wiring)
-- Test suite (`tests/` directory, pytest-asyncio configured)
-- `one_hertz.py` — One Hertz Operations processor
+- Test suite (`tests/` directory populated, pytest-asyncio configured)
 - CLI `main()` entry point implemented (`crawler_pixel8/cli/main.py`; exposed via `pyproject.toml`)
 
 ---
 
 ## Active Tasks (Priority Order)
 
-### 1. Fix async bug in AdvancedPatternExtractor
-**File**: `crawler_pixel8/processors/pattern_extractor.py`, line ~157
-**Problem**: `async for part in await super().process(content)` — `process()` is an
-async generator, not a coroutine. `await` is wrong here.
-**Fix**: `async for part in super().process(content):`
-
-### 2. Wire `.locations/` config into CrawlerConfig
+### 1. Wire `.locations/` config into CrawlerConfig
 **Problem**: `CrawlerConfig` defaults hard-code `/storage/emulated/0/pixel8a/Q`.
 This fails on mulberry and Codespaces.
 **Approach**:
@@ -107,7 +101,7 @@ This fails on mulberry and Codespaces.
 - Fall back to `Path.cwd()` if unset
 - Keep all existing defaults as pixel8a fallback
 
-### 3. Maintain and expand test coverage
+### 2. Maintain and expand test coverage
 **Setup already in pyproject.toml** — `asyncio_mode = "auto"`, testpaths = `["tests"]`
 **Status**: the `tests/` directory is present; continue improving coverage and keeping
 the suite aligned with current pipeline behavior.
@@ -117,7 +111,7 @@ the suite aligned with current pipeline behavior.
 - `test_processor_chain.py` — `+` chaining, batch processing
 - `test_processing_result.py` — aggregation, serialization, verification seal
 
-### 4. Build one_hertz.py
+### 3. Build one_hertz.py
 **Purpose**: Implement the One Hertz Operations concept — process exactly one
 plexus stage per cycle, report status, exit.
 **Lives in**: `crawler_pixel8/processors/one_hertz.py` or project root
@@ -127,12 +121,7 @@ plexus stage per cycle, report status, exit.
 - Move processed files to next stage
 - Report what moved and what remains
 
-### 5. Fix CLI entry point
-**Problem**: `pyproject.toml` declares `hodie-crawler = "crawler_pixel8.cli.test_crawler:main"`
-but `test_crawler.py` likely lacks a `main()` function at module level.
-**Fix**: Wrap CLI logic in `def main(): ...` and add `if __name__ == "__main__": main()`
-
-### 6. Gemini API integration
+### 4. Gemini API integration
 **Stub location**: `AdvancedPatternExtractor.process()` in `pattern_extractor.py`
 **Config flags**: `use_gemini: bool`, `gemini_api_key` property (reads `GEMINI_API_KEY`)
 **Approach**: When `use_ai=True` and API key present, send text to Gemini for
@@ -190,7 +179,7 @@ python3 crawler_pixel8/cli/test_crawler.py /path/to/conversation.json
 # Run crawler on a directory
 python3 crawler_pixel8/cli/test_crawler.py --search-dir /path/to/folder
 
-# Run tests (once tests/ exists)
+# Run tests
 pip install pytest pytest-asyncio
 pytest
 
@@ -209,11 +198,10 @@ bash .scripts/acp_proceed.sh DRAFT REVIEW
 
 ## Git Workflow
 
-- Active branch: `claude/upgrade-hodie-repo-XEFEy`
+- Active branch: `revert-123-main`
 - Branch prefixes: `feature/`, `heritage/`, `experimental/`, `claude/`
 - Hooks installed in `.githooks/` — run `git config core.hooksPath .githooks`
 - CI runs pylint on `.py` file changes (`.github/workflows/pylint.yml`)
-- pylint `fail-under = 7.0` — score must stay above 7.0
 
 ---
 
@@ -221,10 +209,7 @@ bash .scripts/acp_proceed.sh DRAFT REVIEW
 
 | Location | Issue | Status |
 |----------|-------|--------|
-| `pattern_extractor.py:157` | `await super().process()` on async generator | Fix pending |
-| `config.py:17` | Hard-coded Pixel8a paths as defaults | Fix pending |
-| `pyproject.toml:53` | `cli:main` entry point missing | Fix pending |
-| `tests/` | Directory does not exist | Build pending |
+| `config.py` | Hard-coded Pixel8a paths as defaults | Fix pending |
 | `one_hertz.py` | Referenced in docs, not yet built | Build pending |
 
 ---
