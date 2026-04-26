@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- Resolved Pylint workflow failure on Python < 3.11 by implementing a compatibility path for pyproject.toml parsing.
+- Resolved Pylint workflow failure on Python < 3.11 by removing workflow-side `pyproject.toml` parsing and simplifying lint score gating.
 
 ### Changed
 - Enhanced Pylint workflow with clearer reporting of lint results and robust score gating enforcement.
