@@ -119,3 +119,11 @@ build/
 *.mp3
 *.mov
 *.avi
+
+# Document files (store in Drive, not Git)
+*.pdf
+*.PDF
+*.docx
+*.doc
+*.pptx
+*.ppt
