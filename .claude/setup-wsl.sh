@@ -97,7 +97,7 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 copy_public_key_to_clipboard() {
-    if [ ! -f ~/.ssh/id_ed25519.pub ]; then
+    if [[ ! -f ~/.ssh/id_ed25519.pub ]]; then
         print_warning "Public key file not found for clipboard copy."
         return
     fi
