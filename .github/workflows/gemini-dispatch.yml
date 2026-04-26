@@ -99,7 +99,7 @@ jobs:
     if: '${{ needs.dispatch.outputs.command == ''review'' }}'
     uses: './.github/workflows/gemini-review.yml'
     permissions:
-      contents: 'write'
+      contents: 'read'
       id-token: 'write'
       issues: 'write'
       pull-requests: 'write'

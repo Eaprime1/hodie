@@ -21,7 +21,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     timeout-minutes: 7
     permissions:
-      contents: 'write'
+      contents: 'read'
       id-token: 'write'
       issues: 'write'
       pull-requests: 'write'
@@ -34,7 +34,7 @@ jobs:
         with:
           app-id: '${{ vars.APP_ID }}'
           private-key: '${{ secrets.APP_PRIVATE_KEY }}'
-          permission-contents: 'write'
+          permission-contents: 'read'
           permission-issues: 'write'
           permission-pull-requests: 'write'
 
@@ -102,10 +102,6 @@ jobs:
                   ],
                   "includeTools": [
                     "add_comment_to_pending_review",
-                    "create_or_update_file",
-                    "get_file_contents",
-                    "list_commits",
-                    "push_files",
                     "pull_request_read",
                     "pull_request_review_write"
                   ],
@@ -124,24 +120,6 @@ jobs:
                 ]
               }
             }
-          prompt: |-
-            You are a code reviewer AND repair agent for pull request ${{ github.event.pull_request.number || github.event.issue.number }} in repository ${{ github.repository }}.
-
-            **Phase 1 — Review:**
-            Use `pull_request_read` to fetch the PR diff and changed files.
-            Check criteria defined in `.gemini/styleguide.md` and `.gemini/GEMINI.md`. Focus on: security issues (credentials, tokens, hardcoded paths), Python hygiene, Bash hygiene, and logic errors.
-            Do NOT flag intentional domain vocabulary (plexus, duplex, quanta, tardigradia, vitara, atelier, etc.) — these are project-specific terms.
-
-            **Phase 2 — Report:**
-            Post a structured PR review using `pull_request_review_write` listing every issue with the exact file path, line number(s), and a specific corrected code snippet.
-
-            **Phase 3 — Repair:**
-            Before committing any files, call `pull_request_read` to retrieve the PR metadata.
-            **Abort the repair phase entirely** if the PR head repository differs from the base repository (i.e. the PR is from a fork) — post a comment explaining why repairs were skipped.
-            Otherwise, write all fixes exclusively to the head branch ref reported by `pull_request_read` (never to the default branch or any other ref).
-            Apply each fix by calling `create_or_update_file` (or `push_files` for multiple files) targeting that head ref.
-            After committing, post a follow-up comment via `add_comment_to_pending_review` summarising which files were changed and what was fixed.
-
-            Be concise and precise. Apply fixes directly — do not just suggest them.
+          prompt: '/gemini-review'
 
 # ∰🛠️♓-salmon_canon

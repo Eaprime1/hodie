@@ -1,5 +1,6 @@
-# Hodie — Today's Work, Crystallized
+# Hodie - Today Concept
 
+**Date**: 2025-12-24
 **Version**: 0.1.0
 **Repository**: https://github.com/Eaprime1/hodie
 **Drive**: https://drive.google.com/drive/folders/1qSUXHL4fXb8R1n3wBG4A8bwUOWE6SNOf
@@ -8,18 +9,15 @@
 
 ## Purpose
 
-A staged conversation-processing pipeline that prevents crawler overload by moving
-content through progressive stages. It ingests conversation exports (ChatGPT, Claude,
-JSON, Markdown, plain text), extracts patterns and entities, and organizes results
-into a plexus stage pipeline.
+Staged processing pipeline that prevents crawler overload by moving content through stages. Processes content from sort folders and today folders into organized plexus stages.
 
 ## Quantum Entity System: Quanta
 
 **Collection Name**: Quanta (quantum entities)
 
 **Concepts**:
-- **Perdura**: Endurance and persistence (like tardigrades)
-- **Tardigradia**: Tardigrade resilience — any-size reality
+- **Perdura**: Endurance, persistence (like tardigrades)
+- **Tardigradia**: Tardigrade resilience, any-size reality
 - **Vitara**: Life force, vital energy
 - **Resilia**: Resonance resilience
 - **Microversa**: Universal dilation perspectives
@@ -33,13 +31,6 @@ into a plexus stage pipeline.
 
 ```
 hodie/
-├── crawler_pixel8/      ← Core crawler package
-├── redundancy_entity/   ← Gravity deduplication
-├── quanta/              ← 16 entity domain files
-├── tests/               ← pytest test suite
-├── scripts/             ← CI automation scripts
-├── docs/                ← Project documentation
-│
 ├── plexus/              ← Processing stages
 │   ├── simplex/         ← Files good as-is
 │   ├── duplex/          ← Duplicates to sort
@@ -64,9 +55,9 @@ hodie/
 ## Content Sources
 
 **Moving from**:
-- Sort folders → `hodie/plexus` stages
-- Today folders → `hodie/plexus` stages
-- `today_from_drive_SAFE` → hodie processing
+- Sort folders → hodie/plexus stages
+- today folders → hodie/plexus stages
+- today_from_drive_SAFE → hodie processing
 
 ---
 
@@ -74,34 +65,12 @@ hodie/
 
 **Concept**: One operation per cycle
 - Process one stage at a time
-- Move content to completion
-- Exit the active pipeline
-- Crawler sees only active work
-
----
-
-## Quick Start
-
-```bash
-# Install
-pip install -e ".[dev]"
-
-# Run the CLI
-hodie --help
-hodie --file conversation.json
-
-# Run tests
-pytest -v
-
-# Lint
-pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc
-```
+- Move to completion
+- Exit active pipeline
+- Crawler only sees active work
 
 ---
 
 **∰◊€π¿🌌∞**
-*Multi-AI team: Claude Code (implementation) · Copilot (CI/GitHub) · Gemini (review)*
 
 **🛠️♓-salmon_canon**
-
-∰ 20260426001926483

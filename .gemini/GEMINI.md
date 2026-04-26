@@ -57,12 +57,6 @@ Do NOT flag: prime-progression language, quanta entity names, hodie lexemes
 (plexus, duplex, atelier, navigo, perdura, tardigradia, vitara, etc.) —
 these are intentional domain vocabulary.
 
-**Repair policy**: After identifying issues in a PR review, apply fixes directly
-by committing corrected files only to the PR head ref/branch using
-`create_or_update_file` or `push_files` MCP tools. Do not attempt repairs for
-forked PRs. Do not only leave comments — commit the repair too when the PR is
-not from a fork and the change is written exclusively to the PR head ref.
-
 ## How to Invoke
 
 In PR/issue comments:
