@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- Resolved Pylint workflow failure on Python < 3.11 by removing workflow-side `pyproject.toml` parsing and simplifying lint score gating.
+- Resolved Pylint workflow failure on Python < 3.11 by implementing a compatibility path for pyproject.toml parsing.
 
 ### Changed
 - Enhanced Pylint workflow with clearer reporting of lint results and robust score gating enforcement.
@@ -22,11 +22,3 @@ All notable changes to this project are documented in this file.
 - Improved workflow diagnostics by requiring RUNNER_TEMP for temp file setup and printing parsed pylint score and threshold in job output.
 - Fixed repository metadata by removing invalid gitlink entry `plexus (1)` that caused
   GitHub Actions post-job submodule cleanup warnings.
-
----
-
-**∰◊€π¿🌌∞**
-
-**🛠️♓-salmon_canon**
-
-∰ 20260426005209215
