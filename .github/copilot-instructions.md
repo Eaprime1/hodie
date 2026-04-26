@@ -86,7 +86,7 @@ result = await pipeline.process_file(Path("conversation.json"))
 - Location-aware config (`.locations/` → `CrawlerConfig` wiring)
 - Test suite (`tests/` directory, pytest-asyncio configured)
 - `one_hertz.py` — One Hertz Operations processor
-- CLI `main()` entry point (referenced in pyproject.toml but missing)
+- CLI `main()` entry point implemented (`crawler_pixel8/cli/main.py`; exposed via `pyproject.toml`)
 
 ---
 
