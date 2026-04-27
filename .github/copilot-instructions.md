@@ -92,14 +92,17 @@ result = await pipeline.process_file(Path("conversation.json"))
 
 ## Active Tasks (Priority Order)
 
-### 1. Wire `.locations/` config into CrawlerConfig
-**Problem**: `CrawlerConfig` defaults hard-code `/storage/emulated/0/pixel8a/Q`.
-This fails on mulberry and Codespaces.
+### 1. Keep `CrawlerConfig` path-resolution docs aligned with implementation
+**Problem**: This instructions file should reflect that `CrawlerConfig` is already
+location-aware. It resolves paths from `HODIE_PATH` or `.locations/{location}/config.sh`,
+then falls back to `Path.cwd()` if neither is set. Pixel8a absolute paths are only kept
+as a fallback when `HODIE_LOCATION == "pixel8a"`, so mulberry and Codespaces do not fail
+by default for this reason.
 **Approach**:
-- Read `HODIE_LOCATION` env var (mulberry | pixel8a | codespaces)
-- Load base path from `.locations/{location}/` config
-- Fall back to `Path.cwd()` if unset
-- Keep all existing defaults as pixel8a fallback
+- Document `HODIE_PATH` as the highest-priority base-path override
+- Note `.locations/{location}/config.sh` as the location-specific source
+- Describe `Path.cwd()` as the general fallback when no location config is present
+- Clarify that Pixel8a absolute paths remain only as a Pixel8a-specific fallback
 
 ### 2. Maintain and expand test coverage
 **Setup already in pyproject.toml** — `asyncio_mode = "auto"`, testpaths = `["tests"]`
