@@ -114,15 +114,15 @@ the suite aligned with current pipeline behavior.
 - `test_processor_chain.py` — `+` chaining, batch processing
 - `test_processing_result.py` — aggregation, serialization, verification seal
 
-### 3. Build one_hertz.py
-**Purpose**: Implement the One Hertz Operations concept — process exactly one
-plexus stage per cycle, report status, exit.
-**Lives in**: `crawler_pixel8/processors/one_hertz.py` or project root
-**Behavior**:
+### 3. Enhance `one_hertz.py`
+**Purpose**: Refine the existing One Hertz Operations implementation so it
+processes exactly one plexus stage per cycle, reports status clearly, and exits.
+**Lives in**: `crawler_pixel8/processors/one_hertz.py`
+**Follow-up behavior**:
 - Accept a stage name (simplex, duplex, triplex, etc.)
 - Process files in that stage only
-- Move processed files to next stage
-- Report what moved and what remains
+- Move processed files to the next stage when appropriate
+- Report what moved and what remains after the cycle
 
 ### 4. Gemini API integration
 **Stub location**: `AdvancedPatternExtractor.process()` in `pattern_extractor.py`
