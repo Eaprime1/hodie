@@ -6,7 +6,7 @@ on:
   pull_request_review:
     types: ['submitted']
   pull_request:
-    types: ['opened', 'synchronize', 'reopened']
+    types: ['opened']
   issues:
     types: ['opened', 'reopened']
   issue_comment:
@@ -132,4 +132,4 @@ jobs:
     with:
       additional_context: '${{ needs.dispatch.outputs.additional_context }}'
     secrets: 'inherit'
-# ∰🛠️♓-salmon_canon
+# ∰🛠️♓🤝-salmon_canon

@@ -55,23 +55,13 @@ jobs:
             core.info(`Found ${labelNames.length} labels: ${labelNames.join(', ')}`);
             return labelNames;
 
-      - name: 'Check Gemini credentials'
-        id: 'check_creds'
-        run: |-
-          if [[ -n "${GEMINI_API_KEY}" || -n "${GCP_WIF_PROVIDER}" ]]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Gemini credentials not configured (set GEMINI_API_KEY or GCP_WIF_PROVIDER); skipping triage."
-          fi
-        env:
-          GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
-          GCP_WIF_PROVIDER: '${{ vars.GCP_WIF_PROVIDER }}'
-
       - name: 'Run Gemini issue analysis'
         id: 'gemini_analysis'
         if: |-
-          ${{ steps.get_labels.outputs.available_labels != '' && steps.check_creds.outputs.available == 'true' }}
+          ${{
+            steps.get_labels.outputs.available_labels != '' &&
+            (secrets.GEMINI_API_KEY != '' || vars.GCP_WIF_PROVIDER != '')
+          }}
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         env:
           GITHUB_TOKEN: '' # Do NOT pass any auth tokens here since this runs on untrusted inputs
@@ -170,4 +160,4 @@ jobs:
               core.info(`Failed to determine labels to set. There may not be enough information in the issue or pull request.`)
             }
 
-# ∰🛠️♓-salmon_canon
+# ∰🛠️♓🤝-salmon_canon
