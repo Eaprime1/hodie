@@ -2,7 +2,7 @@
 
 **Date**: 2026-04-26
 **Branch**: `main` (active development)
-**Phase**: 1 complete — Phase 2 largely complete, Phase 3 planned
+**Phase**: 2 complete — Phase 3 planned
 
 Read this file before suggesting changes. It contains the architecture map,
 active tasks, known issues, and workflows for this project.
