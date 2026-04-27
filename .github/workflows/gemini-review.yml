@@ -41,23 +41,10 @@ jobs:
       - name: 'Checkout repository'
         uses: 'actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8' # ratchet:actions/checkout@v6
 
-      - name: 'Check Gemini credentials'
-        id: 'check_creds'
-        run: |-
-          if [[ -n "${GEMINI_API_KEY}" || -n "${GCP_WIF_PROVIDER}" ]]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Gemini credentials not configured (set GEMINI_API_KEY or GCP_WIF_PROVIDER); skipping review."
-          fi
-        env:
-          GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
-          GCP_WIF_PROVIDER: '${{ vars.GCP_WIF_PROVIDER }}'
-
       - name: 'Run Gemini pull request review'
-        if: steps.check_creds.outputs.available == 'true'
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         id: 'gemini_pr_review'
+        if: ${{ secrets.GEMINI_API_KEY != '' || vars.GCP_WIF_PROVIDER != '' }}
         env:
           GITHUB_TOKEN: '${{ steps.mint_identity_token.outputs.token || secrets.GITHUB_TOKEN || github.token }}'
           ISSUE_TITLE: '${{ github.event.pull_request.title || github.event.issue.title }}'
@@ -122,4 +109,4 @@ jobs:
             }
           prompt: '/gemini-review'
 
-# ∰🛠️♓-salmon_canon
+# ∰🛠️♓🤝-salmon_canon
