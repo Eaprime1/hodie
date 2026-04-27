@@ -1,7 +1,7 @@
 # Copilot Instructions — Hodie Repository
 
 **Date**: 2026-04-26
-**Branch**: `revert-123-main` (active development)
+**Branch**: `main` (active development)
 **Phase**: 1 complete — Phase 2 largely complete, Phase 3 planned
 
 Read this file before suggesting changes. It contains the architecture map,
