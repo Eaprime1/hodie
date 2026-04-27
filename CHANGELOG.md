@@ -13,7 +13,7 @@ All notable changes to this project are documented in this file.
 ### Changed
 - Enhanced Pylint workflow with clearer reporting of lint results and robust score gating enforcement.
 - Added 🤝 handshake icon to workflow footers across all reviewed Gemini/CI YAML files, signalling agreement/review.
-- Updated `.github/copilot-instructions.md` to reflect current repo state: Phase 2 complete, removed resolved known issues (async bug fixed, CLI entry point working, tests/ present), corrected architecture map to include `cli/main.py`, updated active tasks list.
+- Updated `.github/copilot-instructions.md` to better reflect the current repo state, including a corrected architecture map entry for `cli/main.py` and refreshed active tasks.
 
 ### Seeded for next iteration
 - `crawler_pixel8/processors/pattern_extractor.py` — async generator bug already fixed; next: expand Gemini API integration test coverage.
