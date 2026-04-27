@@ -54,7 +54,7 @@ all = [
 ]
 
 [project.scripts]
-hodie = "crawler_pixel8.cli:main"
+hodie = "crawler_pixel8.cli.main:main"
 hodie-crawler = "crawler_pixel8.cli.test_crawler:main"
 
 [project.urls]

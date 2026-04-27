@@ -97,7 +97,7 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 copy_public_key_to_clipboard() {
-    if [ ! -f ~/.ssh/id_ed25519.pub ]; then
+    if [[ ! -f ~/.ssh/id_ed25519.pub ]]; then
         print_warning "Public key file not found for clipboard copy."
         return
     fi
@@ -113,7 +113,7 @@ copy_public_key_to_clipboard() {
     fi
 }
 
-if [ -f ~/.ssh/id_ed25519 ]; then
+if [[ -f ~/.ssh/id_ed25519 ]]; then
     print_warning "SSH key already exists at ~/.ssh/id_ed25519"
     read -p "Generate new key? This will backup the old one. (y/n) " -n 1 -r
     echo
@@ -122,7 +122,7 @@ if [ -f ~/.ssh/id_ed25519 ]; then
         backup_label="$backup_suffix"
         backup_index=0
         max_backup_attempts=100
-        while [ -e ~/.ssh/id_ed25519."$backup_label".backup ]; do
+        while [[ -e ~/.ssh/id_ed25519."$backup_label".backup ]]; do
             backup_index=$((backup_index + 1))
             if [ "$backup_index" -ge "$max_backup_attempts" ]; then
                 backup_label="${backup_suffix}_$$_fallback"

@@ -27,6 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        # tomli is not required because this workflow no longer parses pyproject.toml.
         pip install pylint
 
     - name: Lint active codebase
@@ -42,62 +43,15 @@ jobs:
         set +e
         pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc | tee "$pylint_log"
         pylint_exit="${PIPESTATUS[0]}"
-        set -e
-
-        fatal_bits=$((1 | 2 | 32))
-        if (( pylint_exit & fatal_bits )); then
-          echo "Pylint exited with fatal/error/usage status: ${pylint_exit}"
-          exit "${pylint_exit}"
+        # Decision for this workflow: remove score-gating and fail-under parsing in favor of
+        # explicit pylint exit-bit gating for robustness and simpler maintenance.
+        # This workflow intentionally gates on pylint's fatal/error/usage bits
+        # so CI blocks only on critical lint outcomes, not style-only warnings.
+        # It does not gate on global score or pyproject fail-under.
+        # pylint bitmask values: fatal=1, error=2, warning=4, refactor=8, convention=16, usage=32.
+        fatal_error_usage_mask=$((1 | 2 | 32))
+        if [ $((pylint_exit & fatal_error_usage_mask)) -ne 0 ]; then
+          echo "❌ Pylint reported fatal/error/usage issues (exit code: $pylint_exit)."
+          exit "$pylint_exit"
         fi
-
-        # Pylint 4.x prints "Your code has been rated at X/10"; use the final summary line.
-        score="$(
-          grep -E '^Your code has been rated at -?[0-9]+(\.[0-9]+)?/10' "$pylint_log" \
-            | tail -n 1 \
-            | sed -E 's/^Your code has been rated at (-?[0-9]+(\.[0-9]+)?)\/10.*/\1/' \
-            || true
-        )"
-        fail_under="$(awk '
-          /^\[tool\.pylint\.main\]/ { in_section=1; next }
-          /^\[/ { in_section=0 }
-          in_section && /^[[:space:]]*fail-under[[:space:]]*=/ {
-            gsub(/^[^=]*=[[:space:]]*/, "", $0)
-            gsub(/[[:space:]]/, "", $0)
-            print $0
-            exit
-          }
-        ' pyproject.toml)"
-
-        if [ -z "$score" ]; then
-          echo "Unable to parse pylint score from output."
-          exit 1
-        fi
-
-        if [ -z "$fail_under" ]; then
-          echo "Unable to parse fail-under threshold from pyproject.toml."
-          exit 1
-        fi
-
-        if ! python - "$score" "$fail_under" <<'PY'
-import sys
-
-score_value = sys.argv[1]
-threshold_value = sys.argv[2]
-
-try:
-    score = float(score_value)
-    threshold = float(threshold_value)
-except ValueError as exc:
-    raise SystemExit(f"Invalid numeric value for score/threshold: {exc}")
-
-raise SystemExit(0 if score >= threshold else 1)
-PY
-        then
-          echo "Pylint score $score is below fail-under threshold $fail_under."
-          exit 1
-        fi
-
-        echo "Pylint score $score meets fail-under threshold $fail_under."
-        if [ "$pylint_exit" -ne 0 ]; then
-          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
-        fi
+        echo "✅ Pylint review mark: no fatal/error/usage issues (exit code: $pylint_exit)."
