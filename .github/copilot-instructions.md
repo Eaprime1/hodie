@@ -213,7 +213,7 @@ bash .scripts/acp_proceed.sh DRAFT REVIEW
 | Location | Issue | Status |
 |----------|-------|--------|
 | `config.py` | Hard-coded Pixel8a paths as defaults | Fix pending |
-| `one_hertz.py` | Referenced in docs, not yet built | Build pending |
+| `one_hertz.py` | Processor exists and is built | Fixed |
 
 ---
 
