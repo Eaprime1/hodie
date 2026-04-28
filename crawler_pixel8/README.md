@@ -32,7 +32,7 @@ The PIXEL8 Crawler is a local-first conversation processing system designed to:
 ### Test with Single Conversation
 
 ```bash
-cd "${HODIE_PATH:-/storage/emulated/0/pixel8a/Q/hodie}"
+cd "${HODIE_PATH:-$PWD}"
 python3 crawler_pixel8/cli/test_crawler.py
 ```
 
