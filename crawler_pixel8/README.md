@@ -32,7 +32,7 @@ The PIXEL8 Crawler is a local-first conversation processing system designed to:
 ### Test with Single Conversation
 
 ```bash
-cd /storage/emulated/0/pixel8a/Q/hodie
+cd "${HODIE_PATH:-/storage/emulated/0/pixel8a/Q/hodie}"
 python3 crawler_pixel8/cli/test_crawler.py
 ```
 
@@ -125,12 +125,21 @@ config = CrawlerConfig(
 
 ### Paths (Auto-configured)
 
-- **Input**: `/storage/emulated/0/pixel8a/Q/conversation_archive/`
-- **Output**: `/storage/emulated/0/pixel8a/Q/hodie/crawler_output/`
-  - `patterns/` - Extracted patterns
-  - `maps/` - Relationship maps
-  - `summaries/` - Conversation summaries
-  - `exports/` - Entity-specific exports
+`CrawlerConfig` resolves the hodie base path in priority order:
+
+1. `HODIE_PATH` environment variable (explicit override)
+2. `HODIE_LOCATION` → `.locations/<location>/config.sh` (uses `HODIE_PATH` export)
+3. Pixel 8a fallback when `HODIE_LOCATION == "pixel8a"`
+4. `Path.cwd()` for CI/testing/unknown environments
+
+Outputs are written under `<hodie_dir>/crawler_output/`:
+
+- `patterns/` - Extracted patterns
+- `maps/` - Relationship maps
+- `summaries/` - Conversation summaries
+- `exports/` - Entity-specific exports
+
+Inputs default to `Path.cwd()` unless `conversation_archive` is set explicitly.
 
 ---
 
@@ -300,7 +309,8 @@ Expected output:
 ## Troubleshooting
 
 ### No conversations found
-Check: `/storage/emulated/0/pixel8a/Q/conversation_archive/` exists and contains files
+Confirm `conversation_archive` points at your export folder (defaults to `Path.cwd()`), or
+set it directly in `CrawlerConfig`.
 
 ### Parse errors
 The parser falls back to treating file as single part if format detection fails
