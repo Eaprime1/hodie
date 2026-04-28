@@ -1,5 +1,5 @@
 # THE hodie — Entity Identity Declaration
-∰ 20260425 — First witness
+20260425 — First witness
 
 ## Identity
 
