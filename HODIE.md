@@ -49,7 +49,8 @@ Every arrival is received. Every stream is tended. Every departure is witnessed.
 
 THE hodie repo and the unexusi Drive ecosystem are **peers, not mirrors**.
 The P^11 sphincter maintains clean isolation.
-DRIVE_SYNC.md is the manifest. Handoffs are explicit. Custody is tracked.
+The Drive sync manifest is maintained as part of the handoff process.
+Handoffs are explicit. Custody is tracked.
 
 ## Shadow Edge Note
 
