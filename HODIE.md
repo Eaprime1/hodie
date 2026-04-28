@@ -1,4 +1,4 @@
-# HODIE.md — Entity Identity Declaration
+# THE hodie — Entity Identity Declaration
 ∰ 20260425 — First witness
 
 ## Identity
