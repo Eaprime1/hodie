@@ -309,8 +309,11 @@ Expected output:
 ## Troubleshooting
 
 ### No conversations found
-Confirm `conversation_archive` points at your export folder (defaults to `Path.cwd()`), or
-set it directly in `CrawlerConfig`.
+Confirm `conversation_archive` points at your export folder (defaults to `Path.cwd()`).
+For `test_crawler.py`, you can point the crawler at the correct folder without editing
+config by passing `--dir /path/to/folder` (or `-d /path/to/folder`), and use
+`--prompt` / `-p` when you want to provide a prompt from the CLI. If you prefer a
+persistent default, set the path in `CrawlerConfig`.
 
 ### Parse errors
 The parser falls back to treating file as single part if format detection fails
