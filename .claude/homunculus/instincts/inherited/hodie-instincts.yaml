@@ -156,11 +156,11 @@ source_repo: Eaprime1/hodie
 
 ## Action
 
-Name the function using camelCase
+Name the function using snake_case
 
 ## Evidence
 
-- Pattern in namingConventions.functions: camelCase
+- Pattern in namingConventions.functions: snake_case
 
 ---
 id: hodie-instinct-class-naming
@@ -317,4 +317,3 @@ Write a freeform commit message without a required prefix, averaging around 64 c
 - Pattern in commits.prefixes: []
 - Pattern in commits.averageLength: 64
 - Seen in commit examples
-
