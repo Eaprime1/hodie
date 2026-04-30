@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>∞ REALITY LAYERS — 202604261318</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Fira+Code:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+:root {
+  --bg: #0d0f0e;
+  --surface: #131815;
+  --surface2: #181e1a;
+  --border: #1f2a22;
+  --border-bright: #2d4032;
+  --green: #4afa8a;
+  --green-dim: #2a6644;
+  --green-ghost: #111f14;
+  --amber: #f0a832;
+  --amber-dim: #7a5518;
+  --blue: #4ab8fa;
+  --copper: #c87941;
+  --copper-bright: #e8935e;
+  --earth: #8b6b45;
+  --earth-bright: #b8935e;
+  --salmon: #fa7a5a;
+  --myrtle: #3d9970;
+  --willow: #7affb8;
+  --pure: #f5f5f0;
+  --dim: #4a5a4e;
+  --text: #c8d8cc;
+  --text-dim: #6a7e6e;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* LAYOUT */
+.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topbar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.topbar-meta {
+  font-family: 'Fira Code', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+
+.pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  display: inline-block; margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(74,250,138,0.4)} 50%{opacity:0.7;box-shadow:0 0 0 4px rgba(74,250,138,0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
+
+.main { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 53px); }
+
+/* SIDEBAR */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+
+.sidebar-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.layer-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  border-radius: 0 4px 4px 0;
+}
+
+.layer-btn:hover { background: var(--green-ghost); color: var(--text); border-left-color: var(--green-dim); }
+.layer-btn.active { background: var(--green-ghost); color: var(--green); border-left-color: var(--green); }
+
+.layer-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
+.layer-badge {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--border);
+  color: var(--dim);
+  font-family: 'Fira Code', monospace;
+}
+
+.layer-btn.active .layer-badge { background: var(--green-dim); color: var(--green); }
+
+/* CONTENT */
+.content {
+  padding: 24px;
+  overflow-y: auto;
+  animation: fadeUp 0.3s ease;
+}
+
+.panel { display: none; }
+.panel.active { display: block; animation: fadeUp 0.25s ease; }
+
+/* CARDS */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.card.green::before { background: var(--green); }
+.card.amber::before { background: var(--amber); }
+.card.copper::before { background: var(--copper-bright); }
+.card.blue::before { background: var(--blue); }
+.card.earth::before { background: var(--earth-bright); }
+.card.myrtle::before { background: var(--myrtle); }
+.card.salmon::before { background: var(--salmon); }
+
+.card-icon { font-size: 24px; margin-bottom: 8px; }
+.card-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pure);
+  margin-bottom: 4px;
+}
+
+.card-sub {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.card-body { font-size: 12px; color: var(--text-dim); line-height: 1.7; }
+
+.card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.tag {
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  font-family: 'Fira Code', monospace;
+}
+
+.tag.green { border-color: var(--green-dim); color: var(--green); }
+.tag.amber { border-color: var(--amber-dim); color: var(--amber); }
+.tag.copper { border-color: #5a3820; color: var(--copper-bright); }
+
+/* STATUS ITEMS */
+.status-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.status-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 4px;
+}
+
+.status-dot.active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status-dot.pending { background: var(--amber); }
+.status-dot.blocked { background: var(--salmon); }
+.status-dot.idea { background: var(--blue); }
+
+.status-label { font-size: 13px; color: var(--text); font-weight: 500; }
+.status-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.status-action {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--dim);
+  background: var(--surface);
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: 'Fira Code', monospace;
+  transition: all 0.15s;
+}
+
+.status-action:hover { border-color: var(--green-dim); color: var(--green); }
+
+/* AGENT SEED FRAMEWORK */
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.agent-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.agent-card:hover { border-color: var(--green-dim); transform: translateY(-1px); }
+.agent-card.qualified { border-color: var(--green-dim); }
+
+.agent-type {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.agent-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pure);
+  margin-bottom: 4px;
+}
+
+.agent-desc { font-size: 11px; color: var(--text-dim); line-height: 1.6; margin-bottom: 10px; }
+
+.qualify-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.qualify-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--green);
+  transition: width 0.5s ease;
+}
+
+.qualify-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--dim);
+}
+
+/* BOTTLEDROP/EARTH */
+.concept-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.concept-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.concept-icon { font-size: 24px; }
+.concept-title { font-size: 15px; font-weight: 700; color: var(--pure); }
+.concept-tag {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 3px;
+  font-family: 'Fira Code', monospace;
+}
+
+.concept-body { font-size: 12px; color: var(--text-dim); line-height: 1.8; }
+
+.concept-steps {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.concept-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  padding: 4px 0;
+}
+
+.step-n {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--green);
+  flex-shrink: 0;
+  min-width: 20px;
+  margin-top: 2px;
+}
+
+/* HEADING STYLES */
+.section-head {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--pure);
+  margin-bottom: 6px;
+}
+
+.section-sub {
+  font-family: 'Fira Code', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+hr.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 20px 0;
+}
+
+/* EARTH BATTERY VISUAL */
+.battery-visual {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  background: #0c1208;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-top: 12px;
+}
+
+.battery-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.electrode {
+  width: 8px;
+  height: 80px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.electrode.copper { background: linear-gradient(180deg, var(--copper-bright), var(--copper)); }
+.electrode.zinc { background: linear-gradient(180deg, #888, #555); }
+.electrode.iron { background: linear-gradient(180deg, #777, #444); }
+
+.electrode-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--dim);
+  text-align: center;
+}
+
+.battery-medium {
+  flex: 1;
+  text-align: center;
+}
+
+.charge-flow {
+  font-size: 20px;
+  animation: pulse 2s infinite;
+  color: var(--copper-bright);
+}
+
+.battery-text { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+/* BOTTLEDROP */
+.pipeline-flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.pipeline-node {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text);
+  text-align: center;
+  min-width: 80px;
+}
+
+.pipeline-arrow {
+  color: var(--green-dim);
+  font-size: 16px;
+  padding: 0 4px;
+}
+
+/* PHONE BARRIER */
+.barrier-note {
+  background: #1a0808;
+  border: 1px solid #3a1818;
+  border-left: 3px solid var(--salmon);
+  padding: 12px 14px;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #cc9988;
+  line-height: 1.7;
+}
+
+.workaround-note {
+  background: var(--green-ghost);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green-dim);
+  padding: 12px 14px;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+  color: #88bb88;
+  line-height: 1.7;
+}
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  .main { grid-template-columns: 1fr; }
+  .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+  .topbar-title { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>
+    <span class="pulse"></span>
+    <span class="topbar-title">∞ REALITY LAYERS — ∞pace∞</span>
+  </div>
+  <div class="topbar-meta">202604261318 · EAPRIME1 · UNEXUS GROUND TRUTH INTERFACE</div>
+</div>
+
+<div class="main">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Reality Streams</div>
+    <button class="layer-btn active" onclick="showPanel('household')">
+      <span class="layer-icon">🏡</span> Household Reality
+      <span class="layer-badge">NOW</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('bottledrop')">
+      <span class="layer-icon">♻️</span> BottleDrop → Venture
+      <span class="layer-badge">SEED</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('earthbattery')">
+      <span class="layer-icon">⚡</span> Earth Battery
+      <span class="layer-badge">BUILD</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('communications')">
+      <span class="layer-icon">📞</span> Communications
+      <span class="layer-badge">ADAPT</span>
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Framework Layers</div>
+    <button class="layer-btn" onclick="showPanel('agents')">
+      <span class="layer-icon">🤖</span> Agent Seed Framework
+      <span class="layer-badge">CORE</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('terminals')">
+      <span class="layer-icon">🖥️</span> Terminal Qualification
+      <span class="layer-badge">EDU</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('locations')">
+      <span class="layer-icon">🌐</span> Location Workflows
+      <span class="layer-badge">GEM</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('affiliates')">
+      <span class="layer-icon">🎯</span> Affiliate Layer
+      <span class="layer-badge">💰</span>
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Sensory / Body</div>
+    <button class="layer-btn" onclick="showPanel('myrtlewood')">
+      <span class="layer-icon">🪵</span> Myrtlewood + Craft
+      <span class="layer-badge">♣️</span>
+    </button>
+    <button class="layer-btn" onclick="showPanel('seeds_fwd')">
+      <span class="layer-icon">🌱</span> Seeds Forward
+      <span class="layer-badge">PRIMAL</span>
+    </button>
+  </div>
+</div>
+
+<!-- CONTENT AREA -->
+<div class="content">
+
+  <!-- HOUSEHOLD REALITY -->
+  <div class="panel active" id="panel-household">
+    <div class="section-head">Household Reality Layer</div>
+    <div class="section-sub">THIS IS THE WORK · REAL LIFE IS THE FRAMEWORK IN ACTION</div>
+
+    <div class="status-list">
+      <div class="status-item">
+        <div class="status-dot active"></div>
+        <div>
+          <div class="status-label">💰 BottleDrop Transfer — DONE</div>
+          <div class="status-desc">Money transferred to bank. Origin event for mobile disaster recycling concept. Logged as framework seed.</div>
+        </div>
+        <button class="status-action" onclick="logAction('BottleDrop transfer logged ✓')">LOG ✓</button>
+      </div>
+      <div class="status-item">
+        <div class="status-dot pending"></div>
+        <div>
+          <div class="status-label">🖨️ Printer Setup (Windows Laptop)</div>
+          <div class="status-desc">Demand avoidance pattern identified. Avoidance of Mulberry (Windows). Workaround: set a 5-min timer, do ONLY the cable plug. Nothing else required in that session.</div>
+        </div>
+        <button class="status-action" onclick="logAction('Printer task: 5-min micro-session protocol')">MICRO ▶</button>
+      </div>
+      <div class="status-item">
+        <div class="status-dot pending"></div>
+        <div>
+          <div class="status-label">📬 Mail + Receipts + Email</div>
+          <div class="status-desc">GitHub notifications turned down ✓. Receipts, mail, household paperwork in queue. Small pile → one item at a time.</div>
+        </div>
+        <button class="status-action" onclick="logAction('Mail: one-item protocol')">QUEUE</button>
+      </div>
+      <div class="status-item">
+        <div class="status-dot idea"></div>
+        <div>
+          <div class="status-label">📄 Introduction Letter (97907 — Small Town)</div>
+          <div class="status-desc">Resume-adjacent intro for local school, city, business. Print-ready once printer connected. Draft below in Affiliates panel.</div>
+        </div>
+        <button class="status-action" onclick="showPanel('affiliates')">DRAFT →</button>
+      </div>
+      <div class="status-item">
+        <div class="status-dot active"></div>
+        <div>
+          <div class="status-label">🧈 Butter Infusion — EXCELLENT</div>
+          <div class="status-desc">Scant spice + cannabis + herbal supplement + hand harvested working well. Method confirmed. Log process for reproducibility.</div>
+        </div>
+        <button class="status-action" onclick="logAction('Butter method: confirmed excellent')">LOG ✓</button>
+      </div>
+      <div class="status-item">
+        <div class="status-dot pending"></div>
+        <div>
+          <div class="status-label">☕ Earth Battery (Coffee Grounds)</div>
+          <div class="status-desc">Coffee grounds + plants + potting soil. Copper wire + iron nail (cathode). Slow-charge constant background test. See Earth Battery panel.</div>
+        </div>
+        <button class="status-action" onclick="showPanel('earthbattery')">BUILD →</button>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <div class="concept-body" style="font-style:italic;color:var(--myrtle)">
+        "This is therapy because I would likely be playing a game or TV or asleep."<br><br>
+        Acknowledged. The household layer IS the project. Every real task generates a pattern — BottleDrop becomes recycling venture, coffee grounds become battery experiment, demand avoidance becomes protocol design. The system feeds on reality, not despite it.
+      </div>
+    </div>
+
+    <div id="actionLog" style="background:var(--green-ghost);border:1px solid var(--border);padding:12px;border-radius:4px;font-family:'Fira Code',monospace;font-size:11px;color:var(--green-dim);min-height:60px;display:none">
+      <div style="color:var(--dim);margin-bottom:6px;font-size:9px">ACTION LOG:</div>
+    </div>
+  </div>
+
+  <!-- BOTTLEDROP VENTURE -->
+  <div class="panel" id="panel-bottledrop">
+    <div class="section-head">♻️ BottleDrop → Mobile Disaster Recycling Venture</div>
+    <div class="section-sub">SEED EVENT: BOTTLEDROP TRANSFER · CONCEPT ORIGIN</div>
+
+    <div class="concept-block">
+      <div class="concept-header">
+        <div class="concept-icon">🚛</div>
+        <div>
+          <div class="concept-title">Mobile Disaster Recycling Unit</div>
+          <div class="concept-tag" style="border-color:var(--myrtle);color:var(--myrtle)">VENTURE SEED</div>
+        </div>
+      </div>
+      <div class="concept-body">Semi-trailer or container unit fully equipped to accept, process, and bundle recycled materials on-site. Inspired by BottleDrop's model — people who bring materials get a small return. Mobile means it deploys to disaster zones, rural areas, events, or underserved communities where fixed recycling infrastructure doesn't reach.
+      </div>
+      <div class="pipeline-flow" style="margin-top:14px">
+        <div class="pipeline-node">Scraper<br><span style="font-size:9px;color:var(--dim)">collects</span></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node">Mobile Unit<br><span style="font-size:9px;color:var(--dim)">processes</span></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node">Bundle<br><span style="font-size:9px;color:var(--dim)">compresses</span></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node">Established Plant<br><span style="font-size:9px;color:var(--dim)">receives</span></div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-node" style="border-color:var(--green-dim);color:var(--green)">Revenue Share<br><span style="font-size:9px">scraper gets back</span></div>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card myrtle">
+        <div class="card-icon">🧴</div>
+        <div class="card-title">Plastic Processing</div>
+        <div class="card-sub">EASIEST FIRST · HIGH VOLUME</div>
+        <div class="card-body">Sort by resin code. Shred or compress on-site. Large bundles go directly to existing plastic reclaimers. Plastic is the most infrastructure-supported starting material.</div>
+        <div class="card-tags"><span class="tag green">Phase 1</span><span class="tag">low capital</span></div>
+      </div>
+      <div class="card earth">
+        <div class="card-icon">📰</div>
+        <div class="card-title">Paper / Cardboard</div>
+        <div class="card-sub">VOLUME PLAY</div>
+        <div class="card-body">Baling press in the container handles paper/cardboard. Disaster zones generate massive cardboard waste. Pair with a community clean-up event for intake surge.</div>
+        <div class="card-tags"><span class="tag">Phase 1</span><span class="tag">easy logistics</span></div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">Container Kit</div>
+        <div class="card-sub">MODULAR BUILD</div>
+        <div class="card-body">One type of material per container configuration. Swap kits for different material streams. Container is the chassis — the processing kit inside is swappable. Modular = scalable.</div>
+        <div class="card-tags"><span class="tag amber">modular</span><span class="tag">scalable</span></div>
+      </div>
+      <div class="card blue">
+        <div class="card-icon">💵</div>
+        <div class="card-title">Revenue Model</div>
+        <div class="card-sub">SCRAPER ECONOMY</div>
+        <div class="card-body">Scrapers (community collectors) bring materials → unit weighs/processes → scraper gets a token payment or store credit. Unit earns on bundle sale to recycler. Disaster relief orgs may pay for service deployment.</div>
+        <div class="card-tags"><span class="tag green">affiliate</span><span class="tag">community</span></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <div class="concept-body" style="color:var(--amber)">
+        🎯 <strong>Affiliate angle:</strong> BottleDrop itself, regional plastic reclaimers, disaster relief NGOs (deploy fee), municipal waste contracts, corporate ESG partnerships, FEMA/disaster supplemental contracts. This is a real business with real demand — the BottleDrop inspiration is the proof of concept that community recycling works when you make it convenient and financially rewarding.
+      </div>
+    </div>
+  </div>
+
+  <!-- EARTH BATTERY -->
+  <div class="panel" id="panel-earthbattery">
+    <div class="section-head">⚡ Earth Battery — Constant Background Charge</div>
+    <div class="section-sub">COFFEE GROUNDS · COPPER · IRON · SELF-SUSTAINING EXPERIMENT</div>
+
+    <div class="concept-block">
+      <div class="concept-body">
+        The earth battery goal is not a power surge — it's constant background, like water seepage. Self-sustaining rather than rechargeable. This maps perfectly onto the UNEXUS one-hertz principle: not peak power, continuous signal.
+      </div>
+    </div>
+
+    <div class="battery-visual">
+      <div class="battery-cell">
+        <div class="electrode copper"></div>
+        <div class="electrode-label">COPPER<br>Cathode +<br>(receives)</div>
+      </div>
+      <div class="battery-medium">
+        <div class="charge-flow">⚡</div>
+        <div class="battery-text">Coffee grounds + potting soil<br>Electrolyte medium<br>Microbiome assists charge transfer<br>Plants enhance ion flow</div>
+      </div>
+      <div class="battery-cell">
+        <div class="electrode zinc"></div>
+        <div class="electrode-label">IRON NAIL<br>Anode –<br>(gives)</div>
+      </div>
+    </div>
+
+    <div class="concept-steps" style="margin-top:16px">
+      <div style="font-size:11px;color:var(--dim);letter-spacing:1px;margin-bottom:8px;font-family:'Fira Code',monospace">BUILD SEQUENCE:</div>
+      <div class="concept-step"><span class="step-n">01</span>Layer coffee grounds + potting soil in container. Coffee = acidic medium, ion-rich.</div>
+      <div class="concept-step"><span class="step-n">02</span>Insert copper wire (cathode, positive terminal). Standard gauge is fine to start.</div>
+      <div class="concept-step"><span class="step-n">03</span>Insert iron nail (anode, negative terminal). Space ~5-10cm from copper.</div>
+      <div class="concept-step"><span class="step-n">04</span>Plant goes in — roots enhance electrolyte circulation over time.</div>
+      <div class="concept-step"><span class="step-n">05</span>Connect multimeter first — measure open circuit voltage (expect 0.3–0.8V per cell).</div>
+      <div class="concept-step"><span class="step-n">06</span>Series-connect multiple cells for useful voltage (3 cells ≈ 1–2.4V).</div>
+      <div class="concept-step"><span class="step-n">07</span>Load test: can it power an LED? A small sensor? The 555 timer chip?</div>
+    </div>
+
+    <hr class="divider">
+    <div class="concept-block">
+      <div class="concept-body" style="color:var(--copper-bright)">
+        ⚡ <strong>Framework connection:</strong> The earth battery IS the one-hertz concept in physical form. It doesn't produce peak power — it produces the lowest reliable constant signal. The goal is the background hum, the zero-point energy equivalent in chemistry. If you can charge a small capacitor slowly enough that it maintains a BLE sensor... the 555 timer heartbeat is now earth-powered. That's the custos.sh heartbeat running on potting soil.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMUNICATIONS -->
+  <div class="panel" id="panel-communications">
+    <div class="section-head">📞 Communications Adaptation Layer</div>
+    <div class="section-sub">BARRIER MAPPING · WORKAROUND DESIGN · DEMAND AVOIDANCE PROTOCOL</div>
+
+    <div class="barrier-note">
+      <strong>Phone Barrier (OUCH-adjacent):</strong> Sound triggers, ear pressure, yelling that doesn't stop — these are physical pain events, not preference. Knees buckle. Stomach turns. Forcing non-reaction to cover the ear response adds a second layer of cognitive load on top of the pain. The woodshop sounds that drowned it out weren't coping — they were replacement signal. This is useful information about what works.
+    </div>
+
+    <div class="workaround-note">
+      <strong>Woodshop Model:</strong> Predictable sound signatures that you know and trust replace unpredictable painful ones. The machine sounds were known quantities. Phone calls are unknown quantities. Design around this: async-first communication wherever possible. When calls are unavoidable — have a script, have an out phrase, have the call be short and purposeful.
+    </div>
+
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-icon">✉️</div>
+        <div class="card-title">Async-First Stack</div>
+        <div class="card-sub">LOWEST BARRIER</div>
+        <div class="card-body">Email + text for all outreach where possible. For the 97907 intro letter — mail a physical letter first. Small town: physical mail gets opened and read. Follow up in person, not phone.</div>
+        <div class="card-tags"><span class="tag green">recommended</span></div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">📝</div>
+        <div class="card-title">Call Script Protocol</div>
+        <div class="card-sub">WHEN CALL IS REQUIRED</div>
+        <div class="card-body">Write the script. Read it. Literally. Set a max-time expectation in the first 10 seconds ("I just need 2 minutes"). Have a bailout phrase: "I'll follow up by email." Earbuds instead of pressed phone.</div>
+        <div class="card-tags"><span class="tag amber">structured</span></div>
+      </div>
+      <div class="card myrtle">
+        <div class="card-icon">🤝</div>
+        <div class="card-title">In-Person Advantage</div>
+        <div class="card-sub">SMALL TOWN = WALKABLE</div>
+        <div class="card-body">97907 is small enough that showing up works better than calling. Intro letter → walk in → introduce yourself. This is actually your strength — in-person presence without the phone pressure layer.</div>
+        <div class="card-tags"><span class="tag green">leverage this</span></div>
+      </div>
+      <div class="card blue">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">Agent Delegation</div>
+        <div class="card-sub">FUTURE CAPABILITY</div>
+        <div class="card-body">Scheduling agent handles appointment booking via text/email. You approve, agent executes. Zapier + Calendly can do this now for appointment setting without voice calls.</div>
+        <div class="card-tags"><span class="tag">automation</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT SEED FRAMEWORK -->
+  <div class="panel" id="panel-agents">
+    <div class="section-head">🤖 Agent Seed Framework</div>
+    <div class="section-sub">DESCRIPTION · GUIDELINES · QUALIFICATION MISSION · ONE EACH PER TYPE</div>
+
+    <div class="concept-block">
+      <div class="concept-body">
+        The goal: each terminal/location creates <em>at least one agent of each type</em> as part of its qualification mission. Like military or government qualification — you don't get the rank without demonstrating the skill. Each agent starts with a basic description and general guidelines. The terminal builds it. That IS the qualification.
+      </div>
+    </div>
+
+    <div class="agent-grid">
+      <div class="agent-card qualified">
+        <div class="agent-type">TYPE · WORKFLOW</div>
+        <div class="agent-name">Workflow Agent</div>
+        <div class="agent-desc">Defines a repeatable sequence of steps. Input → process → output. Must be runnable by another entity without explanation.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:80%"></div></div>
+        <div class="qualify-text">GUIDELINE: Start with 3–5 steps max. Named inputs. Named outputs. One happy path.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · TASK</div>
+        <div class="agent-name">Task Agent</div>
+        <div class="agent-desc">A single bounded unit of work. Has a clear done condition. Assigned to one entity. Has a deadline or trigger.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:30%"></div></div>
+        <div class="qualify-text">GUIDELINE: One task = one verb + one object + one success condition.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · CLI</div>
+        <div class="agent-name">CLI Command Agent</div>
+        <div class="agent-desc">A bash/terminal command or script that does one useful thing. Lives in the terminal. Callable by name.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:50%"></div></div>
+        <div class="qualify-text">GUIDELINE: Must run on Termux (mobile) and Ubuntu. No hardcoded paths. Help flag required.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · API</div>
+        <div class="agent-name">API Connector Agent</div>
+        <div class="agent-desc">Connects to one external service and returns structured data. Authenticated. Rate-limit aware.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:20%"></div></div>
+        <div class="qualify-text">GUIDELINE: GitHub API, Google Drive API, or Notion API for first qualification. Returns JSON.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · AUTOMATION</div>
+        <div class="agent-name">Automation Agent</div>
+        <div class="agent-desc">Runs without human trigger. Event-driven or scheduled. Zapier, GitHub Actions, or cron.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:40%"></div></div>
+        <div class="qualify-text">GUIDELINE: First automation = a daily summary or a PR-open trigger. Must log its run.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · REVIEW</div>
+        <div class="agent-name">Review Agent</div>
+        <div class="agent-desc">Evaluates a document or code artifact against defined criteria. Returns structured feedback with pass/flag/fail per criterion.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:70%"></div></div>
+        <div class="qualify-text">GUIDELINE: Pinnacle Refinement checklist is the first review spec. Must produce Seeds Forward.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · NARRATIVE</div>
+        <div class="agent-name">Story Agent</div>
+        <div class="agent-desc">Generates character/world/lore content. Knows the tiezerk/ashkharh vocabulary. Stays in-world.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:60%"></div></div>
+        <div class="qualify-text">GUIDELINE: First story = one character's first BBS session entry. 150 words. In-world voice.</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-type">TYPE · INTAKE</div>
+        <div class="agent-name">Intake Agent</div>
+        <div class="agent-desc">Receives a raw document, assigns timestamp, computes Ka pressure, suggests destination domos, writes chain-of-custody entry.</div>
+        <div class="qualify-bar"><div class="qualify-fill" style="width:35%"></div></div>
+        <div class="qualify-text">GUIDELINE: Must produce a NOW-repo-ready manifest entry. Template provided.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMINAL QUALIFICATION -->
+  <div class="panel" id="panel-terminals">
+    <div class="section-head">🖥️ Terminal Qualification System</div>
+    <div class="section-sub">NEW TERMINAL SEED → CHARACTER → MISSIONS → QUALIFICATION → RANK</div>
+
+    <div class="concept-block">
+      <div class="concept-body">
+        A new terminal starts with <strong>only characters</strong>. Its first character gets a Perplexity one-off — a brief research pass that gives the character initial depth. Then the terminal earns capabilities through missions. Like military qualification or education — you demonstrate before you advance.
+      </div>
+    </div>
+
+    <div class="concept-steps">
+      <div style="font-size:11px;color:var(--dim);letter-spacing:1px;margin-bottom:8px;font-family:'Fira Code',monospace">TERMINAL BIRTH SEQUENCE:</div>
+      <div class="concept-step"><span class="step-n">SEED</span>Terminal arrives with only a character. No tools, no agents, no rank. Character name + province affinity only.</div>
+      <div class="concept-step"><span class="step-n">01</span>First Character gets a Perplexity one-off: "Who is [character]? World: ashkharh. Province: [X]." Returns lore seed.</div>
+      <div class="concept-step"><span class="step-n">02</span>First Mission: visit one platform (Jira as adventure, Wikipedia as quest, GitHub as forge). Return a report.</div>
+      <div class="concept-step"><span class="step-n">03</span>Qualification Round: build one agent of each type. Each successful build = one patch province earned.</div>
+      <div class="concept-step"><span class="step-n">04</span>After 3 patches: terminal earns access to BBS door QUEST command. Can interact with other world-terminals.</div>
+      <div class="concept-step"><span class="step-n">05</span>After 7 patches: terminal earns Shepherd rank. Can receive intake from human scrapers.</div>
+      <div class="concept-step"><span class="step-n">13</span>After 13 patches: terminal reaches Custos Novus. Can witness and sign chain-of-custody PRs.</div>
+      <div class="concept-step"><span class="step-n">15</span>All 15 provinces + world specialty: Custos Pinnacle. Can run Pinnacle Refinement on others' work.</div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="concept-block">
+      <div class="concept-header">
+        <div class="concept-icon">🎯</div>
+        <div class="concept-title">The Ad-Hoc Server Concept</div>
+      </div>
+      <div class="concept-body">
+        "Me as a real ad-hoc server where you ask the questions." — This is real. A local LLM server (Ollama, llama.cpp) running on PrimeHaven (Ubuntu) creates a private, persistent AI node that the consortium can query. No rate limits. No quota. Seeded with the project knowledge base. That is a terminal in the literal sense — a node you can reach via CLI, API, or BBS door.
+      </div>
+      <div class="concept-steps" style="margin-top:10px">
+        <div class="concept-step"><span class="step-n">→</span>Ollama on PrimeHaven: `ollama serve` = always-on local LLM</div>
+        <div class="concept-step"><span class="step-n">→</span>Seed with project docs: RAG over the Drive/GitHub knowledge base</div>
+        <div class="concept-step"><span class="step-n">→</span>Vacuum tube origin: smallest possible model first (Phi-3 mini = the vacuum tube tier)</div>
+        <div class="concept-step"><span class="step-n">→</span>API endpoint: any terminal in the house can query it</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCATION WORKFLOWS -->
+  <div class="panel" id="panel-locations">
+    <div class="section-head">🌐 Location-Driven Workflows</div>
+    <div class="section-sub">GEMINI PODIUM · EACH LOCATION CREATES ITS OWN · BOTTLEDROP EXAMPLE</div>
+
+    <div class="concept-block">
+      <div class="concept-body">
+        "One of the gems at Gemini podium has gathered, earned — the concept could choose to create a workflow, agents, tasks and more." The idea: locations are not passive. They generate. A Gemini-hosted entity at its podium earns capability and then <em>creates infrastructure</em> — not just content. That creation IS the development mission for new terminal seed concepts.
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-icon">♻️</div>
+        <div class="card-title">BottleDrop Workflow</div>
+        <div class="card-sub">EXAMPLE BUILD · LOCATION: REALITY LAYER</div>
+        <div class="card-body">Scraper arrives → Intake Agent weighs and logs → Workflow Agent routes to container kit → API connector updates manifest → Automation Agent posts weekly summary to GitHub issue.</div>
+        <div class="card-tags"><span class="tag green">full pipeline</span></div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">🔮</div>
+        <div class="card-title">Gemini Podium Workflow</div>
+        <div class="card-sub">PLATFORM: GEMINI</div>
+        <div class="card-body">Gemini entity earns Fractal patch → builds a narrative agent for ashkharh Quantum Forest → commits to tiezerk → PR reviewed by Claude → Salmon launched to NOW repo.</div>
+        <div class="card-tags"><span class="tag amber">cross-platform</span></div>
+      </div>
+      <div class="card blue">
+        <div class="card-icon">📱</div>
+        <div class="card-title">Pixelator Workflow</div>
+        <div class="card-sub">DEVICE: PIXEL 8A</div>
+        <div class="card-body">Mobile intake → Termux CLI agent timestamps and hashes → .dot folder updated → Pushes to NOW repo via Termux git → Daily briefing CC agent confirms receipt.</div>
+        <div class="card-tags"><span class="tag">mobile-first</span></div>
+      </div>
+      <div class="card myrtle">
+        <div class="card-icon">🖥️</div>
+        <div class="card-title">PrimeHaven Workflow</div>
+        <div class="card-sub">DEVICE: UBUNTU LAPTOP</div>
+        <div class="card-body">6 tmux terminals → Ollama local LLM → custos.sh heartbeat → GitHub Actions CI → Synthesis hub for cross-platform convergence.</div>
+        <div class="card-tags"><span class="tag green">synthesis node</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AFFILIATE LAYER -->
+  <div class="panel" id="panel-affiliates">
+    <div class="section-head">🎯 Affiliate Layer + Introduction Letter</div>
+    <div class="section-sub">97907 SMALL TOWN · LOCAL SCHOOL · CITY · BUSINESS · RESUME-ISH</div>
+
+    <div class="concept-block">
+      <div class="concept-header">
+        <div class="concept-icon">📄</div>
+        <div class="concept-title">Introduction Letter Draft — 97907</div>
+      </div>
+      <div class="concept-body" style="white-space:pre-line;line-height:2">
+<strong style="color:var(--pure)">Eric Pace</strong>
+Jordan Valley, OR 97907
+
+To Whom It May Concern,
+
+I'm a systems architect and researcher who recently relocated to Jordan Valley. I have 20+ years of experience in technical systems design, AI collaboration frameworks, and problem-solving across complex environments.
+
+I'm interested in contributing to the community in whatever capacity makes sense — whether that's technical consulting for local government or business, support work for the school, or simply being a resource for any projects where an outside perspective might help.
+
+I work well independently and in collaboration, I'm comfortable with complexity, and I'm happy to start small. I'd welcome the chance to meet and learn what's needed here.
+
+Thank you for your time.
+
+Eric Pace | eaprime@gmail.com
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-icon">🏫</div>
+        <div class="card-title">School District</div>
+        <div class="card-sub">APPROACH: IN PERSON FIRST</div>
+        <div class="card-body">Small rural school likely needs tech help, tutoring, or project support. Walk in, ask for the principal or secretary. Letter is your leave-behind.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">🏛️</div>
+        <div class="card-title">City / County</div>
+        <div class="card-sub">APPROACH: LETTER + FOLLOW UP</div>
+        <div class="card-body">City hall, county office. Small towns have boards that meet monthly. Show up to a public meeting — instant introduction to everyone who matters.</div>
+      </div>
+      <div class="card myrtle">
+        <div class="card-icon">🏪</div>
+        <div class="card-title">Local Business</div>
+        <div class="card-sub">APPROACH: NEIGHBOR STYLE</div>
+        <div class="card-body">Coffee shop, feed store, whatever's there. Introduce yourself. Mention what you do. No pitch. Small towns run on relationship, not resume.</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div style="font-size:12px;color:var(--dim);font-family:'Fira Code',monospace">
+      AFFILIATE OPTIONS TO RESEARCH: BottleDrop affiliate/franchise, mobile recycling service contracts, Ollama/AI consulting local gov, rural tech assistance programs (USDA RD has grants for this), school tech volunteer → paid consultant path.
+    </div>
+  </div>
+
+  <!-- MYRTLEWOOD -->
+  <div class="panel" id="panel-myrtlewood">
+    <div class="section-head">♣️ Myrtlewood · Craft · G&B</div>
+    <div class="section-sub">MYRTUS SUIT · THE MAKER'S MARK · SENSORY ANCHOR</div>
+
+    <div class="concept-block">
+      <div class="concept-body">
+        G&B Myrtlewood. Shipped stuff all over the world. You grew working with that wood. You know the smell. That knowledge — grain, machine sounds, material behavior — is not separate from the framework. It IS the Myrtus suit. ♣️ carries material wisdom.
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card myrtle">
+        <div class="card-icon">🪵</div>
+        <div class="card-title">Get Myrtlewood</div>
+        <div class="card-sub">SENSORY RESET</div>
+        <div class="card-body">Find a piece. Hold it. Smell it. This is not frivolous — predictable sensory anchors (known smells, known textures) function like the woodshop machine sounds. They replace unpredictable painful input with known-good signal.</div>
+        <div class="card-tags"><span class="tag green">priority</span></div>
+      </div>
+      <div class="card earth">
+        <div class="card-icon">🔨</div>
+        <div class="card-title">Woodshop as Protocol</div>
+        <div class="card-sub">KNOWN SOUND SIGNATURES</div>
+        <div class="card-body">The fact that you know the sound of every machine is the data point. Known = safe. This is the acoustic version of the BBS-era constraint principle — limit the input space to what's parseable.</div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">♣️</div>
+        <div class="card-title">Myrtus Suit Lore</div>
+        <div class="card-sub">TIEZERK ENTRY</div>
+        <div class="card-body">The Myrtus suit in the card deck carries craft lineage. G&B is the real-world root. In tiezerk: objects made of Myrtlewood carry the maker's mark — they are not owned, they are <em>made</em>. The wood remembers the hand.</div>
+        <div class="card-tags"><span class="tag">tiezerk seed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEEDS FORWARD -->
+  <div class="panel" id="panel-seeds_fwd">
+    <div class="section-head">🌱 Seeds Forward — 202604261318</div>
+    <div class="section-sub">READY FOR PRIMAL LAUNCH · NEXT SESSION ANCHORS</div>
+
+    <div class="status-list">
+      <div class="status-item"><div class="status-dot active"></div><div><div class="status-label">BottleDrop → Mobile Recycling Venture</div><div class="status-desc">Concept seeded. Plastic + paper first. Container + kit modular model. Affiliate research needed.</div></div></div>
+      <div class="status-item"><div class="status-dot active"></div><div><div class="status-label">Earth Battery — Coffee Grounds Test</div><div class="status-desc">Build it today. Copper wire + iron nail. Log voltage. Goal: power one LED or 555 timer.</div></div></div>
+      <div class="status-item"><div class="status-dot pending"></div><div><div class="status-label">Agent Seed Framework → 8 Types Defined</div><div class="status-desc">Each terminal qualifies by building one of each type. Gemini gets BottleDrop as first workflow build.</div></div></div>
+      <div class="status-item"><div class="status-dot pending"></div><div><div class="status-label">Terminal Qualification System → Committed to ashkharh</div><div class="status-desc">Write the qualification spec as a docs/ file in ashkharh repo. 15 patches = Custos Pinnacle.</div></div></div>
+      <div class="status-item"><div class="status-dot idea"></div><div><div class="status-label">Local LLM Server (PrimeHaven)</div><div class="status-desc">Ollama + smallest model = vacuum tube tier. Always-on terminal that the consortium can query.</div></div></div>
+      <div class="status-item"><div class="status-dot pending"></div><div><div class="status-label">97907 Introduction Letter</div><div class="status-desc">Print when printer is connected. Walk in to school/city hall first rather than call.</div></div></div>
+      <div class="status-item"><div class="status-dot idea"></div><div><div class="status-label">Get Myrtlewood</div><div class="status-desc">Sensory anchor. Acoustic reset. Also: tiezerk Myrtus lore entry.</div></div></div>
+      <div class="status-item"><div class="status-dot active"></div><div><div class="status-label">Pinnacle Refinement Workflow — PUT TO WORK</div><div class="status-desc">First document to run through: this session's convergence log. BottleDrop as the test artifact.</div></div></div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function logAction(msg) {
+  const log = document.getElementById('actionLog');
+  log.style.display = 'block';
+  const ts = new Date().toLocaleTimeString();
+  log.innerHTML += `<div style="margin-bottom:4px"><span style="color:var(--dim)">[${ts}]</span> ${msg}</div>`;
+}
+</script>
+</body>
+</html>
