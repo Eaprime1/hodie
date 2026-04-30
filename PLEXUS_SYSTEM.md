@@ -379,3 +379,4 @@ Fully processed → simplex or omniplex
 **Repository**: github.com/Eaprime1/hodie
 **Drive**: drive.google.com/drive/folders/1qSUXHL4fXb8R1n3wBG4A8bwUOWE6SNOf
 **Companion**: github.com/Eaprime1/plex (automation workspace)
+#navigo
