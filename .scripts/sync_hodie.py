@@ -150,7 +150,7 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
     """Download or export a single Drive file.
 
     Returns (status, path_or_message) where status is one of:
-    'downloaded', 'dry-run', 'error'.
+    'downloaded', 'dry-run', 'skipped', 'error'.
     """
     from googleapiclient.errors import HttpError  # pylint: disable=import-outside-toplevel
     from googleapiclient.http import MediaIoBaseDownload  # pylint: disable=import-outside-toplevel
@@ -164,6 +164,11 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
 
     dest.parent.mkdir(parents=True, exist_ok=True)
     temp_dest = dest.with_suffix(dest.suffix + ".tmp")
+
+    # Google Workspace files not in EXPORT_MAP (e.g. Shortcuts, unknown types)
+    # cannot be downloaded via get_media — skip them gracefully.
+    if mime.startswith("application/vnd.google-apps.") and mime not in EXPORT_MAP:
+        return "skipped", f"Google Workspace type {mime!r} not in export map"
 
     try:
         if mime in EXPORT_MAP:
@@ -183,6 +188,15 @@ def download_file(service, file_meta: dict, dest_dir: Path, dry_run: bool = Fals
     except HttpError as exc:
         if temp_dest.exists():
             temp_dest.unlink()
+        # fileNotDownloadable means the Drive API requires Export for this file.
+        # Treat it as a skip rather than a hard error so the sync can continue.
+        try:
+            err_details = json.loads(exc.content)
+            reason = (err_details.get("error", {}).get("errors") or [{}])[0].get("reason", "")
+        except (json.JSONDecodeError, AttributeError, IndexError, TypeError):
+            reason = ""
+        if reason == "fileNotDownloadable":
+            return "skipped", f"not downloadable (MIME {mime!r}); use Export API"
         return "error", str(exc)
     except OSError as exc:
         if temp_dest.exists():
@@ -248,6 +262,8 @@ def sync(
             print(f"  {status:<10} {name} → {result}")
             if not dry_run:
                 manifest[fid] = {"name": name, "modifiedTime": modified}
+        elif status == "skipped":
+            print(f"  skipped   {name}: {result}")
         else:
             print(f"  ERROR     {name}: {result}")
 
@@ -263,7 +279,7 @@ def sync(
     else:
         print(
             f"Done: {counts['downloaded']} downloaded, "
-            f"{counts['skipped']} up to date, "
+            f"{counts['skipped']} skipped, "
             f"{counts['error']} errors."
         )
 
@@ -299,3 +315,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+# 🔧 ∰ 20260504003725277

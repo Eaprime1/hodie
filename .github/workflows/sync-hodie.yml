@@ -54,4 +54,5 @@ jobs:
           git pull --rebase --autostash
           git push
 
+# 🔧 Repair: Drive sync now tolerates non-downloadable Google Workspace files.
 # ∰🛠️♓-salmon_canon
