@@ -16,4 +16,8 @@ exclude_paths:
   - ".server_root/**"
   - ".streams/**"
   - ".valox/**"
+  - ".agents/**"
+  - ".gemini/**"
+  - "migrations/**"
+  - "tests/**"
   - "**/*.pdf"
