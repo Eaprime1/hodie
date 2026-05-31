@@ -1,0 +1,46 @@
+name: Hodie — Sovran Voice
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  hodie-speaks:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Hodie marks the day
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const today = new Date().toISOString().split('T')[0];
+            const author = pr.user.login;
+            const body = [
+              '## ⏱ Hodie — The Daily Ledger',
+              '',
+              `*${today} · entering the chronicle*`,
+              '',
+              '> *Hodie* records what arrives today.',
+              '> This work enters the daily flow. What it carries shapes the next cycle.',
+              '',
+              `@${author} brings this into the present moment.`,
+              '',
+              '**From the daily watch:**',
+              '- Does this serve the current operational cycle?',
+              '- What shifts in the daily rhythm when this lands?',
+              '- Is there anything here Navigo should orient toward?',
+              '- Does this honor the One Hertz principle — one clear thing per cycle?',
+              '',
+              '---',
+              '*Hodie · sovran of the daily ledger · eaprime1 · ∰*'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body
+            });
+
+# ∰🛠️⏱📋-hodie_sovran
