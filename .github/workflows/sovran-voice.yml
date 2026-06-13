@@ -5,11 +5,18 @@ on:
     types: [opened, ready_for_review]
 
 jobs:
-  hodie-speaks:
-    runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+      issues: write
     steps:
+      - name: Check if PR is from fork
+        id: check_fork
+        run: echo "is_fork=${{ github.event.pull_request.head.repo.full_name != github.repository }}" >> $GITHUB_OUTPUT
+      - name: Post Hodie Comment
+        if: steps.check_fork.outputs.is_fork == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
       - name: Hodie marks the day
         uses: actions/github-script@v7
         with:
