@@ -81,7 +81,7 @@ class LocalProcessor(ABC):
         )
 
         try:
-            self.logger.info(f"Processing file: {file_path}")
+            self.logger.info("Processing file: %s", file_path)
 
             # Read and parse file (to be implemented by subclasses)
             parts = await self._parse_file(file_path)
@@ -102,10 +102,8 @@ class LocalProcessor(ABC):
             # Generate verification seal
             result.generate_verification_seal()
 
-            self.logger.info(
-                f"Processed {result.parts_count} parts from {file_path.name}"
-            )
-            self.logger.info(f"Verification seal: {result.verification_seal}")
+            self.logger.info("Processed %s parts from %s", result.parts_count, file_path.name)
+            self.logger.info("Verification seal: %s", result.verification_seal)
 
         except (OSError, RuntimeError, TypeError, ValueError) as e:
             # Broad boundary catch: file-processing errors should not crash the pipeline
@@ -164,7 +162,9 @@ class LocalProcessor(ABC):
         max_concurrent = max_concurrent or self.config.max_concurrent
 
         self.logger.info(
-            f"Processing {len(file_paths)} files with max {max_concurrent} concurrent"
+            "Processing %s files with max %s concurrent",
+            len(file_paths),
+            max_concurrent,
         )
 
         results = []
@@ -180,7 +180,9 @@ class LocalProcessor(ABC):
 
         successful = sum(1 for r in results if not r.errors)
         self.logger.info(
-            f"Batch processing complete: {successful}/{len(results)} successful"
+            "Batch processing complete: %s/%s successful",
+            successful,
+            len(results),
         )
 
         return results
