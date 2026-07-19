@@ -63,6 +63,20 @@ jobs:
               return;
             }
 
+            // Make sure the label exists before we reference it — a fresh repo
+            // (or one that's never had a failure yet) won't have it.
+            try {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'workflow-failure',
+                color: 'b60205',
+                description: 'Auto-filed: a workflow has failed repeated consecutive runs',
+              });
+            } catch (err) {
+              if (err.status !== 422) throw err; // 422 = label already exists
+            }
+
             const latest = runs[0];
             await github.rest.issues.create({
               owner: context.repo.owner,
