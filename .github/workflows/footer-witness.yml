@@ -29,7 +29,7 @@ jobs:
     name: ∰ Prima Witness Check
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -46,13 +46,26 @@ jobs:
         id: witness
         # --strict causes exit 1 when newly introduced files lack witness.
         # The scanner uses the checked-in quepad/state.json on startup when
-        # that file exists in the repository checkout. However, this CI job
-        # does not automatically write updated state back to the repo between
-        # runs, so state only advances when quepad/state.json is committed or
-        # restored from a cache/artifact.
+        # that file exists in the repository checkout. The "Commit refreshed
+        # scan state" step below writes the result back on push events, so
+        # state actually accumulates instead of going stale between manual
+        # refreshes (see issue #149).
         run: |
           python scripts/footer_witness.py --root . --strict
         continue-on-error: true
+
+      - name: Commit refreshed scan state
+        # Only on same-repo push events — no push access on pull_request
+        # (especially from forks), and no reason to commit on every PR run.
+        # quepad/** isn't in this workflow's own path filters, so this can't
+        # trigger an infinite loop; [skip ci] is belt-and-suspenders.
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add quepad/state.json
+          git diff --cached --quiet || git commit -m "quepad: refresh witness scan state [skip ci]"
+          git diff --cached --quiet || git push
 
       - name: Upload quepad reports
         uses: actions/upload-artifact@v4
