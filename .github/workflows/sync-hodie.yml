@@ -54,4 +54,15 @@ jobs:
           git pull --rebase --autostash
           git push
 
+  notify-on-failure:
+    needs: sync
+    if: always() && needs.sync.result == 'failure'
+    uses: ./.github/workflows/notify-repeated-failure.yml
+    with:
+      workflow_file: sync-hodie.yml
+      threshold: 3
+    permissions:
+      issues: write
+      actions: read
+
 # ∰🛠️♓-salmon_canon
