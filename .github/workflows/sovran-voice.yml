@@ -30,7 +30,7 @@ jobs:
             // from untrusted PR content, and gemini-review.yml already posts a
             // full AI review on the same event — this stays a quick, factual
             // daily-ledger entry rather than duplicating that).
-            const { data: files } = await github.rest.pulls.listFiles({
+            const files = await github.paginate(github.rest.pulls.listFiles, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pr.number,
