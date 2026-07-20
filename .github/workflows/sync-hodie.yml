@@ -54,6 +54,7 @@ jobs:
           git pull --rebase --autostash
           git push
 
+# 🔧 Repair: Drive sync now tolerates non-downloadable Google Workspace files.
   notify-on-failure:
     needs: sync
     if: always() && needs.sync.result == 'failure'
@@ -66,3 +67,4 @@ jobs:
       actions: read
 
 # ∰🛠️♓-salmon_canon
+# ∰ 20260720020353550
