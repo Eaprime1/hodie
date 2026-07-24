@@ -50,6 +50,23 @@ jobs:
               owner, repo, pull_number: prNum,
             });
 
+            // ── 1a. Skip dependabot PRs — they merge directly ──────────────────
+            if (pr.user.login.startsWith('dependabot') || pr.head.ref.startsWith('dependabot/')) {
+              core.info(`PR #${prNum} is a dependabot PR — finalization ritual does not apply.`);
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: prNum,
+                body: [
+                  `## ⏱ Finalization skipped`,
+                  '',
+                  'Dependabot PRs are merged directly — the finalization ritual does not apply.',
+                  '',
+                  '---',
+                  `*${IDENTITY} · ${SYMBOL}*`,
+                ].join('\n'),
+              });
+              return;
+            }
+
             // ── 2. Template section check ──────────────────────────────────────
             const body = pr.body || '';
             const hasWitness = body.includes('∰');
