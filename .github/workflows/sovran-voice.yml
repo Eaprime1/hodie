@@ -22,7 +22,6 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             const today = new Date().toISOString().split('T')[0];
-            const author = pr.user.login;
 
             // Real per-PR facts, not a template — pull structured data straight
             // from the PR/file-list APIs rather than piping PR title/body text
@@ -49,7 +48,7 @@ jobs:
               '> *Hodie* records what arrives today.',
               '> This work enters the daily flow. What it carries shapes the next cycle.',
               '',
-              `@${author} brings **"${pr.title}"** into the present moment —`,
+              `**"${pr.title}"** enters the present moment —`,
               `${pr.changed_files} file${pr.changed_files === 1 ? '' : 's'} touched (+${pr.additions}/−${pr.deletions}) across ${pr.commits} commit${pr.commits === 1 ? '' : 's'}.`,
               `Areas: ${areasLine}`,
               '',
