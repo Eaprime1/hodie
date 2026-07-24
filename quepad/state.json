@@ -1,5 +1,4 @@
 {
-  "last_scan": "20260724020052852",
   "last_scan": "20260724023605660",
   "known_files": {
     ".scripts/sync_hodie.py": {
@@ -215,7 +214,6 @@
     "INVENTORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724020052852"
       "last_seen": "20260724023605660"
     },
     "LAPTOP_SETUP.md": {
