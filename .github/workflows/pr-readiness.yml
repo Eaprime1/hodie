@@ -39,6 +39,7 @@ jobs:
 
             // ── Template sections ──────────────────────────────────────────────
             const body = pr.body || '';
+            const hasWitness = body.includes('∰');
             const parseSection = (label) => {
               const re = new RegExp(`##\\s+${label}\\s*\\n([\\s\\S]*?)(?=\\n##\\s|$)`);
               const m  = body.match(re);
@@ -80,10 +81,9 @@ jobs:
             }
 
             // ── CI check runs ──────────────────────────────────────────────────
-            const { data: checksData } = await github.rest.checks.listForRef({
+            const allChecks = (await github.paginate(github.rest.checks.listForRef, {
               owner, repo, ref: pr.head.sha, per_page: 100,
-            });
-            const allChecks = checksData.check_runs.filter(c =>
+            })).filter(c =>
               !c.name.toLowerCase().includes('finalize') &&
               !c.name.toLowerCase().includes('readiness')
             );
@@ -107,7 +107,7 @@ jobs:
             const templateOk  = !!(intent && whatArrived && resonance);
             const threadsOk   = unresolved === 0;
             const ciOk        = failing.length === 0 && pending.length === 0;
-            const allGreen    = templateOk && threadsOk && ciOk;
+            const allGreen    = templateOk && threadsOk && ciOk && hasWitness;
 
             const gateTable = [
               gate(!!intent,           `Intent section ${intent ? 'filled' : '**empty**'}`),
@@ -115,6 +115,7 @@ jobs:
               gate(!!resonance,        `Resonance section ${resonance ? 'filled' : '**empty**'}`),
               gate(ethicsTotal > 0 && ethicsDone === ethicsTotal,
                    `Ethics check ${ethicsDone}/${ethicsTotal} complete`),
+              gate(hasWitness,         `∰ witness ${hasWitness ? 'present in PR body' : '**absent from PR body**'}`),
               gate(threadsOk,          `Review threads — ${unresolved === 0 ? 'all resolved' : `${unresolved} unresolved`}`),
               gate(failing.length === 0, `CI — ${failing.length === 0 ? `${passing.length} passing` : `${failing.length} failing`}`),
               gate(pending.length === 0, `CI — ${pending.length === 0 ? 'all complete' : `${pending.length} pending`}`),
@@ -182,4 +183,4 @@ jobs:
               });
             }
 
-# ∰🛠️⏱-hodie_readiness
+# ∰🛠️⏱🃏-hodie_readiness_v2

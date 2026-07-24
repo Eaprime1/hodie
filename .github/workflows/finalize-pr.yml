@@ -52,6 +52,7 @@ jobs:
 
             // ── 2. Template section check ──────────────────────────────────────
             const body = pr.body || '';
+            const hasWitness = body.includes('∰');
 
             const parseSection = (label) => {
               const re = new RegExp(`##\\s+${label}\\s*\\n([\\s\\S]*?)(?=\\n##\\s|$)`);
@@ -77,6 +78,7 @@ jobs:
             if (!intent)      templateGaps.push('**Intent** is empty');
             if (!whatArrived) templateGaps.push('**What Arrived** is empty');
             if (!resonance)   templateGaps.push('**Resonance** is empty');
+            if (!hasWitness)  templateGaps.push('**∰ witness** is absent from the PR body');
 
             // ── 3. Review threads (GraphQL, paginated) ─────────────────────────
             const THREAD_Q = `query($owner:String!,$repo:String!,$pr:Int!,$after:String){
@@ -102,10 +104,9 @@ jobs:
             }
 
             // ── 4. CI check runs on head commit ────────────────────────────────
-            const { data: checksData } = await github.rest.checks.listForRef({
+            const allChecks = (await github.paginate(github.rest.checks.listForRef, {
               owner, repo, ref: pr.head.sha, per_page: 100,
-            });
-            const allChecks = checksData.check_runs.filter(c =>
+            })).filter(c =>
               !c.name.toLowerCase().includes('finalize')
             );
             const failing = allChecks.filter(c =>
@@ -364,4 +365,4 @@ jobs:
               });
             }
 
-# ∰🛠️⏱📋-hodie_finalize_v1
+# ∰🛠️⏱📋🃏-hodie_finalize_v2

@@ -80,6 +80,7 @@ jobs:
 
               // ── Template sections ─────────────────────────────────────────
               const body        = pr.body || '';
+              const hasWitness  = body.includes('∰');
               const intent      = parseSection(body, 'Intent');
               const whatArrived = parseSection(body, 'What Arrived');
               const resonance   = parseSection(body, 'Resonance');
@@ -92,7 +93,7 @@ jobs:
               const ethicsDone  = ethicsLines.filter(l => l.includes('[x]')).length;
               const ethicsTotal = ethicsLines.length;
 
-              if (!intent || !whatArrived || !resonance) continue;
+              if (!intent || !whatArrived || !resonance || !hasWitness) continue;
 
               // ── Review threads ────────────────────────────────────────────
               let unresolved = 0;
@@ -107,10 +108,9 @@ jobs:
               if (unresolved > 0) continue;
 
               // ── CI check runs ─────────────────────────────────────────────
-              const { data: checksData } = await github.rest.checks.listForRef({
+              const allChecks = (await github.paginate(github.rest.checks.listForRef, {
                 owner, repo, ref: pr.head.sha, per_page: 100,
-              });
-              const allChecks = checksData.check_runs.filter(c =>
+              })).filter(c =>
                 !c.name.toLowerCase().includes('finalize')
               );
               const failing = allChecks.filter(c =>
@@ -327,4 +327,4 @@ jobs:
               }
             }
 
-# ∰🛠️⏱📋-hodie_auto_finalize_v1
+# ∰🛠️⏱📋🃏-hodie_auto_finalize_v2
