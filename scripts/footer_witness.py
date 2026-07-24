@@ -256,6 +256,20 @@ def extract_witness_lines(filepath: Path) -> List[Tuple[str, str, str]]:
     return results
 
 
+def _parse_icon_table_row(line: str) -> Optional[Tuple[str, str]]:
+    """Parse one markdown table row; return (icon, meaning) or None."""
+    if not line.startswith("|"):
+        return None
+    parts = [p.strip() for p in line.strip("|").split("|")]
+    if len(parts) < 2:
+        return None
+    icon = parts[0]
+    if not icon or "Icon" in icon or not icon.strip("-"):
+        return None
+    meaning = parts[-1]
+    return (icon, meaning) if meaning else None
+
+
 def load_icon_registry() -> Dict[str, str]:
     """
     Load the icon → meaning mapping from quepad/icon-registry.md.
@@ -267,24 +281,48 @@ def load_icon_registry() -> Dict[str, str]:
     if not ICON_REGISTRY_FILE.exists():
         return registry
     try:
-        for line in ICON_REGISTRY_FILE.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line.startswith("|"):
-                continue
-            parts = [p.strip() for p in line.strip("|").split("|")]
-            if len(parts) < 2:
-                continue
-            icon = parts[0]
-            # Skip header rows and separator rows
-            if not icon or "Icon" in icon or not icon.strip("-"):
-                continue
-            # Use last column as meaning (supports 2- and 3-column tables)
-            meaning = parts[-1]
-            if icon and meaning:
-                registry[icon] = meaning
+        for raw_line in ICON_REGISTRY_FILE.read_text(encoding="utf-8").splitlines():
+            parsed = _parse_icon_table_row(raw_line.strip())
+            if parsed is not None:
+                registry[parsed[0]] = parsed[1]
     except OSError:
         pass
     return registry
+
+
+def _print_icon_summary(witnesses: List[Tuple[str, str, str]], registry: Dict[str, str]) -> None:
+    """Print the unique-icon summary block for ``list_file_icons``."""
+    seen: Set[str] = set()
+    unique: List[str] = []
+    for _, icons, _ in witnesses:
+        for ch in icons:
+            if ch not in seen:
+                seen.add(ch)
+                unique.append(ch)
+    if unique:
+        print()
+        print(f"  Unique icons: {''.join(unique)}")
+        for ch in unique:
+            print(f"    {ch}  {registry.get(ch, '(unknown)')}")
+
+
+def _print_witness_line(
+    i: int, count: int, entry: Tuple[str, str, str], registry: Dict[str, str]
+) -> None:
+    """Print one ∰ witness entry with its icon annotations."""
+    raw, icons, stamp = entry
+    label = "current  " if i == count - 1 else f"provenance[{i}]"
+    valid_mark = "✓" if is_valid_timestamp(stamp) else "✗ INVALID"
+    cent = to_centesimal_minutes(stamp)
+    cent_str = f"  [{cent:.2f} cmin]" if cent is not None else ""
+    print(f"  [{label}] {raw}  {valid_mark}{cent_str}")
+    if icons:
+        for ch in icons:
+            meaning = registry.get(ch, "(unknown)")
+            if meaning != "(unknown)":
+                print(f"              {ch!r} → {meaning}")
+    else:
+        print("              (no icons)")
 
 
 def list_file_icons(filepath: Path) -> None:
@@ -305,37 +343,10 @@ def list_file_icons(filepath: Path) -> None:
     print(f"∰ witness lines in {filepath.name}  ({count} total):")
     print()
 
-    for i, (raw, icons, stamp) in enumerate(witnesses):
-        label = "current  " if i == count - 1 else f"provenance[{i}]"
-        valid_mark = "✓" if is_valid_timestamp(stamp) else "✗ INVALID"
-        cent = to_centesimal_minutes(stamp)
-        cent_str = f"  [{cent:.2f} cmin]" if cent is not None else ""
-        print(f"  [{label}] {raw}  {valid_mark}{cent_str}")
-        if icons:
-            # Iterate over each Python character in the icons string;
-            # multi-codepoint emoji (e.g. 🛠️) may appear as 2 chars.
-            for ch in icons:
-                meaning = registry.get(ch, "(unknown)")
-                if meaning != "(unknown)":
-                    print(f"              {ch!r} → {meaning}")
-        else:
-            print("              (no icons)")
+    for i, entry in enumerate(witnesses):
+        _print_witness_line(i, count, entry, registry)
 
-    # Collect unique chars across all witnesses for a summary line
-    seen: Set[str] = set()
-    unique: List[str] = []
-    for _, icons, _ in witnesses:
-        for ch in icons:
-            if ch not in seen:
-                seen.add(ch)
-                unique.append(ch)
-
-    if unique:
-        print()
-        print(f"  Unique icons: {''.join(unique)}")
-        for ch in unique:
-            meaning = registry.get(ch, "(unknown)")
-            print(f"    {ch}  {meaning}")
+    _print_icon_summary(witnesses, registry)
 
 
 # ---------------------------------------------------------------------------
@@ -644,6 +655,40 @@ def _persist_reports(buckets: Dict, summary: Dict, scan_stamp: str) -> None:
     _write_report(f"egressum-Q-{scan_stamp}.md", build_egress_marker(scan_stamp, summary))
 
 
+def _persist_state(
+    state: Dict,
+    known_files: Dict,
+    compliant: List[Tuple[str, str]],
+    missing: List[str],
+    scan_stamp: str,
+) -> None:
+    """Merge scan results into state and write state.json."""
+    new_known: Dict = dict(known_files)
+    for rel, witness in compliant:
+        new_known[rel] = {"compliant": True, "witness": witness, "last_seen": scan_stamp}
+    for rel in missing:
+        new_known[rel] = {"compliant": False, "witness": None, "last_seen": scan_stamp}
+    state["last_scan"] = scan_stamp
+    state["known_files"] = new_known
+    save_state(state)
+
+
+def _report_flagged(new_missing: List[str], scan_stamp: str, strict: bool) -> int:
+    """Print flagged-file warning and return the appropriate exit code."""
+    if not new_missing:
+        return 0
+    cent = to_centesimal_minutes(scan_stamp)
+    cent_str = f"{cent:.2f} cmin" if cent is not None else ""
+    print()
+    print("🚩 FLAGGED — new files missing ∰ footer witness:")
+    for f in sorted(new_missing):
+        print(f"   {f}")
+    print()
+    print(f"  Add a footer witness line: ∰ {scan_stamp}  [{cent_str}]")
+    print()
+    return 1 if strict else 0
+
+
 def scan(root: Path, strict: bool = False, git_base: Optional[str] = None) -> int:
     """
     Run the footer witness scan.
@@ -708,33 +753,12 @@ def scan(root: Path, strict: bool = False, git_base: Optional[str] = None) -> in
     }
     _persist_reports(buckets, summary, scan_stamp)
 
-    # Update incremental state
-    new_known: Dict = dict(known_files)
-    for rel, witness in compliant:
-        new_known[rel] = {"compliant": True, "witness": witness, "last_seen": scan_stamp}
-    for rel in missing:
-        new_known[rel] = {"compliant": False, "witness": None, "last_seen": scan_stamp}
-    state["last_scan"] = scan_stamp
-    state["known_files"] = new_known
-    save_state(state)
+    _persist_state(state, known_files, compliant, missing, scan_stamp)
 
     print("  Reports → quepad/")
     print(f"  State   → {STATE_FILE}")
 
-    if new_missing:
-        cent = to_centesimal_minutes(scan_stamp)
-        cent_str = f"{cent:.2f} cmin" if cent is not None else ""
-        print()
-        print("🚩 FLAGGED — new files missing ∰ footer witness:")
-        for f in sorted(new_missing):
-            print(f"   {f}")
-        print()
-        print(f"  Add a footer witness line: ∰ {scan_stamp}  [{cent_str}]")
-        print()
-        if strict:
-            return 1
-
-    return 0
+    return _report_flagged(new_missing, scan_stamp, strict)
 
 
 def _write_report(filename: str, content: str) -> Path:
