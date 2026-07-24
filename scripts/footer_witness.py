@@ -12,6 +12,10 @@ accumulation, not replacement or removal.  The ∰ marker must never be treated
 with replace/remove semantics.  It is a prima witness of a document's existence
 and evolution.
 
+A document may carry multiple ∰ witness lines, one per meaningful iteration.
+The scanner validates only the most recent (last) witness line.  All earlier
+lines are retained as provenance — they must never be removed.
+
 TIMESTAMP FORMAT
 ----------------
   ∰ YYYYMMDDHHMMSSMS
@@ -27,6 +31,17 @@ TIMESTAMP FORMAT
 
   Total: 17 numeric digits.
   Example: ∰ 20260424024720123
+
+ICON-EMBEDDED FORMAT
+--------------------
+Icons (emoji or symbols) may be placed directly after ∰ with no space, before
+the timestamp whitespace.  Examples:
+
+  ∰⏱ 20260424024720123          (time/arrival icon)
+  ∰⏱🃏 20260424024720123        (arrival + current iteration)
+
+Use --list-icons <file> to inspect which icons appear in a file's witness lines.
+The icon registry lives in quepad/icon-registry.md.
 
 QUEPAD / EGRESS
 ---------------
@@ -86,7 +101,11 @@ WITNESS_PATTERN = re.compile(
     re.MULTILINE,
 )
 
+# Extracts the icon string between ∰ and the first whitespace
+_ICON_EXTRACT_RE = re.compile(r"^∰([^\s\d]*)")
+
 # Number of lines from end of file to consider as "footer"
+# (kept for egress marker context; accumulation scan searches full document)
 FOOTER_LINES = 15
 
 # File extensions scanned for footer witness
@@ -118,6 +137,16 @@ EXCLUDED_DIRS = frozenset(
 
 QUEPAD_DIR = Path("quepad")
 STATE_FILE = QUEPAD_DIR / "state.json"
+ICON_REGISTRY_FILE = QUEPAD_DIR / "icon-registry.md"
+
+# Built-in icon definitions used when quepad/icon-registry.md does not exist.
+# Update quepad/icon-registry.md to extend or override without editing this file.
+BUILTIN_ICON_REGISTRY: Dict[str, str] = {
+    "⏱": "time / ledger arrival",
+    "🃏": "joker / current iteration",
+    "🛠": "tooling / build",
+    "📋": "documentation / checklist",
+}
 
 
 # ---------------------------------------------------------------------------
@@ -195,6 +224,121 @@ def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
 
 
 # ---------------------------------------------------------------------------
+# Witness line utilities — accumulation semantics
+# ---------------------------------------------------------------------------
+
+
+def extract_witness_lines(filepath: Path) -> List[Tuple[str, str, str]]:
+    """
+    Find ALL ∰ witness lines in *filepath*, searching the entire document.
+
+    Accumulation semantics: a document may carry one ∰ line per meaningful
+    iteration.  The scanner searches the whole file — not just the footer
+    — so every provenance stamp is discovered.  The last entry in the
+    returned list is the current (most recent) witness; all earlier entries
+    are provenance and must never be removed.
+
+    Returns a list of (raw_line_stripped, icons, stamp) tuples in document
+    order (oldest first).
+    """
+    try:
+        text = filepath.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return []
+
+    results: List[Tuple[str, str, str]] = []
+    for m in WITNESS_PATTERN.finditer(text):
+        raw = m.group(0).strip()
+        stamp = "".join(m.groups())
+        icon_m = _ICON_EXTRACT_RE.match(raw)
+        icons = icon_m.group(1) if icon_m else ""
+        results.append((raw, icons, stamp))
+    return results
+
+
+def load_icon_registry() -> Dict[str, str]:
+    """
+    Load the icon → meaning mapping from quepad/icon-registry.md.
+
+    Falls back to BUILTIN_ICON_REGISTRY when the file does not exist.
+    Entries in the file extend and override the built-ins.
+    """
+    registry: Dict[str, str] = dict(BUILTIN_ICON_REGISTRY)
+    if not ICON_REGISTRY_FILE.exists():
+        return registry
+    try:
+        for line in ICON_REGISTRY_FILE.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line.startswith("|"):
+                continue
+            parts = [p.strip() for p in line.strip("|").split("|")]
+            if len(parts) < 2:
+                continue
+            icon = parts[0]
+            # Skip header rows and separator rows
+            if not icon or "Icon" in icon or not icon.strip("-"):
+                continue
+            # Use last column as meaning (supports 2- and 3-column tables)
+            meaning = parts[-1]
+            if icon and meaning:
+                registry[icon] = meaning
+    except OSError:
+        pass
+    return registry
+
+
+def list_file_icons(filepath: Path) -> None:
+    """
+    Print ∰ witness lines and their icon annotations from *filepath*.
+
+    Called by the ``--list-icons`` CLI flag.  Exits after printing —
+    does not run a full repository scan.
+    """
+    registry = load_icon_registry()
+    witnesses = extract_witness_lines(filepath)
+
+    if not witnesses:
+        print(f"No ∰ witness lines found in: {filepath}")
+        return
+
+    count = len(witnesses)
+    print(f"∰ witness lines in {filepath.name}  ({count} total):")
+    print()
+
+    for i, (raw, icons, stamp) in enumerate(witnesses):
+        label = "current  " if i == count - 1 else f"provenance[{i}]"
+        valid_mark = "✓" if is_valid_timestamp(stamp) else "✗ INVALID"
+        cent = to_centesimal_minutes(stamp)
+        cent_str = f"  [{cent:.2f} cmin]" if cent is not None else ""
+        print(f"  [{label}] {raw}  {valid_mark}{cent_str}")
+        if icons:
+            # Iterate over each Python character in the icons string;
+            # multi-codepoint emoji (e.g. 🛠️) may appear as 2 chars.
+            for ch in icons:
+                meaning = registry.get(ch, "(unknown)")
+                if meaning != "(unknown)":
+                    print(f"              {ch!r} → {meaning}")
+        else:
+            print("              (no icons)")
+
+    # Collect unique chars across all witnesses for a summary line
+    seen: Set[str] = set()
+    unique: List[str] = []
+    for _, icons, _ in witnesses:
+        for ch in icons:
+            if ch not in seen:
+                seen.add(ch)
+                unique.append(ch)
+
+    if unique:
+        print()
+        print(f"  Unique icons: {''.join(unique)}")
+        for ch in unique:
+            meaning = registry.get(ch, "(unknown)")
+            print(f"    {ch}  {meaning}")
+
+
+# ---------------------------------------------------------------------------
 # File scanning
 # ---------------------------------------------------------------------------
 
@@ -213,28 +357,29 @@ def iter_scannable_files(root: Path):
         yield path
 
 
-def check_file_witness(filepath: Path) -> Tuple[bool, Optional[str]]:
+def check_file_witness(filepath: Path) -> Tuple[bool, Optional[str], List[str]]:
     """
-    Check whether *filepath* has a valid ∰ witness in its footer.
+    Check whether *filepath* has a valid ∰ witness.
+
+    Accumulation semantics: searches the entire document for all ∰ witness
+    lines; validates only the most recent (last) one; returns earlier lines
+    as provenance.  Provenance lines do not affect the compliance verdict.
 
     Returns:
-        (is_compliant, witness_string_or_None)
+        (is_compliant, current_witness_or_None, provenance_lines)
     """
-    try:
-        text = filepath.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return False, None
+    witnesses = extract_witness_lines(filepath)
+    if not witnesses:
+        return False, None, []
 
-    lines = text.splitlines()
-    footer = "\n".join(lines[-FOOTER_LINES:])
+    provenance = [raw for raw, _, _ in witnesses[:-1]]
+    _, icons, stamp = witnesses[-1]
 
-    match = WITNESS_PATTERN.search(footer)
-    if match:
-        stamp = "".join(match.groups())
-        if is_valid_timestamp(stamp):
-            return True, f"∰ {stamp}"
+    if is_valid_timestamp(stamp):
+        witness_str = f"∰{icons} {stamp}" if icons else f"∰ {stamp}"
+        return True, witness_str, provenance
 
-    return False, None
+    return False, None, [raw for raw, _, _ in witnesses]
 
 
 # ---------------------------------------------------------------------------
@@ -353,16 +498,28 @@ def build_new_docs_report(
 
 
 def build_flagged_report(flagged: List[str], scan_stamp: str) -> str:
-    """Return the flagged-documents report as a Markdown string."""
+    """Return the flagged-documents report as a Markdown string.
+
+    Shows the SI timestamp and centesimal equivalent side by side so
+    operators can read the scan time in both the canonical and 100-minute
+    clock systems.
+    """
+    cent = to_centesimal_minutes(scan_stamp)
+    cent_str = f"{cent:.2f}" if cent is not None else "n/a"
+
     lines = _report_header("Prima Witness — Flagged Documents", scan_stamp)
     lines += [
         f"**Flagged count:** {len(flagged)}",
+        "",
+        f"**Scan stamp (SI):**         `{scan_stamp}`  ",
+        f"**Scan stamp (centesimal):** `{cent_str}` cmin  *(100-min clock)*",
         "",
         "Newly introduced files listed below are missing the ∰ footer witness.",
         "Add a footer witness line in the canonical format:",
         "",
         "```",
         f"∰ {scan_stamp}",
+        f"# centesimal: {cent_str} cmin",
         "```",
         "",
         "---",
@@ -457,7 +614,7 @@ def _classify_files(
             is_new = rel in git_new_files
         else:
             is_new = rel not in known_files
-        ok, witness = check_file_witness(filepath)
+        ok, witness, _provenance = check_file_witness(filepath)
         if ok and witness is not None:
             compliant.append((rel, witness))
             if is_new:
@@ -471,13 +628,7 @@ def _classify_files(
 
 
 def _persist_reports(buckets: Dict, summary: Dict, scan_stamp: str) -> None:
-    """Write all quepad report files for this scan cycle.
-
-    Args:
-        buckets:    Dict with keys compliant, missing, new_compliant, new_missing.
-        summary:    Aggregated counts dict.
-        scan_stamp: Canonical 17-digit witness timestamp for this scan.
-    """
+    """Write all quepad report files for this scan cycle."""
     compliant = buckets["compliant"]
     missing = buckets["missing"]
     new_compliant = buckets["new_compliant"]
@@ -571,13 +722,14 @@ def scan(root: Path, strict: bool = False, git_base: Optional[str] = None) -> in
     print(f"  State   → {STATE_FILE}")
 
     if new_missing:
+        cent = to_centesimal_minutes(scan_stamp)
+        cent_str = f"{cent:.2f} cmin" if cent is not None else ""
         print()
         print("🚩 FLAGGED — new files missing ∰ footer witness:")
         for f in sorted(new_missing):
             print(f"   {f}")
         print()
-        print("  Add a footer witness line in the canonical format:")
-        print(f"  ∰ {scan_stamp}")
+        print(f"  Add a footer witness line: ∰ {scan_stamp}  [{cent_str}]")
         print()
         if strict:
             return 1
@@ -608,6 +760,10 @@ def main() -> None:
             "Timestamp format: ∰ YYYYMMDDHHMMSSMS  (17 digits, ms precision)\n"
             "Example:          ∰ 20260424024720123\n"
             "\n"
+            "Accumulation semantics: a document may carry multiple ∰ lines,\n"
+            "one per meaningful iteration.  Only the last line is validated;\n"
+            "earlier lines are preserved as provenance — never remove them.\n"
+            "\n"
             "Documents carrying ∰ are additive, always additive.\n"
         ),
     )
@@ -637,6 +793,16 @@ def main() -> None:
             "so each file is flagged only once — the first time it is introduced."
         ),
     )
+    parser.add_argument(
+        "--list-icons",
+        metavar="FILE",
+        default=None,
+        help=(
+            "Scan FILE and print all ∰ witness lines with icon annotations. "
+            "Icons are looked up in quepad/icon-registry.md (falls back to "
+            "built-ins). Exits after printing — does not run a full scan."
+        ),
+    )
     args = parser.parse_args()
 
     if args.stamp:
@@ -647,6 +813,10 @@ def main() -> None:
             print(f"  centesimal: {cent:.4f} cmin  (100-min clock)")
         return
 
+    if args.list_icons:
+        list_file_icons(Path(args.list_icons))
+        return
+
     root = args.root.resolve()
     sys.exit(scan(root, strict=args.strict, git_base=args.git_base))
 
@@ -655,3 +825,4 @@ if __name__ == "__main__":
     main()
 
 # ∰ 20260424000000000
+# ∰⏱🃏 20260724120000000
