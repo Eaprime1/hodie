@@ -45,13 +45,21 @@ jobs:
       - name: Run Prima Witness Scanner
         id: witness
         # --strict causes exit 1 when newly introduced files lack witness.
-        # The scanner uses the checked-in quepad/state.json on startup when
-        # that file exists in the repository checkout. The "Commit refreshed
-        # scan state" step below writes the result back on push events, so
-        # state actually accumulates instead of going stale between manual
-        # refreshes (see issue #149).
+        #
+        # On pull_request events: pass --git-base so only files genuinely
+        # new to this branch (vs the base) are flagged. This ensures the
+        # check fires exactly once per file — the first time it is introduced
+        # — rather than re-flagging every untracked file on every PR run.
+        #
+        # On push events: state.json is committed back by the step below, so
+        # files are recorded as known after their first passing scan.
         run: |
-          python scripts/footer_witness.py --root . --strict
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python scripts/footer_witness.py --root . --strict \
+              --git-base "origin/${{ github.base_ref }}"
+          else
+            python scripts/footer_witness.py --root . --strict
+          fi
         continue-on-error: true
 
       - name: Commit refreshed scan state

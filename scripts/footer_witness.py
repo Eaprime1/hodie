@@ -55,10 +55,11 @@ decimal-time standard is formalised.
 import argparse
 import json
 import re
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -66,14 +67,22 @@ from typing import Dict, List, Optional, Tuple
 
 WITNESS_SYMBOL = "∰"
 
-# Canonical pattern: ∰ <space/tab(s)> YYYYMMDDHHMMSSMS (17 digits)
-# Use horizontal whitespace only so a witness split across lines is not
-# treated as valid when matching against a multi-line footer string.
+# Canonical pattern: ∰ [optional icons] <space/tab(s)> YYYYMMDDHHMMSSMS (17 digits)
+#
+# Icons are non-whitespace, non-digit characters (emoji, symbols) placed
+# directly after ∰ with no intervening space.  The timestamp follows after
+# one or more horizontal whitespace characters.
+#
+# Examples:
+#   ∰ 20260424024720123          (plain — original format)
+#   ∰⏱ 20260424024720123         (one icon)
+#   ∰⏱🃏 20260424024720123       (icon + iteration marker)
+#
 # Enforce full-token match: after the 17-digit timestamp only optional
 # horizontal whitespace is allowed before end-of-line or end-of-string,
 # so trailing text such as "∰ 20260424024720123 extra" is rejected.
 WITNESS_PATTERN = re.compile(
-    r"∰[ \t]+(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})[ \t]*$",
+    r"∰[^\s\d]*[ \t]+(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{3})[ \t]*$",
     re.MULTILINE,
 )
 
@@ -156,6 +165,33 @@ def to_centesimal_minutes(stamp: str) -> Optional[float]:
     second = int(stamp[12:14])
     total_seconds = hour * 3600 + minute * 60 + second
     return total_seconds / 86400.0 * 10000.0
+
+
+# ---------------------------------------------------------------------------
+# Git helpers
+# ---------------------------------------------------------------------------
+
+
+def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
+    """Return repo-relative paths of files added since *base_ref*, or None on failure.
+
+    Uses ``git diff --name-only --diff-filter=A <base_ref>...HEAD`` so only
+    files that are genuinely new to this branch are treated as "new" by the
+    scanner.  This is the correct behaviour for PR checks where state.json
+    is not persisted between runs — it prevents every file from appearing
+    new on every pull_request event.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -397,8 +433,19 @@ def build_egress_marker(scan_stamp: str, summary: Dict) -> str:
 def _classify_files(
     root: Path,
     known_files: Dict,
+    git_new_files: Optional[Set[str]] = None,
 ) -> Tuple[List[Tuple[str, str]], List[str], List[Tuple[str, str]], List[str]]:
-    """Classify all scannable files under *root* into compliant/missing buckets."""
+    """Classify all scannable files under *root* into compliant/missing buckets.
+
+    *git_new_files*: when provided (e.g. from ``get_git_new_files``), a file is
+    considered "new" only if its repo-relative path is in this set.  This is the
+    correct behaviour for pull_request CI runs where ``state.json`` is not
+    persisted between runs — it prevents every untracked file from appearing new
+    on every PR check (the "only run once" guarantee).
+
+    When *git_new_files* is None the legacy state-based logic applies: a file is
+    "new" if it has no entry in *known_files*.
+    """
     compliant: List[Tuple[str, str]] = []
     missing: List[str] = []
     new_compliant: List[Tuple[str, str]] = []
@@ -406,7 +453,10 @@ def _classify_files(
 
     for filepath in iter_scannable_files(root):
         rel = str(filepath.relative_to(root))
-        is_new = rel not in known_files
+        if git_new_files is not None:
+            is_new = rel in git_new_files
+        else:
+            is_new = rel not in known_files
         ok, witness = check_file_witness(filepath)
         if ok and witness is not None:
             compliant.append((rel, witness))
@@ -443,14 +493,19 @@ def _persist_reports(buckets: Dict, summary: Dict, scan_stamp: str) -> None:
     _write_report(f"egressum-Q-{scan_stamp}.md", build_egress_marker(scan_stamp, summary))
 
 
-def scan(root: Path, strict: bool = False) -> int:
+def scan(root: Path, strict: bool = False, git_base: Optional[str] = None) -> int:
     """
     Run the footer witness scan.
 
     Args:
-        root:   Repository root to scan.
-        strict: If True, exit nonzero when any newly introduced file is
-                missing the ∰ witness.
+        root:     Repository root to scan.
+        strict:   If True, exit nonzero when any newly introduced file is
+                  missing the ∰ witness.
+        git_base: If set, use ``git diff --diff-filter=A <git_base>...HEAD``
+                  to determine which files are "new" instead of relying on
+                  state.json.  Pass the PR base branch (e.g. ``origin/main``)
+                  here on pull_request CI runs so each file is only flagged
+                  once — the first time it is introduced.
 
     Returns:
         0 on success / full compliance, 1 if violations detected (strict mode).
@@ -459,12 +514,24 @@ def scan(root: Path, strict: bool = False) -> int:
     print(f"∰ Prima Witness Scanner — {scan_stamp}")
     print(f"  Root   : {root}")
     print(f"  Strict : {strict}")
+    if git_base:
+        print(f"  Git base: {git_base} (git-diff new-file detection)")
     print()
 
     state = load_state()
     known_files: Dict = state.get("known_files", {})
 
-    compliant, missing, new_compliant, new_missing = _classify_files(root, known_files)
+    git_new_files: Optional[Set[str]] = None
+    if git_base:
+        git_new_files = get_git_new_files(root, git_base)
+        if git_new_files is None:
+            print("  ⚠ git diff failed — falling back to state.json new-file detection")
+        else:
+            print(f"  Git-new files: {len(git_new_files)}")
+
+    compliant, missing, new_compliant, new_missing = _classify_files(
+        root, known_files, git_new_files=git_new_files
+    )
 
     summary: Dict = {
         "total": len(compliant) + len(missing),
@@ -560,6 +627,16 @@ def main() -> None:
         action="store_true",
         help="Print a fresh canonical witness stamp and exit",
     )
+    parser.add_argument(
+        "--git-base",
+        metavar="REF",
+        default=None,
+        help=(
+            "Use git diff against REF (e.g. origin/main) to identify newly added "
+            "files instead of state.json.  Recommended for pull_request CI runs "
+            "so each file is flagged only once — the first time it is introduced."
+        ),
+    )
     args = parser.parse_args()
 
     if args.stamp:
@@ -571,7 +648,7 @@ def main() -> None:
         return
 
     root = args.root.resolve()
-    sys.exit(scan(root, strict=args.strict))
+    sys.exit(scan(root, strict=args.strict, git_base=args.git_base))
 
 
 if __name__ == "__main__":
