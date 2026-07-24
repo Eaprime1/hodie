@@ -53,10 +53,17 @@ jobs:
         #
         # On push events: state.json is committed back by the step below, so
         # files are recorded as known after their first passing scan.
+        #
+        # env: block assigns GitHub context values before the shell runs so
+        # ${{ }} expressions never appear inside the run: script — this is
+        # the correct pattern to avoid expression-injection warnings.
+        env:
+          GH_EVENT_NAME: ${{ github.event_name }}
+          GH_BASE_REF: ${{ github.base_ref }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
+          if [ "$GH_EVENT_NAME" = "pull_request" ]; then
             python scripts/footer_witness.py --root . --strict \
-              --git-base "origin/${{ github.base_ref }}"
+              --git-base "origin/$GH_BASE_REF"
           else
             python scripts/footer_witness.py --root . --strict
           fi
