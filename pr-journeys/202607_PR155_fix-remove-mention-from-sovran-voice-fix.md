@@ -1,7 +1,7 @@
 # PR Journey: #155 — fix: remove @mention from sovran-voice; fix invalid JSON in quepad/state.json
 
 **Repository:** Eaprime1/hodie  
-**prima-clock:** 202607240516  
+**prima-clock:** 202607240609  
 **Branch:** `claude/nifty-franklin-fxwp3r` → `main`  
 **Author:** @Eaprime1  
 **State:** FINALIZED  
@@ -31,20 +31,12 @@ Two files changed:
 | Event | prima-clock | Actor |
 |---|---|---|
 | Opened | 202607240400 | @Eaprime1 |
-| Finalized | 202607240516 | @Eaprime1 |
+| Finalized | 202607240609 | @Eaprime1 |
 
 ## CI Record
 
 | Check | Result |
 |---|---|
-| Codacy Static Code Analysis | ✅ |
-| build (3.11) | ✅ |
-| build (3.10) | ✅ |
-| build (3.12) | ✅ |
-| claude-review | ✅ |
-| build (3.12) | ✅ |
-| build (3.10) | ✅ |
-| build (3.11) | ✅ |
 | GitGuardian Security Checks | ✅ |
 
 ## DeepSource Record
@@ -55,11 +47,11 @@ Two files changed:
 
 | Dimension | Score | Note |
 |---|---|---|
-| Correctness | 5/5 | 9 CI check(s) — all passed |
+| Correctness | 5/5 | 1 CI check(s) — all passed |
 | Consistency | 5/5 | Template complete · ethics 2/2 |
-| Scope | 5/5 | 1 file(s) changed |
-| Verification | 5/5 | 9 check run(s) completed |
-| **Valuation** | **High** | 20/20 |
+| Scope | 4/5 | 8 file(s) changed |
+| Verification | 3/5 | 1 check run(s) completed |
+| **Valuation** | **Medium** | 17/20 |
 
 ## Ethics Check
 
@@ -71,6 +63,6 @@ Two files changed:
 *Not recorded.*
 
 ---
-**prima-clock:** 202607240516  
+**prima-clock:** 202607240609  
 **witnessed:** true  
 *⏱ Hodie — the daily ledger records what arrived · ∰⏱*
