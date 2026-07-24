@@ -1,7 +1,7 @@
 # PR Journey: #155 — fix: remove @mention from sovran-voice; fix invalid JSON in quepad/state.json
 
 **Repository:** Eaprime1/hodie  
-**prima-clock:** 202607240609  
+**prima-clock:** 202607240636  
 **Branch:** `claude/nifty-franklin-fxwp3r` → `main`  
 **Author:** @Eaprime1  
 **State:** FINALIZED  
@@ -31,7 +31,7 @@ Two files changed:
 | Event | prima-clock | Actor |
 |---|---|---|
 | Opened | 202607240400 | @Eaprime1 |
-| Finalized | 202607240609 | @Eaprime1 |
+| Finalized | 202607240636 | @Eaprime1 |
 
 ## CI Record
 
@@ -49,7 +49,7 @@ Two files changed:
 |---|---|---|
 | Correctness | 5/5 | 1 CI check(s) — all passed |
 | Consistency | 5/5 | Template complete · ethics 2/2 |
-| Scope | 4/5 | 8 file(s) changed |
+| Scope | 4/5 | 12 file(s) changed |
 | Verification | 3/5 | 1 check run(s) completed |
 | **Valuation** | **Medium** | 17/20 |
 
@@ -63,7 +63,7 @@ Two files changed:
 *Not recorded.*
 
 ---
-**prima-clock:** 202607240609  
+**prima-clock:** 202607240636  
 **witnessed:** true  
 *⏱ Hodie — the daily ledger records what arrived · ∰⏱*
 
