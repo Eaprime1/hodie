@@ -24,7 +24,6 @@ jobs:
   finalize:
     if: |
       github.event.issue.pull_request != null &&
-      contains(github.event.comment.body, '@claude finalize') &&
       (
         contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) ||
         github.event.comment.user.login == 'github-actions[bot]'
@@ -32,7 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Gate — check trigger phrase
+        id: gate
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          if echo "$COMMENT_BODY" | grep -qF '@claude finalize'; then
+            echo "triggered=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Finalize PR
+        if: steps.gate.outputs.triggered == 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -50,8 +59,26 @@ jobs:
               owner, repo, pull_number: prNum,
             });
 
+            // ── 1a. Skip dependabot PRs — they merge directly ──────────────────
+            if (pr.user.login.startsWith('dependabot') || pr.head.ref.startsWith('dependabot/')) {
+              core.info(`PR #${prNum} is a dependabot PR — finalization ritual does not apply.`);
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: prNum,
+                body: [
+                  `## ⏱ Finalization skipped`,
+                  '',
+                  'Dependabot PRs are merged directly — the finalization ritual does not apply.',
+                  '',
+                  '---',
+                  `*${IDENTITY} · ${SYMBOL}*`,
+                ].join('\n'),
+              });
+              return;
+            }
+
             // ── 2. Template section check ──────────────────────────────────────
             const body = pr.body || '';
+            const hasWitness = body.includes('∰');
 
             const parseSection = (label) => {
               const re = new RegExp(`##\\s+${label}\\s*\\n([\\s\\S]*?)(?=\\n##\\s|$)`);
@@ -77,6 +104,7 @@ jobs:
             if (!intent)      templateGaps.push('**Intent** is empty');
             if (!whatArrived) templateGaps.push('**What Arrived** is empty');
             if (!resonance)   templateGaps.push('**Resonance** is empty');
+            if (!hasWitness)  templateGaps.push('**∰ witness** is absent from the PR body');
 
             // ── 3. Review threads (GraphQL, paginated) ─────────────────────────
             const THREAD_Q = `query($owner:String!,$repo:String!,$pr:Int!,$after:String){
@@ -102,10 +130,9 @@ jobs:
             }
 
             // ── 4. CI check runs on head commit ────────────────────────────────
-            const { data: checksData } = await github.rest.checks.listForRef({
+            const allChecks = (await github.paginate(github.rest.checks.listForRef, {
               owner, repo, ref: pr.head.sha, per_page: 100,
-            });
-            const allChecks = checksData.check_runs.filter(c =>
+            })).filter(c =>
               !c.name.toLowerCase().includes('finalize')
             );
             const failing = allChecks.filter(c =>
@@ -364,4 +391,4 @@ jobs:
               });
             }
 
-# ∰🛠️⏱📋-hodie_finalize_v1
+# ∰🛠️⏱📋🃏-hodie_finalize_v2
