@@ -1,735 +1,735 @@
 {
-  "last_scan": "20260724053823276",
+  "last_scan": "20260724054039519",
   "known_files": {
     ".scripts/sync_hodie.py": {
       "compliant": true,
       "witness": "∰ 20260504003725277",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".sovran/identity.md": {
       "compliant": true,
       "witness": "∰ 20260615083500000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".valox/README.md": {
       "compliant": true,
       "witness": "∰ 20260424120230871",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".valox/pylint_quickwins.todo.md": {
       "compliant": true,
       "witness": "∰ 20260424120230871",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "CHANGELOG.md": {
       "compliant": true,
       "witness": "∰ 20260426024622073",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "HODIE.md": {
       "compliant": true,
       "witness": "∰ 20260430033238482",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "PLEXUS_SYSTEM.md": {
       "compliant": true,
       "witness": "∰ 20251224000000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "SECURITY.md": {
       "compliant": true,
       "witness": "∰ 20260426000000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "_TODAY/inbox/CONVERGENCE_202604260033.md": {
       "compliant": true,
       "witness": "∰ 20260428031846559",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "_TODAY/inbox/SESSION_COMMIT_202604270020.md": {
       "compliant": true,
       "witness": "∰ 20260428031846559",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "_TODAY/inbox/arekhe_wisp_codex_202604261318.md": {
       "compliant": true,
       "witness": "∰ 20260428031846559",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/cli/main.py": {
       "compliant": true,
       "witness": "∰ 20260427120000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "docs/FOOTER_WITNESS.md": {
       "compliant": true,
       "witness": "∰ 20260424000000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/MISSION_SEED_PROCEDURE.md": {
       "compliant": true,
       "witness": "∰ 20260719000000002",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/seeds/SEED_cleanup-prs-with-issues.md": {
       "compliant": true,
       "witness": "∰ 20260719000000003",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/seeds/SEED_wisp-codex.md": {
       "compliant": true,
       "witness": "∰ 20260719000000004",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "scripts/footer_witness.py": {
       "compliant": true,
       "witness": "∰ 20260424000000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/test_footer_witness.py": {
       "compliant": true,
       "witness": "∰ 20260424000000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/CLOUD_MOUNTING_GUIDE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/POWERSHELL_GUIDE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/QUICK_REFERENCE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/RCLONE_QUICK_CONFIG.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/SETUP_INDEX.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/Setting up a home server network across devices - Claude.txt": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/WINDOWS_SETUP_GUIDE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".claude/skills/hodie/SKILL.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".gemini/GEMINI.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".gemini/styleguide.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".journey/BRANCHES_WITH_WORK.md": {
       "compliant": true,
       "witness": "∰ 20260720051500001",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".journey/BRANCH_FINALIZATION_20260720.md": {
       "compliant": true,
       "witness": "∰ 20260720051500000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".locations/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".reminders/DONATION_LINK.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".scripts/FILE_SERVER_GUIDE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".scripts/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".scripts/hodie_log.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".scripts/hodie_zero_point.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     ".streams/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "BRANCH_STRATEGY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "CLAUDE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "CRAWLER_DEVELOPMENT_SESSION_20260104.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "CRAWLER_PIXEL8_ADAPTATION_PLAN.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "INVENTORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "LAPTOP_SETUP.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "MULTI_CLOUD_SETUP.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "NAVIGO.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "PRIME_2026_DEVELOPMENT_PLAN.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "QUICK_START.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "_TODAY/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/__init__.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/cli/__init__.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/cli/batch_processor.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/cli/crawl_consolidated.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/cli/test_crawler.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/config.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/core/__init__.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/core/content_types.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/core/local_processor.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/core/stream_utils.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/processors/__init__.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/processors/conversation_parser.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/processors/entity_queue_processor.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/processors/one_hertz.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "crawler_pixel8/processors/pattern_extractor.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/BRANCH_STRATEGY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/GEMINI_BRIEF.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/NAVIGO.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/PLEXUS_SYSTEM.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/PRIME_2026_DEVELOPMENT_PLAN.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/CHARACTER_CREATION_TEMPLATE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/CHARACTER_DEVELOPMENT_UPDATE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/EMOTIONAL_UNDERTONE_GUIDE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/ENTITY_DEVELOPMENT_STATUS.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/ENTITY_DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/GUARDIAN_REVIEW_AUTOMATION.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/GUARDIAN_TRINITY_INFO.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/PERSPECTIVE_GUARDIANS_CONCEPT.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/PERSPECTIVE_GUARDIANS_QUICK_REF.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/PIXEL_SUBSTRATE_COORDINATION.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/QUANTUM_ENTITY_ORIGIN_STORIES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/RUBRIC_SYSTEM.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/SESSION_20251227_CHARACTER_EMERGENCE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/STRATEGIC_ENDURANCE_PATTERN.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/abacusian/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/abacusian/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/domain_consciousness/CORE_PHILOSOPHY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/domain_consciousness/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/jake/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/microversa/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/microversa/DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/microversa/ORIGIN_STORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/nano_concepts/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/nano_concepts/RESEARCH.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/one_hertz_collective/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/one_hertz_collective/RESEARCH.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/perdura/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/perdura/DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/perdura/ORIGIN_STORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/pixel_entity/PIXEL_ENTITY_FRAMEWORK.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/resilia/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/resilia/DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/resilia/ORIGIN_STORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/seventh_pinnacle/The_Seventh_Pinnacle_Complete_Framework_20251123 (1).md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/seventh_pinnacle/The_Seventh_Pinnacle_Complete_Framework_20251123.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/substrate_entity/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/substrate_entity/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/substrate_entity/SUBSTRATE_ENTITY_FRAMEWORK.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/tardigradia/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/tardigradia/DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/tardigradia/ORIGIN_STORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/unexusi/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/unexusi/UNEXUSI_STATE_ANALYSIS.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/vitara/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/vitara/DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/vitara/ORIGIN_STORY.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/wiki_entity/API_PROOF_OF_CONCEPT.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/wiki_entity/CHARACTER.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/wiki_entity/DIALOGUE_EXAMPLES.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "quanta/wiki_entity/WIKIPEDIA_STRUCTURE_RESEARCH.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/CUSTODY_OPERATIONS_REPORT.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/ENTITY_STATUS.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/GRAVITY_CONSORTIUM_README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/GRAVITY_CORE_MISSION.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/GRAVITY_CORE_README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/GRAVITY_REPO_ARCHITECTURE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/PRIME_COLLAPSE_DESIGN.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/READY_TO_COLLAPSE.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/REDUNDANCY_RANGER_DESIGN.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/REDUNDANCY_REPORT.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/SESSION_COMPLETE_20251220.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/prime_collapse.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/prime_search.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/redundancy_entity_analyzer.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "redundancy_entity/redundancy_ranger_custody.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/__init__.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/conftest.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/test_content_types.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/test_conversation_parser.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/test_pattern_extractor.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "tests/test_processor_chain.py": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "mission/TRIADIC_ENTANGLEMENT_CUSTOS_HODIE_RADIX.md": {
       "compliant": true,
       "witness": "∰ 20260720100000000",
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "pr-journeys/README.md": {
       "compliant": false,
       "witness": null,
-      "last_seen": "20260724053823276"
+      "last_seen": "20260724054039519"
     },
     "pr-journeys/202607_PR155_fix-remove-mention-from-sovran-voice-fix.md": {
-      "compliant": false,
-      "witness": null,
-      "last_seen": "20260724053823276"
+      "compliant": true,
+      "witness": "∰ 20260724054016000",
+      "last_seen": "20260724054039519"
     }
   }
 }
