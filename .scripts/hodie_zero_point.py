@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-hodie_zero_point.py — Find the zero-point lexeme of a document and search Perplexity.
+"""hodie_zero_point.py — Find the zero-point lexeme of a document and search Perplexity.
 
 The zero-point lexeme is the single term that anchors a document's meaning —
 remove it and the document loses coherence. This script:
@@ -18,7 +17,6 @@ Usage:
 
 import argparse
 import json
-import logging
 import math
 import os
 import re
@@ -26,6 +24,11 @@ import sys
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
+
+try:
+    import requests
+except ImportError:
+    requests = None  # type: ignore[assignment]
 
 # ---------------------------------------------------------------------------
 # Config
@@ -56,9 +59,19 @@ def extract_terms(text: str) -> list[str]:
     return [t for t in tokens if t not in STOPWORDS and not t.isdigit()]
 
 
+def _score_term(term: str, tf: float, total: int, count: int,
+                header_terms: set, early_terms: set) -> float:
+    """Compute weighted TF-IDF score for a single term."""
+    score = tf * math.log(total / count + 1)
+    if term in header_terms:
+        score *= 3.0
+    if term in early_terms:
+        score *= 1.5
+    return score
+
+
 def score_terms(text: str, top_n: int = 5) -> list[tuple[str, float]]:
-    """
-    Score terms by: frequency × title_boost × early_position_weight
+    """Score terms by frequency × title_boost × early_position_weight.
 
     Title/header terms score 3x — they're declared anchors.
     Terms in first 20% of document score 1.5x — authors front-load key concepts.
@@ -67,36 +80,22 @@ def score_terms(text: str, top_n: int = 5) -> list[tuple[str, float]]:
     lines = text.split('\n')
     total_chars = len(text)
 
-    # Collect header terms (markdown h1-h3)
     header_terms: set[str] = set()
     for line in lines:
         if re.match(r'^#{1,3}\s+', line):
             header_terms.update(extract_terms(line))
 
-    # Split into early (first 20%) and rest
     split_point = max(1, total_chars // 5)
-    early_text = text[:split_point]
-    early_terms = set(extract_terms(early_text))
+    early_terms = set(extract_terms(text[:split_point]))
 
-    # All terms
-    all_terms = extract_terms(text)
-    freq = Counter(all_terms)
+    freq = Counter(extract_terms(text))
     total = sum(freq.values()) or 1
 
-    scores: dict[str, float] = {}
-    for term, count in freq.items():
-        tf = count / total
-        # IDF-style: penalize very common terms, boost rarer ones
-        idf = math.log(total / count + 1)
-        score = tf * idf
-        if term in header_terms:
-            score *= 3.0
-        if term in early_terms:
-            score *= 1.5
-        scores[term] = score
-
-    ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-    return ranked[:top_n]
+    scores = {
+        term: _score_term(term, count / total, total, count, header_terms, early_terms)
+        for term, count in freq.items()
+    }
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
 
 
 def find_zero_point(file_path: Path, top_n: int = 1) -> list[tuple[str, float]]:
@@ -111,23 +110,22 @@ def find_zero_point(file_path: Path, top_n: int = 1) -> list[tuple[str, float]]:
 
 def query_perplexity(lexeme: str, context: str = "") -> dict:
     """Query Perplexity API for the zero-point lexeme."""
-    try:
-        import requests
-    except ImportError:
+    if requests is None:
         return {"error": "requests not installed — run: pip install requests"}
 
     api_key = os.environ.get("PERPLEXITY_API_KEY")
     if not api_key:
         return {"error": "PERPLEXITY_API_KEY not set in environment"}
 
-    prompt = f"Explain the concept '{lexeme}' in the context of: {context}" if context else \
-             f"Explain '{lexeme}': its origin, applications, and conceptual significance."
-
+    prompt = (
+        f"Explain the concept '{lexeme}' in the context of: {context}" if context
+        else f"Explain '{lexeme}': its origin, applications, and conceptual significance."
+    )
     payload = {
         "model": "sonar",
         "messages": [
             {"role": "system", "content": "Be concise. Focus on conceptual significance and connections."},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": prompt},
         ],
         "max_tokens": 400,
     }
@@ -146,7 +144,7 @@ def query_perplexity(lexeme: str, context: str = "") -> dict:
             "response": data["choices"][0]["message"]["content"],
             "citations": data.get("citations", []),
         }
-    except Exception as e:
+    except (requests.RequestException, KeyError, ValueError) as e:
         return {"error": str(e)}
 
 
@@ -165,6 +163,20 @@ def log_to_session(entry: dict) -> None:
 # CLI
 # ---------------------------------------------------------------------------
 
+def _print_perplexity_result(zero_lexeme: str, context: str) -> dict:
+    """Query Perplexity and print the result; return the perplexity payload."""
+    print(f"\n▶ Querying Perplexity for: '{zero_lexeme}'")
+    print("─" * 50)
+    perp = query_perplexity(zero_lexeme, context=context)
+    if "error" in perp:
+        print(f"  Perplexity error: {perp['error']}")
+    else:
+        print(f"\n{perp['response']}\n")
+        for c in perp.get("citations", []):
+            print(f"  - {c}")
+    return perp
+
+
 def main():
     parser = argparse.ArgumentParser(description="Find zero-point lexeme and search Perplexity")
     parser.add_argument("document", help="Path to document file")
@@ -182,12 +194,11 @@ def main():
     print("─" * 50)
 
     ranked = find_zero_point(doc_path, top_n=args.top)
-
     for rank, (lexeme, score) in enumerate(ranked, 1):
         print(f"  #{rank}: '{lexeme}'  (score: {score:.4f})")
 
     zero_lexeme = ranked[0][0] if ranked else None
-    result = {
+    result: dict = {
         "timestamp": datetime.now().isoformat(),
         "operation": "zero_point",
         "document": str(doc_path),
@@ -196,18 +207,7 @@ def main():
     }
 
     if zero_lexeme and not args.no_perplexity:
-        print(f"\n▶ Querying Perplexity for: '{zero_lexeme}'")
-        print("─" * 50)
-        perp = query_perplexity(zero_lexeme, context=args.context)
-        if "error" in perp:
-            print(f"  Perplexity error: {perp['error']}")
-        else:
-            print(f"\n{perp['response']}\n")
-            if perp.get("citations"):
-                print("Citations:")
-                for c in perp["citations"]:
-                    print(f"  - {c}")
-        result["perplexity"] = perp
+        result["perplexity"] = _print_perplexity_result(zero_lexeme, args.context)
 
     log_to_session(result)
     print(f"\n✓ Logged to {LOG_FILE}")
