@@ -40,22 +40,9 @@ jobs:
       - name: 'Checkout Code'
         uses: 'actions/checkout@v4' # ratchet:exclude
 
-      - name: 'Check Gemini credentials'
-        id: 'check_creds'
-        run: |-
-          if [[ -n "${GEMINI_API_KEY}" || -n "${GCP_WIF_PROVIDER}" ]]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Gemini credentials not configured (set GEMINI_API_KEY or GCP_WIF_PROVIDER); skipping invocation."
-          fi
-        env:
-          GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}'
-          GCP_WIF_PROVIDER: '${{ vars.GCP_WIF_PROVIDER }}'
-
       - name: 'Run Gemini CLI'
-        if: steps.check_creds.outputs.available == 'true'
         id: 'run_gemini'
+        if: ${{ secrets.GEMINI_API_KEY != '' || vars.GCP_WIF_PROVIDER != '' }}
         uses: 'google-github-actions/run-gemini-cli@v0' # ratchet:exclude
         env:
           TITLE: '${{ github.event.pull_request.title || github.event.issue.title }}'
@@ -131,4 +118,4 @@ jobs:
             }
           prompt: '/gemini-invoke'
 
-# ∰🛠️♓-salmon_canon
+# ∰🛠️♓🤝-salmon_canon

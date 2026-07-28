@@ -6,11 +6,7 @@ on:
 
 jobs:
   claude-review:
-    if: >
-      github.actor != 'copilot[bot]' &&
-      github.actor != 'github-actions[bot]' &&
-      github.actor != 'dependabot[bot]' &&
-      github.actor != 'Copilot'
+    if: ${{ !contains(fromJSON('["Copilot","copilot[bot]","github-actions[bot]","dependabot[bot]"]'), github.actor) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -33,4 +29,4 @@ jobs:
             actions: read
           allowed_bots: '*'
 
-# ∰🛠️♓-salmon_canon
+# ∰🛠️♓🤝-salmon_canon

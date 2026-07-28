@@ -220,7 +220,7 @@ def save_state(state: Dict) -> None:
     """Persist state to quepad/state.json."""
     QUEPAD_DIR.mkdir(exist_ok=True)
     STATE_FILE.write_text(
-        json.dumps(state, indent=2, ensure_ascii=False),
+        json.dumps(state, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
 
