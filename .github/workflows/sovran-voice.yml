@@ -1,0 +1,90 @@
+name: Hodie — Sovran Voice
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  post-hodie-comment:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Check if PR is from fork
+        id: check_fork
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          if [ "$HEAD_REPO" = "$BASE_REPO" ]; then
+            echo "is_fork=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_fork=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Hodie marks the day
+        if: steps.check_fork.outputs.is_fork == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const today = new Date().toISOString().split('T')[0];
+
+            // Real per-PR facts, not a template — pull structured data straight
+            // from the PR/file-list APIs rather than piping PR title/body text
+            // into anything that generates prose (avoids prompt-injection risk
+            // from untrusted PR content, and gemini-review.yml already posts a
+            // full AI review on the same event — this stays a quick, factual
+            // daily-ledger entry rather than duplicating that).
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+            const areas = [...new Set(files.map(f => f.filename.split('/')[0]))];
+            const areasLine = areas.length
+              ? areas.slice(0, 6).join(', ') + (areas.length > 6 ? `, +${areas.length - 6} more` : '')
+              : '(no files changed)';
+
+            const body = [
+              '## ⏱ Hodie — The Daily Ledger',
+              '',
+              `*${today} · entering the chronicle*`,
+              '',
+              '> *Hodie* records what arrives today.',
+              '> This work enters the daily flow. What it carries shapes the next cycle.',
+              '',
+              `**"${pr.title}"** enters the present moment —`,
+              `${pr.changed_files} file${pr.changed_files === 1 ? '' : 's'} touched (+${pr.additions}/−${pr.deletions}) across ${pr.commits} commit${pr.commits === 1 ? '' : 's'}.`,
+              `Areas: ${areasLine}`,
+              '',
+              '**From the daily watch:**',
+              '- Does this serve the current operational cycle?',
+              '- What shifts in the daily rhythm when this lands?',
+              '- Is there anything here Navigo should orient toward?',
+              '- Does this honor the One Hertz principle — one clear thing per cycle?',
+              '',
+              '---',
+              '*Hodie · sovran of the daily ledger · eaprime1 · ∰*'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body
+            });
+
+  notify-on-failure:
+    needs: post-hodie-comment
+    if: always() && needs.post-hodie-comment.result == 'failure'
+    uses: ./.github/workflows/notify-repeated-failure.yml
+    with:
+      workflow_file: sovran-voice.yml
+      threshold: 3
+    permissions:
+      issues: write
+      actions: read
+
+# ∰🛠️⏱📋-hodie_sovran

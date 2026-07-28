@@ -154,43 +154,64 @@ class TestCheckFileWitness:
     def test_compliant_markdown(self, tmp_path):
         f = tmp_path / "doc.md"
         f.write_text("# Hello\n\nContent here.\n\n∰ 20260424024720123\n", encoding="utf-8")
-        ok, witness = check_file_witness(f)
+        ok, witness, provenance = check_file_witness(f)
         assert ok is True
         assert witness == "∰ 20260424024720123"
+        assert provenance == []
 
     def test_missing_witness(self, tmp_path):
         f = tmp_path / "doc.md"
         f.write_text("# Hello\n\nContent here.\n", encoding="utf-8")
-        ok, witness = check_file_witness(f)
+        ok, witness, provenance = check_file_witness(f)
         assert ok is False
         assert witness is None
+        assert provenance == []
 
     def test_witness_in_python_comment(self, tmp_path):
         f = tmp_path / "module.py"
         f.write_text("def foo():\n    pass\n\n# ∰ 20260424024720123\n", encoding="utf-8")
-        ok, witness = check_file_witness(f)
+        ok, witness, _ = check_file_witness(f)
         assert ok is True
 
-    def test_witness_outside_footer_not_detected(self, tmp_path):
-        # Witness is at line 0; with 21 total lines and FOOTER_LINES=15,
-        # the witness falls before the footer window → not detected.
+    def test_witness_anywhere_in_document_detected(self, tmp_path):
+        # Accumulation semantics: the scanner searches the entire document,
+        # so a witness at line 0 of a 21-line file IS detected.
         lines = ["line " + str(i) for i in range(20)]
         lines.insert(0, "∰ 20260424024720123")  # 21 total lines; witness at index 0
         f = tmp_path / "doc.txt"
         f.write_text("\n".join(lines), encoding="utf-8")
-        ok, witness = check_file_witness(f)
-        assert ok is False
+        ok, witness, provenance = check_file_witness(f)
+        assert ok is True
+        assert provenance == []  # only one witness — no provenance
+
+    def test_accumulation_semantics_validates_last_witness(self, tmp_path):
+        # Multiple witness lines: scanner validates the last (most recent) one;
+        # earlier ones are returned as provenance and must never be removed.
+        content = (
+            "# Document\n\n"
+            "∰ 20260101000000000\n\n"
+            "More content...\n\n"
+            "∰⏱🃏 20260724120000000\n"
+        )
+        f = tmp_path / "doc.md"
+        f.write_text(content, encoding="utf-8")
+        ok, witness, provenance = check_file_witness(f)
+        assert ok is True
+        assert "20260724120000000" in (witness or "")
+        assert len(provenance) == 1
+        assert "20260101000000000" in provenance[0]
 
     def test_invalid_timestamp_not_accepted(self, tmp_path):
         f = tmp_path / "doc.md"
         f.write_text("# Doc\n\n∰ 20261304999999999\n", encoding="utf-8")  # month 13
-        ok, witness = check_file_witness(f)
+        ok, witness, _ = check_file_witness(f)
         assert ok is False
 
     def test_nonexistent_file_returns_false(self, tmp_path):
-        ok, witness = check_file_witness(tmp_path / "ghost.md")
+        ok, witness, provenance = check_file_witness(tmp_path / "ghost.md")
         assert ok is False
         assert witness is None
+        assert provenance == []
 
 
 # ---------------------------------------------------------------------------

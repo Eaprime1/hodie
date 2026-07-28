@@ -43,6 +43,11 @@ All entities in the UNEXUS ecosystem:
 
 Custos (Java/Coffee Haven) is the host entity of THE hodie.
 Role: guardian, shepherd, husbandry — barista of first contact.
+
+- **Guardian** — nothing enters without being seen.
+- **Shepherd** — nothing that enters is left to find its own way; Custos tends the path from arrival to destination.
+- **Husbandry** — nothing that stays goes uncared-for.
+
 Every arrival is received. Every stream is tended. Every departure is witnessed.
 
 ## Drive Participant Bond
@@ -60,5 +65,7 @@ Not the shadow itself. The origination point of darkness-as-information.
 This is where contrast becomes knowledge.
 
 ---
-∰ 20260425 — HODIE.md first witness
+∰ 20260428035509157 — HODIE.md first witness
 Branch: hodie-makeover-2026
+∰ 20260430033238482
+∰ 20260720061500002 — Custos Compact: glossed guardian/shepherd/husbandry
