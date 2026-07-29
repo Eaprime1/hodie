@@ -1,0 +1,79 @@
+# Mission-oriented pull request labeling for Hodie
+# Focus: staged pipeline architecture, portability, quality, and docs alignment
+
+"stage:pipeline":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "crawler_pixel8/core/**"
+          - "crawler_pixel8/processors/**"
+          - "crawler_pixel8/cli/**"
+
+"area:config":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "crawler_pixel8/config.py"
+          - ".locations/**"
+          - "**/config.sh"
+
+"area:tests":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "tests/**"
+          - "**/*test*.py"
+          - "**/*_test.py"
+
+"area:docs":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "README.md"
+          - "docs/**"
+          - "**/*.md"
+
+"ci:actions":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/actions/**"
+
+"platform:pixel8a":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".locations/pixel8a/**"
+          - "**/*pixel8*"
+
+"platform:codespaces":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".devcontainer/**"
+          - ".locations/codespaces/**"
+
+"platform:mulberry":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".locations/mulberry/**"
+
+"domain:quanta":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "quanta/**"
+
+"domain:redundancy-entity":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "redundancy_entity/**"
+
+"automation:scripts":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".scripts/**"
+          - "scripts/**"
+
+"output:crawler":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "crawler_output/**"
+
+"break:api":
+  - head-branch:
+      - "^breaking(/|-).*"
+      - "^.*-breaking$"

@@ -36,7 +36,7 @@ class ConversationParser(LocalProcessor):
 
         Detects format from file extension and content
         """
-        self.logger.info(f"Parsing conversation file: {file_path}")
+        self.logger.info("Parsing conversation file: %s", file_path)
 
         suffix = file_path.suffix.lower()
 
