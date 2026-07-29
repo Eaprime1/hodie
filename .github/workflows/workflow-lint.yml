@@ -1,0 +1,32 @@
+name: Workflow Expression Injection Check
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/check_workflow_injection.py'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'scripts/check_workflow_injection.py'
+  workflow_dispatch:
+
+jobs:
+  injection-check:
+    name: ∰ Expression Injection Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check for expression injection in workflows
+        run: |
+          python scripts/check_workflow_injection.py --check .github/workflows/
+
+# ∰⏱🃏 20260724120000000

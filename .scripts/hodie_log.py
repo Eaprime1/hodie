@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-hodie_log.py — HODIE session log reader, reporter, and checklist builder.
+"""hodie_log.py — HODIE session log reader, reporter, and checklist builder.
 
 Every operation that touches HODIE can log a structured JSON entry to
 _TODAY/daily/session.log. This script reads that log and produces:
@@ -18,7 +17,6 @@ Usage:
 
 import argparse
 import json
-import sys
 import time
 from collections import defaultdict
 from datetime import date, datetime
@@ -75,102 +73,116 @@ def append_log(log_path: Path, entry: dict) -> None:
 # Report
 # ---------------------------------------------------------------------------
 
+_SUMMARIES = {
+    "zero_point": lambda e: f"Zero-point '{e.get('zero_point', '?')}' from {Path(e.get('document', '')).name}",
+    "migration": lambda e: f"Migrated: {e.get('source', '?')} → {e.get('destination', '?')}",
+    "intake": lambda e: f"Intake: {e.get('file', '?')} → {e.get('plexus_stage', '?')}",
+    "note": lambda e: e.get("text", "")[:80],
+}
+
+
+def _summarize_entry(entry: dict) -> str:
+    op = entry.get("operation", "note")
+    handler = _SUMMARIES.get(op)
+    if handler:
+        return handler(entry)
+    return json.dumps({k: v for k, v in entry.items() if k not in ("timestamp", "operation")})[:80]
+
+
+def _format_op_section(op: str, items: list[dict]) -> list[str]:
+    plexus = PLEXUS_HINTS.get(op, "simplex")
+    lines = [
+        f"## {op.replace('_', ' ').title()} ({len(items)})",
+        f"*Suggested plexus stage: {plexus}*",
+    ]
+    for item in items[-5:]:
+        ts = item.get("timestamp", "")[:19].replace("T", " ")
+        lines.append(f"- `{ts}` {_summarize_entry(item)}")
+    lines.append("")
+    return lines
+
+
 def render_report(entries: list[dict], target_date: str) -> str:
     if not entries:
         return f"No log entries for {target_date}.\n"
-
-    by_op = defaultdict(list)
+    by_op: defaultdict[str, list] = defaultdict(list)
     for e in entries:
         by_op[e.get("operation", "unknown")].append(e)
-
     lines = [
         f"# HODIE Session Report — {target_date}",
         f"**Entries**: {len(entries)}  |  **Operations**: {len(by_op)}",
         "",
     ]
-
     for op, items in sorted(by_op.items()):
-        lines.append(f"## {op.replace('_', ' ').title()} ({len(items)})")
-        plexus = PLEXUS_HINTS.get(op, "simplex")
-        lines.append(f"*Suggested plexus stage: {plexus}*")
-        for item in items[-5:]:  # last 5 per operation type
-            ts = item.get("timestamp", "")[:19].replace("T", " ")
-            summary = _summarize_entry(item)
-            lines.append(f"- `{ts}` {summary}")
-        lines.append("")
-
+        lines.extend(_format_op_section(op, items))
     return "\n".join(lines)
-
-
-def _summarize_entry(entry: dict) -> str:
-    op = entry.get("operation", "note")
-    if op == "zero_point":
-        zp = entry.get("zero_point", "?")
-        doc = Path(entry.get("document", "")).name
-        return f"Zero-point '{zp}' from {doc}"
-    if op == "migration":
-        return f"Migrated: {entry.get('source', '?')} → {entry.get('destination', '?')}"
-    if op == "intake":
-        return f"Intake: {entry.get('file', '?')} → {entry.get('plexus_stage', '?')}"
-    if op == "note":
-        return entry.get("text", "")[:80]
-    return json.dumps({k: v for k, v in entry.items() if k not in ("timestamp", "operation")})[:80]
 
 # ---------------------------------------------------------------------------
 # Checklist builder
 # ---------------------------------------------------------------------------
 
-def build_checklist(entries: list[dict]) -> str:
-    """
-    Build a TODO checklist from log entries.
-    Anything with status='open', 'pending', or no status gets a checkbox.
-    Completed items get a checked box.
-    """
-    lines = ["# HODIE Checklist — Auto-generated", ""]
+_STANDARD_CHECKLIST = [
+    "- [ ] [simplex] Check _TODAY/inbox/ for new arrivals",
+    "- [ ] [duplex] Run redundancy scan on new content",
+    "- [ ] [triplex] Route processed content to plexus stages",
+    "- [ ] [quadroplex] Review open PRs and AI review comments",
+    "- [ ] [simplex] Write session note to _TODAY/daily/",
+]
 
-    open_items = []
-    done_items = []
 
+def _classify_entries(entries: list[dict]) -> tuple[list[str], list[str]]:
+    """Separate log entries into open and done checklist items."""
+    open_items: list[str] = []
+    done_items: list[str] = []
     for entry in entries:
         status = entry.get("status", "")
         op = entry.get("operation", "")
         summary = _summarize_entry(entry)
-
-        if status == "complete" or status == "done":
+        if status in ("complete", "done"):
             done_items.append(f"- [x] {summary}")
         elif op in ("zero_point", "migration", "intake", "pr_review"):
-            # These are completable actions
             plexus = PLEXUS_HINTS.get(op, "simplex")
             open_items.append(f"- [ ] [{plexus}] {summary}")
+    return open_items, done_items
 
-    # Add standard recurring HODIE checklist items
-    standard = [
-        "- [ ] [simplex] Check _TODAY/inbox/ for new arrivals",
-        "- [ ] [duplex] Run redundancy scan on new content",
-        "- [ ] [triplex] Route processed content to plexus stages",
-        "- [ ] [quadroplex] Review open PRs and AI review comments",
-        "- [ ] [simplex] Write session note to _TODAY/daily/",
-    ]
 
+def build_checklist(entries: list[dict]) -> str:
+    """Build a TODO checklist from log entries.
+
+    Anything with status='open', 'pending', or no status gets a checkbox.
+    Completed items get a checked box.
+    """
+    open_items, done_items = _classify_entries(entries)
+    lines = ["# HODIE Checklist — Auto-generated", ""]
     if open_items:
-        lines.append("## Open")
-        lines.extend(open_items)
-        lines.append("")
-
-    lines.append("## Standard (One Hertz)")
-    lines.extend(standard)
-    lines.append("")
-
+        lines += ["## Open", *open_items, ""]
+    lines += ["## Standard (One Hertz)", *_STANDARD_CHECKLIST, ""]
     if done_items:
-        lines.append("## Done")
-        lines.extend(done_items)
-        lines.append("")
-
+        lines += ["## Done", *done_items, ""]
     return "\n".join(lines)
 
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
+def _watch_log(log_path: Path) -> None:
+    """Tail the log file, printing new entries as they arrive."""
+    print(f"Watching {log_path} (Ctrl+C to stop)...")
+    last_size = 0
+    while True:
+        try:
+            if log_path.exists():
+                current_size = log_path.stat().st_size
+                if current_size > last_size:
+                    entries = read_log(log_path)
+                    if entries:
+                        ts = entries[-1].get("timestamp", "")[:19]
+                        print(f"[{ts}] {_summarize_entry(entries[-1])}")
+                    last_size = current_size
+            time.sleep(2)
+        except KeyboardInterrupt:
+            break
+
 
 def main():
     parser = argparse.ArgumentParser(description="HODIE session log reader and checklist builder")
@@ -183,41 +195,21 @@ def main():
     log_path = log_file_for(args.date)
 
     if args.append:
-        entry = {
+        append_log(log_path, {
             "timestamp": datetime.now().isoformat(),
             "operation": "note",
             "text": args.append,
             "status": "open",
-        }
-        append_log(log_path, entry)
+        })
         print(f"✓ Note logged: {args.append}")
         return
 
     if args.watch:
-        print(f"Watching {log_path} (Ctrl+C to stop)...")
-        last_size = 0
-        while True:
-            try:
-                if log_path.exists():
-                    current_size = log_path.stat().st_size
-                    if current_size > last_size:
-                        entries = read_log(log_path)
-                        if entries:
-                            newest = entries[-1]
-                            ts = newest.get("timestamp", "")[:19]
-                            print(f"[{ts}] {_summarize_entry(newest)}")
-                        last_size = current_size
-                time.sleep(2)
-            except KeyboardInterrupt:
-                break
+        _watch_log(log_path)
         return
 
     entries = read_log(log_path)
-
-    if args.checklist:
-        print(build_checklist(entries))
-    else:
-        print(render_report(entries, args.date))
+    print(build_checklist(entries) if args.checklist else render_report(entries, args.date))
 
 
 if __name__ == "__main__":
