@@ -3,6 +3,47 @@
 
 ---
 
+## Google Drive Sync
+
+### `sync_hodie_to_drive.sh`
+**Purpose**: Sync hodie to/from Google Drive via rclone (bash — Linux, WSL, Termux)
+**Usage**:
+```bash
+bash .scripts/sync_hodie_to_drive.sh push    # Local → Drive
+bash .scripts/sync_hodie_to_drive.sh pull    # Drive → Local
+bash .scripts/sync_hodie_to_drive.sh status  # Dry-run: see what would change
+```
+**Environment overrides**:
+```bash
+GDRIVE_REMOTE=gdrive_terminal bash .scripts/sync_hodie_to_drive.sh push
+GDRIVE_FOLDER=Q/hodie bash .scripts/sync_hodie_to_drive.sh push
+```
+**Prerequisites**: rclone installed + configured (`rclone config`, remote name: `gdrive`)
+**See**: `.eric/setup_hodie_sync.md`, `.claude/RCLONE_QUICK_CONFIG.md`
+
+### `Sync-HodieToCloud.ps1`
+**Purpose**: Sync hodie to/from Google Drive via rclone (PowerShell — Windows / Git for Windows)
+**Usage**:
+```powershell
+pwsh .scripts/Sync-HodieToCloud.ps1 -Push    # Local → Drive
+pwsh .scripts/Sync-HodieToCloud.ps1 -Pull    # Drive → Local
+pwsh .scripts/Sync-HodieToCloud.ps1 -Status  # Dry-run
+pwsh .scripts/Sync-HodieToCloud.ps1 -Push -Remote gdrive_windows
+```
+**Prerequisites**: rclone for Windows (`winget install rclone.rclone`) + configured
+
+#### Sync Script Changelog
+
+| Date | Change |
+|------|--------|
+| 2026-04-13 | Default mode changed `push` → `status` (dry-run) in both scripts — no-arg invocation is now safe |
+| 2026-04-13 | Bash remote check uses `grep -Fxq` (fixed-string) to handle metacharacters in remote names |
+| 2026-04-13 | PS1 script validates `$HodiePath` exists (`Test-Path`) before invoking rclone |
+| 2026-04-13 | `sync_hodie.py --credentials` help text clarified (file path vs env-var JSON string) |
+| 2026-04-13 | `sync_hodie.py` streams downloads to a temp file (atomic rename) instead of in-memory buffer |
+
+---
+
 ## Session Management
 
 ### `session_notes_append.sh`
@@ -76,6 +117,86 @@ folder_name/
 ├── README.md
 └── .gitignore
 ```
+
+---
+
+## Developer Auth & CLI Setup (NEW!)
+
+### `dev_auth_setup.sh`
+**Purpose**: Universal developer authentication and CLI tool setup
+**Usage**:
+```bash
+# Interactive menu
+./dev_auth_setup.sh
+
+# Check what's installed/configured
+./dev_auth_setup.sh --check
+
+# Setup GitHub CLI authentication
+./dev_auth_setup.sh --github
+
+# Install all AI CLI tools (Claude, OpenAI, Gemini)
+./dev_auth_setup.sh --ai
+
+# Install specific AI CLI
+./dev_auth_setup.sh --claude
+./dev_auth_setup.sh --openai
+./dev_auth_setup.sh --gemini
+
+# Setup environment file
+./dev_auth_setup.sh --env
+
+# Full setup (everything)
+./dev_auth_setup.sh --all
+```
+
+**Features**:
+- Cross-platform: Linux, macOS, WSL, Termux
+- GitHub CLI auth with recommended scopes
+- AI CLI installation (Claude Code, OpenAI, Google Cloud)
+- Environment variable setup with templates
+- Status checking and verification
+
+### `setup_new_project.sh`
+**Purpose**: Bootstrap any project with standard dev configuration
+**Usage**:
+```bash
+# From hodie, setup another repo
+./setup_new_project.sh /path/to/other/repo
+
+# From anywhere (fetches from GitHub)
+curl -fsSL https://raw.githubusercontent.com/Eaprime1/hodie/main/.scripts/setup_new_project.sh | bash -s -- .
+```
+
+**What it creates**:
+- `.scripts/dev_auth_setup.sh` - Auth/CLI setup script
+- `.env.template` - API keys template
+- `.gitignore` updates (adds .env)
+- `pyproject.toml` (if none exists)
+
+---
+
+## Environment Configuration
+
+### `.env.template` (in project root)
+**Purpose**: Template for API keys and environment variables
+**Usage**:
+```bash
+# Create your .env from template
+cp .env.template .env
+
+# Edit with your API keys
+nano .env  # or your preferred editor
+```
+
+**Contains templates for**:
+- `GITHUB_TOKEN` - GitHub Personal Access Token
+- `ANTHROPIC_API_KEY` - Claude/Anthropic API
+- `OPENAI_API_KEY` - OpenAI/ChatGPT API
+- `GEMINI_API_KEY` - Google Gemini API
+- Plus: Cohere, Mistral, Replicate, HuggingFace, Groq, Together
+
+**Important**: `.env` is in `.gitignore` - never commit API keys!
 
 ---
 

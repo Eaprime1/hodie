@@ -4,11 +4,12 @@ Simplified processor pattern without cloud dependencies
 Adapted from genai-processors Processor concept
 """
 
+import asyncio
+import logging
+import time
 from abc import ABC, abstractmethod
 from typing import AsyncIterable, Optional
 from pathlib import Path
-import logging
-import time
 
 from .content_types import ConversationPart, ProcessingResult
 from .stream_utils import stream_content
@@ -28,7 +29,8 @@ class LocalProcessor(ABC):
         Args:
             config: Crawler configuration (uses default if not provided)
         """
-        from ..config import default_config
+        from ..config import default_config  # pylint: disable=import-outside-toplevel
+        # Lazy import avoids circular dependency at module load time
         self.config = config or default_config
         self.logger = self._setup_logger()
 
@@ -61,7 +63,6 @@ class LocalProcessor(ABC):
         Yields:
             Processed ConversationParts
         """
-        pass
 
     async def process_file(self, file_path: Path) -> ProcessingResult:
         """
@@ -80,7 +81,7 @@ class LocalProcessor(ABC):
         )
 
         try:
-            self.logger.info(f"Processing file: {file_path}")
+            self.logger.info("Processing file: %s", file_path)
 
             # Read and parse file (to be implemented by subclasses)
             parts = await self._parse_file(file_path)
@@ -101,14 +102,20 @@ class LocalProcessor(ABC):
             # Generate verification seal
             result.generate_verification_seal()
 
-            self.logger.info(
-                f"Processed {result.parts_count} parts from {file_path.name}"
-            )
-            self.logger.info(f"Verification seal: {result.verification_seal}")
+            self.logger.info("Processed %s parts from %s", result.parts_count, file_path.name)
+            self.logger.info("Verification seal: %s", result.verification_seal)
 
-        except Exception as e:
+        except (OSError, RuntimeError, TypeError, ValueError) as e:
+            # Broad boundary catch: file-processing errors should not crash the pipeline
             error_msg = f"Error processing {file_path}: {str(e)}"
             self.logger.error(error_msg)
+            result.add_error(error_msg)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            # process_file() is the per-file fault boundary; unexpected parser or
+            # processor failures should be recorded on the result instead of
+            # propagating and aborting batch processing.
+            error_msg = f"Unexpected error processing {file_path}: {str(e)}"
+            self.logger.exception(error_msg)
             result.add_error(error_msg)
 
         result.processing_time = time.time() - start_time
@@ -152,12 +159,12 @@ class LocalProcessor(ABC):
         Returns:
             List of ProcessingResults
         """
-        import asyncio
-
         max_concurrent = max_concurrent or self.config.max_concurrent
 
         self.logger.info(
-            f"Processing {len(file_paths)} files with max {max_concurrent} concurrent"
+            "Processing %s files with max %s concurrent",
+            len(file_paths),
+            max_concurrent,
         )
 
         results = []
@@ -173,7 +180,9 @@ class LocalProcessor(ABC):
 
         successful = sum(1 for r in results if not r.errors)
         self.logger.info(
-            f"Batch processing complete: {successful}/{len(results)} successful"
+            "Batch processing complete: %s/%s successful",
+            successful,
+            len(results),
         )
 
         return results

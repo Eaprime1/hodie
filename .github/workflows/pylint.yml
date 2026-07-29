@@ -1,0 +1,68 @@
+name: Pylint
+# ♓
+
+on:
+  push:
+    paths:
+      - '**.py'
+      - '.pylintrc'
+      - '.github/workflows/pylint.yml'
+  pull_request:
+    paths:
+      - '**.py'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install tomli
+        python -m pip install pylint
+
+    - name: Lint active codebase
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
+      run: |
+        # Only lint active code directories, not archived/legacy content.
+        # Gate on pyproject's fail-under score instead of raw pylint exit code.
+        set -euo pipefail
+        : "${RUNNER_TEMP:?RUNNER_TEMP is not set}"
+        safe_python_version="${PYTHON_VERSION//./-}"
+        if [[ ! "$safe_python_version" =~ ^[[:alnum:]-]+$ ]]; then
+          echo "Invalid PYTHON_VERSION value for temp log path: ${PYTHON_VERSION}"
+          exit 1
+        fi
+        pylint_log="$(mktemp "${RUNNER_TEMP}/pylint-output-${safe_python_version}-XXXXXX.log")"
+        trap 'rm -f "$pylint_log"' EXIT
+        set +e
+        pylint crawler_pixel8/ redundancy_entity/ --rcfile=.pylintrc 2>&1 | tee "$pylint_log"
+        pylint_exit="${PIPESTATUS[0]}"
+        set -e
+        # Fail on fatal/error/usage bits only (1 + 2 + 32 = 35).
+        # Allow warnings/refactors/conventions and score-gate those below.
+        if (( pylint_exit & 35 )); then
+          cat "$pylint_log"
+          echo "Pylint exited with fatal/error/usage bits set: ${pylint_exit}"
+          exit "${pylint_exit}"
+        fi
+        PY_FAIL_UNDER=$(python -c "import sys; t=__import__('tomllib' if sys.version_info>=(3,11) else 'tomli'); d=t.load(open('pyproject.toml','rb')); print(d['tool']['pylint']['main']['fail-under'])")
+        PY_SCORE=$(python -c "import re, pathlib, sys; m=re.search(r'rated at (-?[0-9]+(?:\.[0-9]+)?)/10', pathlib.Path('${pylint_log}').read_text(encoding='utf-8')); sys.exit('Unable to parse pylint score; log may be truncated') if not m else print(m.group(1))")
+        echo "Pylint score: ${PY_SCORE}/10 (required: ${PY_FAIL_UNDER}/10)"
+        python -c "import sys; s,r=float('${PY_SCORE}'),float('${PY_FAIL_UNDER}'); print('Pylint score threshold satisfied.') if s>=r else sys.exit(f'Pylint score {s}/10 is below required {r}/10.')"
+        if [ "$pylint_exit" -ne 0 ]; then
+          echo "Pylint returned exit code $pylint_exit due to warnings/messages, but score gate passed."
+        fi
+
+# ∰🛠️♓🤝-salmon_canon

@@ -1,0 +1,36 @@
+{
+  "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/Ωque/Copy of Legacy /Code for Colab/README.txt",
+  "conversation_id": "README",
+  "processed_at": "2026-04-10T12:56:55.257819",
+  "parts_count": 1,
+  "processing_time": 0.00043129920959472656,
+  "errors": [],
+  "parts": [
+    {
+      "text": "Processing scripts stored here\n",
+      "role": "unknown",
+      "timestamp": "2026-04-10T12:56:55.258111",
+      "source_file": "/home/user/hodie/_CONSOLIDATED/CODEX_documents/Ωque/Copy of Legacy /Code for Colab/README.txt",
+      "conversation_id": "README",
+      "turn_number": null,
+      "metadata": {},
+      "patterns": [],
+      "entities": [],
+      "topics": [
+        "processing"
+      ],
+      "links": []
+    }
+  ],
+  "summary": "",
+  "key_patterns": [],
+  "key_entities": [],
+  "key_topics": [
+    "processing"
+  ],
+  "related_conversations": [],
+  "cross_references": {},
+  "output_files": {},
+  "verification_seal": "∰◊€π¿🌌∞-PIXEL8-ad0c5f4e6d4337cf",
+  "pixel8_verified": true
+}

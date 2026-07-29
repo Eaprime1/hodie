@@ -10,7 +10,6 @@ Makes searching, reading, discovery natural through seed ideas
 import os
 import sys
 import json
-from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
 
@@ -104,15 +103,17 @@ PRIME_CATEGORIES = {
 
 def load_catalog():
     """Load REDUNDANCY catalog"""
-    print(f"\n📋 Loading REDUNDANCY catalog...")
-    with open(CATALOG_FILE, 'r') as f:
+    print("\n📋 Loading REDUNDANCY catalog...")
+    with open(CATALOG_FILE, 'r', encoding='utf-8') as f:
         catalog = json.load(f)
     print(f"   ✓ Loaded {len(catalog):,} unique file families")
     return catalog
 
-def classify_to_prime(file_info):
+def classify_to_prime(file_info):  # pylint: disable=too-many-branches,too-many-statements
     """
-    Classify file to PRIME category
+    Classify file to PRIME category.
+    Rationale for disable: heuristic classification logic requires multiple
+    conditional checks; splitting would fragment the semantic mapping rules.
 
     Uses multiple signals:
     - Filename keywords
@@ -190,13 +191,12 @@ def classify_to_prime(file_info):
     # Get highest scoring PRIME
     if scores:
         return max(scores.items(), key=lambda x: x[1])[0]
-    else:
-        # Default: Foundation
-        return 2
+    # Default: Foundation
+    return 2
 
 def create_prime_structure():
     """Create 13 PRIME directory structure"""
-    print(f"\n🏗️  Creating 13 PRIME pyramidic structure...")
+    print("\n🏗️  Creating 13 PRIME pyramidic structure...")
 
     for prime, info in PRIME_CATEGORIES.items():
         prime_dir = os.path.join(PRIME_ROOT, f"PRIME_{prime:02d}_{info['name']}")
@@ -206,9 +206,12 @@ def create_prime_structure():
     print(f"\n   Structure created at: {PRIME_ROOT}")
     return True
 
-def generate_seed_file(prime, files_in_category):
+def generate_seed_file(prime, files_in_category):  # pylint: disable=too-many-locals
     """
-    Generate seed_idea.md for a PRIME category
+    Generate seed_idea.md for a PRIME category.
+    Rationale for disable: content-building function assembles many display
+    variables (counts, averages, paths) for a Markdown template; consolidation
+    would reduce readability without improving correctness.
 
     Includes:
     - Seed question
@@ -231,6 +234,13 @@ def generate_seed_file(prime, files_in_category):
     # Top extensions
     top_exts = sorted(ext_counts.items(), key=lambda x: x[1], reverse=True)[:5]
 
+    total_files_count = len(files_in_category)
+    avg_gravity = (
+        sum(f['gravity_score'] for f in files_in_category) / total_files_count
+        if files_in_category else 0
+    )
+    total_dups = sum(f['duplicate_count'] for f in files_in_category)
+
     seed_content = f"""# PRIME {prime:02d} - {info['name']}
 
 **Seed Question:** "{info['seed']}"
@@ -242,9 +252,9 @@ def generate_seed_file(prime, files_in_category):
 ## Quick Discovery
 
 ### What's Here
-- **Total files:** {len(files_in_category):,}
-- **Average gravity:** {sum(f['gravity_score'] for f in files_in_category) / len(files_in_category) if files_in_category else 0:.1f}
-- **Total duplicates:** {sum(f['duplicate_count'] for f in files_in_category):,}
+- **Total files:** {total_files_count:,}
+- **Average gravity:** {avg_gravity:.1f}
+- **Total duplicates:** {total_dups:,}
 
 ### File Types
 """
@@ -253,7 +263,7 @@ def generate_seed_file(prime, files_in_category):
         ext_display = ext if ext else 'no extension'
         seed_content += f"- {ext_display}: {count:,} files\n"
 
-    seed_content += f"""
+    seed_content += """
 
 ---
 
@@ -264,7 +274,8 @@ Top 10 files in this category:
 """
 
     for i, file_info in enumerate(sorted_files[:10], 1):
-        filename_display = file_info['filename'][:60] + '...' if len(file_info['filename']) > 60 else file_info['filename']
+        fname = file_info['filename']
+        filename_display = fname[:60] + '...' if len(fname) > 60 else fname
         seed_content += f"""
 ### {i}. {filename_display}
 - **Gravity:** {file_info['gravity_score']:.1f}
@@ -333,7 +344,7 @@ Navigate by extension or explore freely.
 
     # Write seed file
     seed_path = os.path.join(prime_dir, "seed_idea.md")
-    with open(seed_path, 'w') as f:
+    with open(seed_path, 'w', encoding='utf-8') as f:
         f.write(seed_content)
 
     return seed_path
@@ -364,20 +375,20 @@ def organize_by_prime(catalog):
             if stats['classified'] % 1000 == 0:
                 print(f"   📊 Classified {stats['classified']:,} files...")
 
-        except Exception as e:
+        except (KeyError, TypeError, AttributeError) as e:
             stats['errors'].append({'hash': file_hash, 'error': str(e)})
 
-    print(f"\n✅ Classification complete!")
+    print("\n✅ Classification complete!")
 
     # Show distribution
-    print(f"\n📊 PRIME Distribution:")
+    print("\n📊 PRIME Distribution:")
     for prime in sorted(prime_assignments.keys()):
         info = PRIME_CATEGORIES[prime]
         count = len(prime_assignments[prime])
         print(f"   PRIME {prime:02d} ({info['name']:15s}): {count:5,} files ({count/len(catalog)*100:5.1f}%)")
 
     # Create symlinks for each PRIME
-    print(f"\n🔗 Creating organized structure...")
+    print("\n🔗 Creating organized structure...")
 
     for prime, files in prime_assignments.items():
         info = PRIME_CATEGORIES[prime]
@@ -412,7 +423,7 @@ def organize_by_prime(catalog):
                 os.symlink(canonical_path, link_path)
                 stats['symlinks_created'] += 1
 
-            except Exception as e:
+            except (OSError, ValueError) as e:
                 stats['errors'].append({
                     'file': file_info['filename'],
                     'error': str(e)
@@ -426,7 +437,7 @@ def organize_by_prime(catalog):
 
 def create_master_index(prime_assignments):
     """Generate master INDEX_PRIME.md"""
-    print(f"\n📖 Creating master index...")
+    print("\n📖 Creating master index...")
 
     index_content = f"""# 13 PRIME Pyramidic Index
 
@@ -538,7 +549,7 @@ def create_master_index(prime_assignments):
 """
 
     index_path = os.path.join(PRIME_ROOT, "INDEX_PRIME.md")
-    with open(index_path, 'w') as f:
+    with open(index_path, 'w', encoding='utf-8') as f:
         f.write(index_content)
 
     print(f"   ✓ Index created: {index_path}")
@@ -553,8 +564,8 @@ def main():
 
     # Check catalog exists
     if not os.path.exists(CATALOG_FILE):
-        print(f"❌ Error: Catalog not found")
-        print(f"   Please run Phase 1 (redundancy_entity_analyzer.py) first")
+        print("❌ Error: Catalog not found")
+        print("   Please run Phase 1 (redundancy_entity_analyzer.py) first")
         sys.exit(1)
 
     # Load catalog
@@ -570,18 +581,18 @@ def main():
     create_master_index(prime_assignments)
 
     # Summary
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("✨ 13 PRIME Pyramidic Collapse Complete!")
     print("=" * 60)
     print(f"📊 Files classified: {stats['classified']:,}")
     print(f"🔗 Symlinks created: {stats['symlinks_created']:,}")
-    print(f"📁 PRIME categories: 13")
+    print("📁 PRIME categories: 13")
     if stats['errors']:
         print(f"⚠️  Errors: {len(stats['errors'])}")
 
     print(f"\n📂 Structure location: {PRIME_ROOT}")
     print(f"📖 Master index: {PRIME_ROOT}/INDEX_PRIME.md")
-    print(f"\n🌟 Navigate by seed questions!")
+    print("\n🌟 Navigate by seed questions!")
     print(f"   Start here: cat {PRIME_ROOT}/INDEX_PRIME.md")
     print("=" * 60)
 

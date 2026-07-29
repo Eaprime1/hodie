@@ -1,0 +1,76 @@
+name: Prima Witness Footer Check
+# ∰ — Documents are additive, always additive.
+#
+# Scans project files for the ∰ footer witness symbol + canonical timestamp.
+# Reports are written to quepad/ (Pad of Q) and uploaded as workflow artifacts.
+# New files missing the ∰ witness will trigger a check failure in strict mode.
+
+on:
+  push:
+    paths:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.rst'
+      - '**/*.py'
+      - 'scripts/footer_witness.py'
+      - '.github/workflows/footer-witness.yml'
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.rst'
+      - '**/*.py'
+      - 'scripts/footer_witness.py'
+      - '.github/workflows/footer-witness.yml'
+  workflow_dispatch:
+
+jobs:
+  witness-check:
+    name: ∰ Prima Witness Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Prima Witness Scanner
+        id: witness
+        # --strict causes exit 1 when newly introduced files lack witness.
+        # The scanner uses the checked-in quepad/state.json on startup when
+        # that file exists in the repository checkout. However, this CI job
+        # does not automatically write updated state back to the repo between
+        # runs, so state only advances when quepad/state.json is committed or
+        # restored from a cache/artifact.
+        run: |
+          python scripts/footer_witness.py --root . --strict
+        continue-on-error: true
+
+      - name: Upload quepad reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quepad-reports-${{ github.run_id }}
+          path: quepad/
+          retention-days: 30
+
+      - name: Emit annotation and fail on violations
+        if: steps.witness.outcome == 'failure'
+        run: |
+          echo "::error title=Prima Witness::New files are missing the ∰ footer witness."
+          echo "::error title=Prima Witness::Add a witness line to each flagged file."
+          echo "::error title=Prima Witness::Format: ∰ YYYYMMDDHHMMSSMS  (17 digits)"
+          echo ""
+          echo "--- quepad/flagged_report.md ---"
+          cat quepad/flagged_report.md || true
+          exit 1
+
+# ∰ 20260424000000000

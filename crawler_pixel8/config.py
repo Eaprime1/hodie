@@ -5,49 +5,163 @@ Pixel8-specific paths and settings for conversation processing
 
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import List, Optional
+from functools import lru_cache
+from typing import Dict, List, Optional
+import logging
 import os
+import re
+
+
+#: Locations that have a corresponding .locations/{name}/config.sh file.
+KNOWN_LOCATIONS = ("mulberry", "pixel8a", "codespaces")
+
+
+@lru_cache(maxsize=None)
+def _parse_location_config(location: str) -> Dict[str, str]:
+    """
+    Parse a .locations/{location}/config.sh file and extract exported variables.
+
+    Results are cached — the file is read at most once per location per process.
+
+    Looks for lines of the form:
+        export VARIABLE_NAME="value"
+        export VARIABLE_NAME='value'
+        export VARIABLE_NAME=value
+
+    Args:
+        location: Location name. Must be one of KNOWN_LOCATIONS; unknown values
+            return an empty dict immediately (path-traversal guard).
+
+    Returns:
+        Dict of variable names to their string values. Empty dict on any error.
+    """
+    # Guard: reject unknown/untrusted location strings before touching the filesystem
+    if location not in KNOWN_LOCATIONS:
+        return {}
+
+    # Search relative to this file's repo root, then cwd
+    repo_root = Path(__file__).resolve().parent.parent
+    config_file = repo_root / ".locations" / location / "config.sh"
+    if not config_file.exists():
+        config_file = Path.cwd() / ".locations" / location / "config.sh"
+    if not config_file.exists():
+        return {}
+
+    # Three alternatives: double-quoted, single-quoted, or bare (no spaces/comment)
+    export_re = re.compile(
+        r'^export\s+([A-Z_][A-Z0-9_]*)='
+        r'(?:"([^"]*)"'
+        r"|'([^']*)'"
+        r'|([^\s#]*))'
+        r'\s*(?:#.*)?$'
+    )
+
+    result: Dict[str, str] = {}
+    try:
+        with open(config_file, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                match = export_re.match(line)
+                if match:
+                    # Take whichever capture group matched (double, single, or bare)
+                    value = match.group(2) or match.group(3) or match.group(4) or ""
+                    result[match.group(1)] = value
+    except OSError:
+        pass
+    return result
+
+
+def _resolve_hodie_path() -> Path:
+    """
+    Resolve the hodie directory.
+
+    Priority:
+    1. HODIE_PATH env var (explicit override — all locations)
+    2. HODIE_LOCATION env var → parse .locations/{location}/config.sh for HODIE_PATH
+    3. HODIE_LOCATION == "pixel8a" → pixel8a hardcoded fallback
+    4. Fall back to Path.cwd() (CI, testing, unknown environments)
+    """
+    if hodie_path := os.getenv("HODIE_PATH"):
+        return Path(hodie_path)
+    location = os.getenv("HODIE_LOCATION", "")
+    if location:
+        loc_vars = _parse_location_config(location)
+        if loc_hodie := loc_vars.get("HODIE_PATH"):
+            return Path(loc_hodie)
+    if location == "pixel8a":
+        return Path("/storage/emulated/0/pixel8a/Q/hodie")
+    return Path.cwd()
+
+
+def _resolve_base_dir() -> Path:
+    """Resolve the Q root directory (the workspace root that contains hodie/).
+
+    This returns Q_ROOT — the top-level directory shared across streams and
+    projects.  It is *not* guaranteed to be the direct parent of hodie_dir;
+    the relationship depends on how each location organises its workspace.
+
+    Priority:
+    1. Q_ROOT env var (explicit override)
+    2. HODIE_LOCATION env var → parse .locations/{location}/config.sh for Q_ROOT
+    3. HODIE_LOCATION == "pixel8a" → pixel8a hardcoded fallback
+    4. Fall back to Path.cwd()
+    """
+    if q_root := os.getenv("Q_ROOT"):
+        return Path(q_root)
+    location = os.getenv("HODIE_LOCATION", "")
+    if location:
+        loc_vars = _parse_location_config(location)
+        if loc_root := loc_vars.get("Q_ROOT"):
+            return Path(loc_root)
+    if location == "pixel8a":
+        return Path("/storage/emulated/0/pixel8a/Q")
+    return Path.cwd()
 
 
 @dataclass
 class CrawlerConfig:
     """Configuration for PIXEL8 Crawler operations"""
 
-    # Base paths
-    base_dir: Path = field(default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q"))
-    hodie_dir: Path = field(default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie"))
+    # Location identity — set by env_setup.sh or auto-detected
+    location_name: str = field(default_factory=lambda: os.getenv("ENV_NAME", "unknown"))
+
+    # Base paths — overridden by HODIE_PATH / Q_ROOT env vars when set
+    base_dir: Path = field(default_factory=_resolve_base_dir)
+    hodie_dir: Path = field(default_factory=_resolve_hodie_path)
 
     # Input paths (defaults to current directory if not specified)
     conversation_archive: Optional[Path] = None
     codex_documents: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/_CONSOLIDATED/CODEX_documents")
+        default_factory=lambda: _resolve_hodie_path() / "_CONSOLIDATED/CODEX_documents"
     )
 
-    # Output paths
+    # Output paths — all relative to hodie_dir
     crawler_output: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output")
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output"
     )
     patterns_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/patterns")
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/patterns"
     )
     maps_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/maps")
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/maps"
     )
     summaries_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/summaries")
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/summaries"
     )
     exports_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/crawler_output/exports")
+        default_factory=lambda: _resolve_hodie_path() / "crawler_output/exports"
     )
 
     # Entity integration
     quanta_dir: Path = field(
-        default_factory=lambda: Path("/storage/emulated/0/pixel8a/Q/hodie/quanta")
+        default_factory=lambda: _resolve_hodie_path() / "quanta"
     )
 
     # Processing settings
     batch_size: int = 10
-    max_concurrent: int = 3  # Mobile device constraint
+    max_concurrent: int = field(
+        default_factory=lambda: int(os.getenv("HQ_MAX_CONCURRENT", "3"))
+    )  # Mobile constraint default; HQ raises this via env
     chunk_size: int = 1000  # Characters per processing chunk
 
     # Feature flags
@@ -78,12 +192,18 @@ class CrawlerConfig:
         if self.conversation_archive is None:
             self.conversation_archive = Path.cwd()
 
-        # Ensure all directories exist
+        # Ensure all directories exist (best-effort — skips paths that can't be created)
+        _log = logging.getLogger(__name__)
         for attr_name in dir(self):
             if attr_name.endswith('_dir') or attr_name in ('crawler_output',):
                 path = getattr(self, attr_name)
                 if isinstance(path, Path):
-                    path.mkdir(parents=True, exist_ok=True)
+                    try:
+                        path.mkdir(parents=True, exist_ok=True)
+                    except PermissionError:
+                        _log.debug("Skipping unwritable path %s (PermissionError)", path)
+                    except OSError as exc:
+                        _log.warning("Could not create directory %s: %s", path, exc)
 
     @property
     def gemini_api_key(self) -> Optional[str]:

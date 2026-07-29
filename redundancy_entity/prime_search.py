@@ -8,7 +8,11 @@ Quickly find files by PRIME category without scanning 55k files!
 import os
 import sys
 import json
-from pathlib import Path
+from collections import defaultdict
+
+# prime_collapse lives in the same directory and is not a package-level dep;
+# importing at module level so it is visible to pylint (avoids C0415).
+from prime_collapse import classify_to_prime
 
 # === CONFIGURATION ===
 REDUNDANCY_DIR = "/storage/emulated/0/pixel8a/Q/redundancy_entity"
@@ -22,13 +26,12 @@ PRIME_NAMES = {
 
 def load_catalog_with_primes():
     """Load catalog with PRIME classifications"""
-    print(f"📋 Loading catalog...", end='')
-    with open(CATALOG_FILE, 'r') as f:
+    print("📋 Loading catalog...", end='')
+    with open(CATALOG_FILE, 'r', encoding='utf-8') as f:
         catalog = json.load(f)
 
     # Re-classify (quick, already done in prime_collapse.py)
-    from prime_collapse import classify_to_prime
-    for file_hash, file_info in catalog.items():
+    for _, file_info in catalog.items():
         if 'prime_category' not in file_info:
             file_info['prime_category'] = classify_to_prime(file_info)
 
@@ -70,10 +73,13 @@ def display_results(results, limit=20):
         prime = file_info.get('prime_category', '?')
         prime_name = PRIME_NAMES.get(prime, 'Unknown')
 
-        filename_display = file_info['filename'][:60] + '...' if len(file_info['filename']) > 60 else file_info['filename']
+        fname = file_info['filename']
+        filename_display = fname[:60] + '...' if len(fname) > 60 else fname
 
         print(f"{i:3d}. {filename_display}")
-        print(f"     PRIME {prime:02d} ({prime_name}) | Gravity: {file_info['gravity_score']:.1f} | Dups: {file_info['duplicate_count']}")
+        gravity = file_info['gravity_score']
+        dups = file_info['duplicate_count']
+        print(f"     PRIME {prime:02d} ({prime_name}) | Gravity: {gravity:.1f} | Dups: {dups}")
         print(f"     Path: {file_info['instances'][0]['path']}")
         print()
 
@@ -135,9 +141,8 @@ Examples:
         display_results(results, limit=30)
 
     elif command == 'stats':
-        print(f"\n📊 13 PRIME Distribution\n")
+        print("\n📊 13 PRIME Distribution\n")
 
-        from collections import defaultdict
         prime_counts = defaultdict(int)
 
         for file_info in catalog.values():
@@ -152,9 +157,9 @@ Examples:
             pct = count / total * 100
 
             bar_length = int(pct / 2)  # Max 50 chars
-            bar = '█' * bar_length
+            progress_bar = '█' * bar_length
 
-            print(f"PRIME {prime:02d} {name:15s} [{bar:<50s}] {count:5,} ({pct:5.1f}%)")
+            print(f"PRIME {prime:02d} {name:15s} [{progress_bar:<50s}] {count:5,} ({pct:5.1f}%)")
 
     else:
         print(f"❌ Unknown command: {command}")

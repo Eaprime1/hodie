@@ -11,6 +11,13 @@ env/
 venv/
 *.egg-info/
 
+# Python Caches & Reports
+.pytest_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
 # Content folders (sync to Drive, not Git)
 plexus/*/
 !plexus/*/.gitkeep
@@ -27,18 +34,52 @@ rudera/fragmenta/*
 rudera/pulvis/*
 !rudera/pulvis/.gitkeep
 
-# Logs and temp
+# Logs and Databases
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.db
+*.sqlite
+*.sqlite3
+
+# Temp files
 *.tmp
+
+# OS-specific files
 .DS_Store
 Thumbs.db
 
+# Editor configurations
+.vscode/
+.idea/
+
 # Local config
 .env
+.env.local
 *.local
+
+# Secrets & Credentials
+*.secret
+secrets/
+credentials/
+.credentials
+
+# Cloud deployment artifacts
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.kubeconfig
 
 # PWD reports (generated)
 PWD_REPORT.txt
+
+# quepad — generated scan artefacts (keep README.md and state.json)
+quepad/compliance_report.md
+quepad/new_docs_report.md
+quepad/flagged_report.md
+quepad/egressum-Q-*.md
 
 # Sensitive Personal Data - Added 2026-01-02
 /storage/emulated/0/pixel8a/Q/no_sync_private/
@@ -58,9 +99,23 @@ PWD_REPORT.txt
 **/*Receipt*
 **/*receipt*
 
-# Local development
-.DS_Store
+# Local development (editor temp files)
 *.swp
 *.swo
 *~
 
+# Build-related directories
+node_modules/
+dist/
+build/
+
+# Large media and archive files
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+*.mp4
+*.mp3
+*.mov
+*.avi
