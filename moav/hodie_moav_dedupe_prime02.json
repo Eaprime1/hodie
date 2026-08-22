@@ -1,0 +1,68 @@
+{
+  "carrier_id": "hodie_moav_dedupe_prime02",
+  "prima_clock": "202608212008",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♣️",
+  "suit_meaning": "Carbonite — duplicates, fragments, sources, raw carbonite material (Five Lakes: Lacus Catatumbo)",
+  "event": "Duplicate consolidation candidate: 4 redundant copies of PRIME_02_Emergence_Void.md reduced to 1 carbonite copy here, canonical copy untouched in hodie",
+  "motion_state": "CANDIDATE",
+  "chain_of_custody": "OPEN",
+  "status_note": "First-ever hodie→duplicatus transfer — the intake process itself is new and unreviewed. Not to be treated as formal custody until eaprime1 reviews the format and approves.",
+  "kept_copy": {
+    "repo": "eaprime1/duplicatus",
+    "path": "incoming/prime-02-emergence-void/PRIME_02_Emergence_Void.md",
+    "content_md5": "208e35066dcdfbcc96b1c7eae8f2c35b"
+  },
+  "canonical_active_copy": {
+    "repo": "eaprime1/hodie",
+    "path": "_CONSOLIDATED/CODEX_documents/PRIME_02_Emergence_Void.md",
+    "note": "Left in place, not touched by this consolidation — this is the copy hodie's crawler pipeline and CLAUDE.md treat as the working content location."
+  },
+  "instances": [
+    {
+      "file_id": "prime02-instance-a",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/PRIME_documents/PRIME_02_Emergence_Void.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/PRIME_documents/PRIME_02_Emergence_Void.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "prime02-instance-b",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/CODEX_documents/primes/PRIME_02_Emergence_Void_v.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/CODEX_documents/primes/PRIME_02_Emergence_Void_v.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "prime02-instance-c",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/duplicates_check/PRIME_02/PRIME_02_Emergence_Void_v.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/duplicates_check/PRIME_02/PRIME_02_Emergence_Void_v.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "prime02-instance-d",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/duplicates_check/PRIME_02/PRIME_02_Emergence_Void_v (1).md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/duplicates_check/PRIME_02/PRIME_02_Emergence_Void_v (1).md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    }
+  ],
+  "references": {
+    "verification": "All 5 instances (4 removed + 1 canonical) confirmed byte-identical via md5sum (208e35066dcdfbcc96b1c7eae8f2c35b) before any removal.",
+    "hodie_source_carrier": "hodie/moav/hodie_moav_dedupe_prime02.json"
+  },
+  "open_questions": [
+    "Is incoming/<slug>/ the right shape for duplicatus, or should candidates land somewhere more clearly provisional until formally accepted?",
+    "Should 'icons'/'awards' per-instance be populated from somewhere hodie doesn't currently track, or are they genuinely null for this content type?"
+  ],
+  "notes": "First worked example of the hodie→duplicatus dedupe pipeline, built as a template for eaprime1 to review before the rest of hodie's duplicates_check/ and primes/*_v.md queue is processed the same way."
+}
