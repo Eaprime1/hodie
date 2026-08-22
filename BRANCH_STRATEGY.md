@@ -1,7 +1,27 @@
 # Git Branch Strategy for PRIME 2026 Development
-**Created**: 2026-01-02
+**Created**: 2026-01-02 | **Revised**: 2026-08-21 (branch retention policy)
 **Purpose**: Enable parallel development across multiple workstreams
 **Pattern**: Feature branches → develop → main (stable)
+
+---
+
+## Branch Retention Policy
+
+**Branches are never deleted.** This supersedes every "delete after merge" /
+"deleted if unsuccessful" line elsewhere in this document — those describe
+the original 2026-01-02 policy, kept below for historical context, but no
+longer followed.
+
+Adopted from `custos`'s convention: once a branch's content has fully landed
+elsewhere (usually `main`, via merge), the branch itself is retained as the
+record of the passage, not deleted and not left as a place further work
+happens. "Finished but not complete" — the branch stays open, the work it
+carried is done. Every branch's status (active, needs review, or fully
+landed) is tracked in `branch-tracker/branches.md`, not by deleting the ones
+that are done.
+
+`radix` and `֍hodie֎` are structural/permanent branches (not spawn branches)
+and are never candidates for closure — see `branch-tracker/branches.md`.
 
 ---
 
@@ -41,7 +61,7 @@
 - Specific tasks/workstreams
 - Branched from develop
 - Merged back to develop when complete
-- Deleted after merge
+- Retained as Mobius-Closed after merge (superseded — see Branch Retention Policy above; was "Deleted after merge")
 
 **heritage/***
 - Transitioned conversations
@@ -203,7 +223,7 @@ Examples:
 - `feature/codex-integration` - CODEX integration work
 - `feature/launch-narrative` - Launch story development
 
-**Lifecycle**: Created from develop → work → merge to develop → delete
+**Lifecycle**: Created from develop → work → merge to develop → retained as Mobius-Closed (superseded — see Branch Retention Policy above; was "→ delete")
 
 ---
 
@@ -229,7 +249,7 @@ Examples:
 - `experimental/alternate-ka-formula`
 - `experimental/different-heritage-structure`
 
-**Lifecycle**: Created → test → merge if successful OR delete if not
+**Lifecycle**: Created → test → merge if successful, retained regardless of outcome (superseded — see Branch Retention Policy above; was "OR delete if not")
 
 ---
 
@@ -350,7 +370,7 @@ git push origin main --tags
 
 **Protections**:
 - None (fast development)
-- Delete after merge
+- Retained as Mobius-Closed after merge (superseded — see Branch Retention Policy above; was "Delete after merge")
 - Rebase before merge (clean history)
 
 ### heritage/* Branches
