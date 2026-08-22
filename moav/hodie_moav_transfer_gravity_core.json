@@ -1,0 +1,34 @@
+{
+  "carrier_id": "hodie_moav_transfer_gravity_core",
+  "prima_clock": "202608220615",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♦️",
+  "suit_meaning": "Diamond — active development, working content en route to a destination repo (custos suit taxonomy, reused here)",
+  "event": "Gravity Core system (redundancy_entity/) copied from hodie to eaprime1/gravitar",
+  "motion_state": "COMPLETE",
+  "chain_of_custody": "OPEN",
+  "transition": {
+    "from": {
+      "repo": "eaprime1/hodie",
+      "path": "redundancy_entity/",
+      "commit": "324fb22"
+    },
+    "to": {
+      "repo": "eaprime1/gravitar",
+      "path": "redundancy_entity/",
+      "commit": "f1dbbee"
+    },
+    "method": "Copy, not move -- source retained in full, matching the system's own conservation-bias principle. 18 of 19 files copied (code + design docs + small manifests); beasis_catalog.json (25MB scan-result data, Dec 2025, tied to the Pixel 8a's local corpus) stayed in hodie -- data, not code."
+  },
+  "references": {
+    "hodie_pointer": "redundancy_entity/CANONICAL_HOME.md",
+    "gravitar_readme": "https://github.com/Eaprime1/gravitar/blob/main/README.md"
+  },
+  "open_questions": [
+    "Whether/how to reconcile this system's keep-every-duplicate philosophy with duplicatus's opposite (keep-one-copy) approach -- see gravitar's README Open Questions section",
+    "Whether the project gets revived (Phases 2-5 were designed, never built) or stays dormant",
+    "Whether the underlying 3GB/42K-file corpus (device-local on the Pixel 8a) ever moves somewhere version-controlled"
+  ],
+  "notes": "Found during a hodie<->custos comparison pass this session; gravitar was already correctly named for this but had never received content. Not a revival of the project, just giving it one clear address instead of living inside a different repo's subfolder.",
+  "symbol": "🪨"
+}

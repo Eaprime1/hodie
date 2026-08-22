@@ -15,6 +15,8 @@ its prima-clock stamp in the JSON payload. Adopted from custos's
 
 ## Existing Carriers
 
+- hodie_moav_transfer_gravity_core.json — redundancy_entity/ (Gravity Core system) copied to eaprime1/gravitar, 202608220615, COMPLETE
+
 - hodie_moav_dedupe_prime02.json — first worked example, PRIME_02 dedupe candidate (4 redundant copies → 1 carbonite copy in duplicatus), 202608212008, CANDIDATE/OPEN, format approved by eaprime1 202608212020
 - hodie_moav_dedupe_prime03.json — PRIME_03_Triadic_Stability.md dedupe candidate (4 redundant copies → 1 carbonite copy in duplicatus), 202608212026, CANDIDATE/OPEN
 - hodie_moav_dedupe_prime05.json — PRIME_05_Quintessence_Amplification.md dedupe candidate (4 redundant copies → 1 carbonite copy in duplicatus), 202608212026, CANDIDATE/OPEN
