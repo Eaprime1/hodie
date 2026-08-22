@@ -662,12 +662,28 @@ def _persist_state(
     missing: List[str],
     scan_stamp: str,
 ) -> None:
-    """Merge scan results into state and write state.json."""
+    """Merge scan results into state and write state.json.
+
+    Only touches an entry's last_seen when the file is new to known_files or
+    its compliant/witness value actually changed since the last scan --
+    previously every entry was rewritten with the fresh scan_stamp
+    unconditionally on every run, so a push that changed one file produced a
+    full-state diff touching every known file. That's the confirmed cause of
+    state.json's rapid, largely-noise growth.
+    """
     new_known: Dict = dict(known_files)
+
+    def _update(rel: str, entry: Dict) -> None:
+        existing = new_known.get(rel)
+        if existing is None or existing.get("compliant") != entry["compliant"] or existing.get("witness") != entry["witness"]:
+            new_known[rel] = {**entry, "last_seen": scan_stamp}
+        # else: unchanged since last scan -- leave the existing entry (and its
+        # last_seen) untouched, so the diff stays proportional to real change.
+
     for rel, witness in compliant:
-        new_known[rel] = {"compliant": True, "witness": witness, "last_seen": scan_stamp}
+        _update(rel, {"compliant": True, "witness": witness})
     for rel in missing:
-        new_known[rel] = {"compliant": False, "witness": None, "last_seen": scan_stamp}
+        _update(rel, {"compliant": False, "witness": None})
     state["last_scan"] = scan_stamp
     state["known_files"] = new_known
     save_state(state)
