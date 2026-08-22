@@ -1,0 +1,37 @@
+{
+  "carrier_id": "hodie_moav_dedupe_seventh_pinnacle",
+  "prima_clock": "202608212040",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♣️",
+  "suit_meaning": "Carbonite — duplicates, fragments, sources, raw carbonite material (Five Lakes: Lacus Catatumbo)",
+  "event": "Duplicate consolidation candidate: 1 redundant same-folder copy of The_Seventh_Pinnacle_Complete_Framework_20251123.md reduced to 1 carbonite copy here, canonical copy untouched in hodie",
+  "motion_state": "CANDIDATE",
+  "chain_of_custody": "OPEN",
+  "status_note": "Batch-processed using the format approved by eaprime1 on the PRIME_02 worked example.",
+  "kept_copy": {
+    "repo": "eaprime1/duplicatus",
+    "path": "incoming/seventh-pinnacle-complete-framework/The_Seventh_Pinnacle_Complete_Framework_20251123.md",
+    "content_md5": "0f6eb86cb619707798413a46b69824b7"
+  },
+  "canonical_active_copy": {
+    "repo": "eaprime1/hodie",
+    "path": "quanta/seventh_pinnacle/The_Seventh_Pinnacle_Complete_Framework_20251123.md",
+    "note": "Left in place, not touched by this consolidation."
+  },
+  "instances": [
+    {
+      "file_id": "seventh-pinnacle-instance-a",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "quanta/seventh_pinnacle/The_Seventh_Pinnacle_Complete_Framework_20251123 (1).md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/quanta/seventh_pinnacle/The_Seventh_Pinnacle_Complete_Framework_20251123 (1).md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    }
+  ],
+  "references": {
+    "verification": "Both instances confirmed byte-identical via md5sum (0f6eb86cb619707798413a46b69824b7) before removal.",
+    "hodie_source_carrier": "hodie/moav/hodie_moav_dedupe_seventh_pinnacle.json"
+  },
+  "notes": "Same-folder duplicate (not a cross-location fork like the PRIME_0X set) — flagged in the original recon pass, not part of the duplicates_check/ batch. Routed through duplicatus for consistency."
+}
