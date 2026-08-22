@@ -19,6 +19,9 @@ venv/
 htmlcov/
 
 # Content folders (sync to Drive, not Git)
+crawler_output/summaries/*
+!crawler_output/summaries/.gitkeep
+redundancy_entity/beasis_catalog.json
 plexus/*/
 !plexus/*/.gitkeep
 duplicatus/*
