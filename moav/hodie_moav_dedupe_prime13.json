@@ -1,0 +1,64 @@
+{
+  "carrier_id": "hodie_moav_dedupe_prime13",
+  "prima_clock": "202608212026",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♣️",
+  "suit_meaning": "Carbonite — duplicates, fragments, sources, raw carbonite material (Five Lakes: Lacus Catatumbo)",
+  "event": "Duplicate consolidation candidate: 4 redundant copies of PRIME_13_Complexity_Navigation.md reduced to 1 carbonite copy here, canonical copy untouched in hodie",
+  "motion_state": "CANDIDATE",
+  "chain_of_custody": "OPEN",
+  "status_note": "Batch-processed using the format approved by eaprime1 on the PRIME_02 worked example.",
+  "kept_copy": {
+    "repo": "eaprime1/duplicatus",
+    "path": "incoming/prime-13-complexity-navigation/PRIME_13_Complexity_Navigation.md",
+    "content_md5": "dc6b8254af96189a257486626d18b8e7"
+  },
+  "canonical_active_copy": {
+    "repo": "eaprime1/hodie",
+    "path": "_CONSOLIDATED/CODEX_documents/PRIME_13_Complexity_Navigation.md",
+    "note": "Left in place, not touched by this consolidation."
+  },
+  "instances": [
+    {
+      "file_id": "prime-13-complexity-navigation-instance-a",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/PRIME_documents/PRIME_13_Complexity_Navigation.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/PRIME_documents/PRIME_13_Complexity_Navigation.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "prime-13-complexity-navigation-instance-b",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/CODEX_documents/primes/PRIME_13_Complexity_Navigation.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/CODEX_documents/primes/PRIME_13_Complexity_Navigation.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "prime-13-complexity-navigation-instance-c",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/duplicates_check/PRIME_13/PRIME_13_Complexity_Navigation_v.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/duplicates_check/PRIME_13/PRIME_13_Complexity_Navigation_v.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "prime-13-complexity-navigation-instance-d",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/duplicates_check/PRIME_13/PRIME_13_Complexity_Navigation (1).md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/duplicates_check/PRIME_13/PRIME_13_Complexity_Navigation (1).md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    }
+  ],
+  "references": {
+    "verification": "All instances confirmed byte-identical via md5sum (dc6b8254af96189a257486626d18b8e7) before any removal.",
+    "hodie_source_carrier": "hodie/moav/hodie_moav_dedupe_prime13.json"
+  },
+  "notes": "Part of the batch dedupe pass following the PRIME_02 template."
+}

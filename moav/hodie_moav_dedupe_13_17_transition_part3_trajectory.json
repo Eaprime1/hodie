@@ -1,0 +1,46 @@
+{
+  "carrier_id": "hodie_moav_dedupe_13_17_transition_part3_trajectory",
+  "prima_clock": "202608212026",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♣️",
+  "suit_meaning": "Carbonite — duplicates, fragments, sources, raw carbonite material (Five Lakes: Lacus Catatumbo)",
+  "event": "Duplicate consolidation candidate: 2 redundant copies of 13-17_transition_part3_trajectory.md reduced to 1 carbonite copy here, canonical copy untouched in hodie",
+  "motion_state": "CANDIDATE",
+  "chain_of_custody": "OPEN",
+  "status_note": "Batch-processed using the format approved by eaprime1 on the PRIME_02 worked example.",
+  "kept_copy": {
+    "repo": "eaprime1/duplicatus",
+    "path": "incoming/13-17-transition-part3-trajectory/13-17_transition_part3_trajectory.md",
+    "content_md5": "cb2823547d252ca821cc89774f36429d"
+  },
+  "canonical_active_copy": {
+    "repo": "eaprime1/hodie",
+    "path": "_CONSOLIDATED/CODEX_documents/13-17_transition_part3_trajectory.md",
+    "note": "Left in place, not touched by this consolidation."
+  },
+  "instances": [
+    {
+      "file_id": "13-17-transition-part3-trajectory-instance-a",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/transition_frameworks/13-17_transition_part3_trajectory.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/transition_frameworks/13-17_transition_part3_trajectory.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    },
+    {
+      "file_id": "13-17-transition-part3-trajectory-instance-b",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/duplicates_check/transition_frameworks/13-17_transition_part3_trajectory (1).md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/duplicates_check/transition_frameworks/13-17_transition_part3_trajectory (1).md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    }
+  ],
+  "references": {
+    "verification": "All instances confirmed byte-identical via md5sum (cb2823547d252ca821cc89774f36429d) before any removal.",
+    "hodie_source_carrier": "hodie/moav/hodie_moav_dedupe_13_17_transition_part3_trajectory.json"
+  },
+  "notes": "Part of the batch dedupe pass following the PRIME_02 template."
+}

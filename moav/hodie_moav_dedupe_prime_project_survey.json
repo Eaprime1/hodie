@@ -1,0 +1,37 @@
+{
+  "carrier_id": "hodie_moav_dedupe_prime_project_survey",
+  "prima_clock": "202608212026",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♣️",
+  "suit_meaning": "Carbonite — duplicates, fragments, sources, raw carbonite material (Five Lakes: Lacus Catatumbo)",
+  "event": "Duplicate consolidation candidate: 1 redundant copies of PRIME_PROJECT_SURVEY_20251211.md reduced to 1 carbonite copy here, canonical copy untouched in hodie",
+  "motion_state": "CANDIDATE",
+  "chain_of_custody": "OPEN",
+  "status_note": "Batch-processed using the format approved by eaprime1 on the PRIME_02 worked example.",
+  "kept_copy": {
+    "repo": "eaprime1/duplicatus",
+    "path": "incoming/prime-project-survey-20251211/PRIME_PROJECT_SURVEY_20251211.md",
+    "content_md5": "7d8ff393da11ba5be233585e07a807b7"
+  },
+  "canonical_active_copy": {
+    "repo": "eaprime1/hodie",
+    "path": "_CONSOLIDATED/CODEX_documents/PRIME_PROJECT_SURVEY_20251211.md",
+    "note": "Left in place, not touched by this consolidation."
+  },
+  "instances": [
+    {
+      "file_id": "prime-project-survey-20251211-instance-a",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/PRIME_documents/PRIME_PROJECT_SURVEY_20251211_v.md",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/PRIME_documents/PRIME_PROJECT_SURVEY_20251211_v.md",
+      "icon": null,
+      "award": null,
+      "removed": true
+    }
+  ],
+  "references": {
+    "verification": "All instances confirmed byte-identical via md5sum (7d8ff393da11ba5be233585e07a807b7) before any removal.",
+    "hodie_source_carrier": "hodie/moav/hodie_moav_dedupe_prime_project_survey.json"
+  },
+  "notes": "Part of the batch dedupe pass following the PRIME_02 template."
+}
