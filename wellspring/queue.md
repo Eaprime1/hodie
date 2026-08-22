@@ -26,3 +26,27 @@ them or staying loose in root.
 | `pinn_workflow.pdf` | 42K |
 | `pinref.pdf` | 300K |
 | `thehodie.pdf` | 230K |
+
+---
+
+## 2. Temphold_needs_review/ (89 files, ~9.3M)
+
+**Arrived**: 2026-08-21, via hodie cleanup pass — moved whole from
+`_CONSOLIDATED/CODEX_documents/Temphold/`
+**Source**: raw PDF exports, mostly named `Copy of Untitled document-N.pdf`,
+apparently a Google Drive dump of printed/exported Claude.ai conversations
+**Why here**: sampled 2 of 89 (files `-1` and `-45`). They are NOT
+interchangeable duplicates or disposable debris — one was a completely
+unrelated personal D&D character-roleplay conversation, the other was
+on-topic "SDWG Visionary" project chat content (Quantum-Runic math, legacy
+document consolidation). The folder is a genuine mixed bag spanning
+unrelated topics and possibly-personal content, so filename pattern alone
+can't be used to bulk-delete or bulk-classify it, and it isn't this cleanup
+pass's place to make that call file-by-file. Moved intact, nothing deleted,
+nothing else opened beyond the 2-file sample.
+**Status**: waiting for eaprime1 review (whole folder, not yet triaged item
+by item)
+**Destination**: TBD per-file — likely a mix of "fold into canonical CODEX
+content" (SDWG-relevant material), "unrelated, route elsewhere or discard"
+(non-project personal content like the D&D file), and possibly more
+duplicates of already-canonical content once actually read
