@@ -50,3 +50,28 @@ by item)
 content" (SDWG-relevant material), "unrelated, route elsewhere or discard"
 (non-project personal content like the D&D file), and possibly more
 duplicates of already-canonical content once actually read
+
+---
+
+## 3. CODEX_fragments_needs_review/ (16 files)
+
+**Arrived**: 2026-08-21, via hodie cleanup pass — moved from loose files
+sitting in `_CONSOLIDATED/CODEX_documents/` root, named after their opening
+words/characters (`Absolutely,.txt`, `Certainly!.txt`, `{.txt`, `#.txt`,
+two files literally named after shebang lines, etc.)
+**Source**: raw pasted chat-response and code fragments — Quantum-Runic
+framework discussion, a QuantumDice class, a directory-structure generator,
+a bash "ONE HERTZ INSTALLER" script, a Termux game engine core
+(`sacred_empire_core.py`), an unrelated `sudo apt install brave-browser`
+snippet
+**Why here**: read all 16 in full before deciding anything (learned from
+the Temphold folder not to trust filenames). Checked each for content
+overlap against canonical `CODEX_documents/` files (grepped distinctive
+class names/strings — `QuantumDice`, `prime_codex_v2`, `CrystalAllocation`,
+the brave-browser keyring URL) — none found elsewhere, so none are
+confirmed-redundant duplicates safe to delete. All are genuine, on-topic
+project material (no personal/unrelated content like Temphold had), just
+never titled or integrated anywhere.
+**Status**: waiting for eaprime1 review
+**Destination**: TBD — likely folding each into the relevant canonical doc
+or a proper new file with a real name, once reviewed

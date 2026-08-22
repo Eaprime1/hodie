@@ -31,6 +31,7 @@ its prima-clock stamp in the JSON payload. Adopted from custos's
 - hodie_moav_dedupe_prime_project_survey.json — PRIME_PROJECT_SURVEY_20251211.md dedupe candidate (1 redundant copy → 1 carbonite copy in duplicatus), 202608212026, CANDIDATE/OPEN
 
 - hodie_moav_dedupe_seventh_pinnacle.json — quanta/seventh_pinnacle same-folder duplicate (1 redundant copy → 1 carbonite copy in duplicatus), 202608212040, CANDIDATE/OPEN
+- hodie_moav_dedupe_my_git_py.json — my.gita.py typo'd duplicate of my.git.py (1 redundant copy → 1 carbonite copy in duplicatus), 202608212055, CANDIDATE/OPEN
 
 All of the above are CANDIDATE/OPEN, not formally closed — eaprime1 approved
 the *format* (per the PRIME_02 worked example) but has not yet reviewed each

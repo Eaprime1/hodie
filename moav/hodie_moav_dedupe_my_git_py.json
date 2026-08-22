@@ -1,0 +1,37 @@
+{
+  "carrier_id": "hodie_moav_dedupe_my_git_py",
+  "prima_clock": "202608212055",
+  "entity": "eaprime1 + Claude (nav1)",
+  "suit": "♣️",
+  "suit_meaning": "Carbonite — duplicates, fragments, sources, raw carbonite material (Five Lakes: Lacus Catatumbo)",
+  "event": "Duplicate consolidation candidate: my.gita.py (typo'd name) is byte-identical to my.git.py, reduced to 1 carbonite copy here",
+  "motion_state": "CANDIDATE",
+  "chain_of_custody": "OPEN",
+  "status_note": "Batch-processed using the format approved by eaprime1 on the PRIME_02 worked example.",
+  "kept_copy": {
+    "repo": "eaprime1/duplicatus",
+    "path": "incoming/my-git-py/my.git.py",
+    "content_md5": "d0d6763057b2b2f368fa4f7e0099ec46"
+  },
+  "canonical_active_copy": {
+    "repo": "eaprime1/hodie",
+    "path": "_CONSOLIDATED/CODEX_documents/my.git.py",
+    "note": "Left in place, not touched by this consolidation. Kept over my.gita.py as the non-typo'd name."
+  },
+  "instances": [
+    {
+      "file_id": "my-git-py-instance-a",
+      "source_repo": "eaprime1/hodie",
+      "original_path": "_CONSOLIDATED/CODEX_documents/my.gita.py",
+      "link": "https://github.com/Eaprime1/hodie/blob/373dcd9/_CONSOLIDATED/CODEX_documents/my.gita.py",
+      "icon": null,
+      "award": null,
+      "removed": true
+    }
+  ],
+  "references": {
+    "verification": "Confirmed byte-identical via diff before removal.",
+    "hodie_source_carrier": "hodie/moav/hodie_moav_dedupe_my_git_py.json"
+  },
+  "notes": "Typo'd filename duplicate (my.gita.py vs my.git.py), not a cross-location fork."
+}
