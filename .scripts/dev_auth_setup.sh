@@ -56,6 +56,20 @@ print_warning() { echo -e "${YELLOW}[!]${NC} $1"; }
 print_error() { echo -e "${RED}[✗]${NC} $1"; }
 print_info() { echo -e "${BLUE}[i]${NC} $1"; }
 
+# Download an installer to a temp file, then run it (no curl | bash:
+# a failed or truncated download never reaches the shell).
+run_remote_installer() {
+    local url="$1" tmp rc
+    tmp="$(mktemp)" || return 1
+    if curl -fsSL "$url" -o "$tmp"; then
+        bash "$tmp"; rc=$?
+    else
+        print_error "Download failed: $url"; rc=1
+    fi
+    rm -f "$tmp"
+    return $rc
+}
+
 # Check if command exists
 cmd_exists() {
     command -v "$1" &> /dev/null
@@ -331,13 +345,13 @@ install_google_cloud_cli() {
             if cmd_exists brew; then
                 brew install --cask google-cloud-sdk
             else
-                curl https://sdk.cloud.google.com | bash
+                run_remote_installer https://sdk.cloud.google.com
             fi
             ;;
         linux|wsl)
             read -p "About to run installer from Google. Continue? (y/N) " -n 1 -r; echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
-                curl https://sdk.cloud.google.com | bash
+                run_remote_installer https://sdk.cloud.google.com
             fi
             ;;
         termux)
