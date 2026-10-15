@@ -1,5 +1,5 @@
 {
-  "last_scan": "20261015232719761",
+  "last_scan": "20261015235934338",
   "known_files": {
     ".scripts/sync_hodie.py": {
       "compliant": true,
@@ -870,6 +870,21 @@
       "compliant": true,
       "witness": "∰ 20261015232649123",
       "last_seen": "20261015232719761"
+    },
+    "peer-swap/session-a/README.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
+    },
+    "peer-swap/session-a/form-hodie-side.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
+    },
+    "peer-swap/session-a/pass1_hodie-reads-custos.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
     }
   }
 }
