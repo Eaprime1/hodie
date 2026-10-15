@@ -1,5 +1,5 @@
 {
-  "last_scan": "20261015220404944",
+  "last_scan": "20261015221326522",
   "known_files": {
     ".scripts/sync_hodie.py": {
       "compliant": true,
@@ -845,6 +845,11 @@
       "compliant": false,
       "witness": null,
       "last_seen": "20260822060014885"
+    },
+    "pr-journeys/202610_PR164_ci-claude-code-review-once-on-ready-not-.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015221326522"
     }
   }
 }
