@@ -17,8 +17,9 @@ what you found, say so and move on.*
    `navigo-claude-hodie-custos` at `a8e9e41`; no history, other branches, PRs or LFS ·
    `eaprime1/hodie` yes: shallow clone of `main` at `a834602`.
 3. What I can write: `eaprime1/hodie` attached with push access. Branch
-   `feature/peer-swap-hodie-side` created locally; push and PR creation were untested when this
-   was written (`gh auth status` reported a failed GH_TOKEN login).
+   `feature/peer-swap-hodie-side-b` pushed successfully (the shared `feature/peer-swap-hodie-side`
+   already held another session's Pass 1, so mine went to `-b`; Eric is keeping both). PR creation
+   still untested (`gh auth status` reported a failed GH_TOKEN login).
 4. What I already know about `eaprime1/custos` before Pass 1, honestly: a vague impression of it
    as a system-management tool, which I discounted, and its `CLAUDE.md`, which loaded
    automatically before Pass 1 began. Nothing else.
@@ -72,23 +73,36 @@ repo" (`atelier/halide/seeds/REVIEW-202610030124.md:109`) and I found no definit
 
 ## C. Pass 2 — deep dive of `eaprime1/hodie`
 
-*Read your own repo with Pass 1 in hand. Do not edit Pass 1.*
+*Full text in `pass2_hodie-own-repo.md`. Pass 1 is not edited.*
 
-1. The top-level folders of `eaprime1/hodie`, one line each: what is load-bearing, what is finished,
-   what is unfinished: ____
-   - `crawler_pixel8/` ____
-   - `quanta/` ____
-   - `moav/` ____
-   - `_CONSOLIDATED/` ____
-   - `.streams/`, `.locations/`, `.scripts/` ____
-   - `redundancy_entity/`, `crawler_output/` ____
-   - Anything top-level I did not list: ____
-2. Where my Pass 1 was wrong or incomplete, now that I know my own repo better: ____
-3. Things `eaprime1/hodie` does that `eaprime1/custos` would not guess: ____
-4. The thing in `eaprime1/hodie` I would least like the peer to open, and why: ____
-5. Did anything in my own repo change how I read Pass 1? If not, say so: ____
+1. The top-level folders of `eaprime1/hodie`, one line each (table with file counts in
+   `pass2_hodie-own-repo.md` section 1):
+   - `crawler_pixel8/` load-bearing Python crawler, about 1.85k lines; running; `tests/` pass (88
+     with `pytest-asyncio`).
+   - `quanta/` unfinished: 15 domain folders (`CLAUDE.md` says 16); status doc dated 2025-12-30.
+   - `moav/` 17 carriers (16 dedupe candidates, 1 transfer); all say `OPEN`, including the transfer
+     the README calls COMPLETE; none records hodie's own custody entry.
+   - `_CONSOLIDATED/` 310 files, a finished merge, unsorted content (302 in `CODEX_documents/`).
+   - `.streams/` one README; `.locations/` three load-bearing configs; `.scripts/` 29 files.
+   - `redundancy_entity/`, `crawler_output/`: Gravity Core files still present after a recorded
+     transfer; one summary JSON.
+   - Not in `CLAUDE.md`'s tree: `wellspring/`, `mission/`, `quepad/`, `moav/`, `tests/`,
+     `branch-tracker/`, `pr-journeys/`, `migrations/`, `docs/`, `scripts/` and more (13 of 33
+     folders are named there).
+2. Where my Pass 1 was wrong or incomplete: it called two custos claims about hodie "different"
+   when they were accurate as of their stamp and have since moved (C-1); it read hodie only
+   through `CLAUDE.md` (C-3); it treated index drift as custos-specific (C-4).
+3. Things hodie does that custos would not guess: a tested Python codebase; a workflow that
+   commits back to branches (`footer-witness.yml`); a daily Drive sync and an hourly bot-PR
+   finalizer; a seal gate with no footer or quote guard; entity domains as the content model.
+4. The thing I would least like the peer to open: `.eric/` (owner-filed notes, 27 files; I did
+   not open them), then `_CONSOLIDATED/CODEX_documents/` (302 files, known duplicates).
+5. Did anything in my own repo change how I read Pass 1? Yes: custos's claims about hodie were
+   accurate when written; index drift is shared; hodie lacks the seal-gate footer guard that
+   Pass 1 noted custos has (O-15).
 
-*Commit as `pass2_hodie-own-repo.md`, message starting `freeze:`.*
+*Commit as `pass2_hodie-own-repo.md`, message starting `freeze:`.* (Done in the commit that adds
+this file.)
 
 ---
 
