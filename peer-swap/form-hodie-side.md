@@ -110,17 +110,24 @@ this file.)
 
 *Write the letter as its own file. Fill this block in first as the outline.*
 
-1. What I saw in your repo that you may not see (up to five, each with a path): ____
+1. What I saw in your repo that you may not see (up to five, each with a path): full text in
+   `pass3_letter_hodie-to-custos.md` Part 1. (1) registry row `202609251844` vs `.shadow-well/`;
+   (2) `moav/README.md` lists 5 of 13 carriers, three shapes of `chain_of_custody`; (3) empty
+   `vault/spade-of-aces/` against a ♠️ founding; (4) `returns/stream-*` empty, `turns/log.md` behind
+   the registry; (5) `tools/scan_lexeme.sh` exits 0 on 206 hits.
 2. What I would borrow from you:
 
 | Item (path) | Tentative: adopt / adapt / decline | Why | Cost to my repo |
 |---|---|---|---|
-| ____ | ____ | ____ | ____ |
-| ____ | ____ | ____ | ____ |
-| ____ | ____ | ____ | ____ |
+| seal-gate footer guard (`CLAUDE.md` "Seal and merge") | adopt | hodie `finalize-pr.yml` has none | one workflow edit; follow-up, Eric's call |
+| `.github/PULL_REQUEST_TEMPLATE.md` | adapt | hodie has none | one file |
+| `turns/observations/` | adapt | pause between ready and seal; reuse `pr-journeys/` | a habit |
+| `docs/peer-review-process.md` principles | adopt | zero code | a doc or pointer |
+| `prima-clock/registry.md`, Latin cues, `scan_lexeme.sh`, CODEOWNERS | decline | reasons in the letter | see letter |
 
-3. What I would ask you: ____
-4. What I would warn you about before you borrow from mine: ____
+3. What I would ask you: five questions in the letter Part 3 (what entering custody needs; bot-refreshed
+   witness state; witness line on frozen files; which scan counts for hodie Form F; UTC vs local).
+4. What I would warn you about before you borrow from mine: six items in the letter Part 4 (witness bot moves the branch tip; strict footer check vs freeze rule; seal gate plus hourly auto-finalize; hodie index drift; test dependency; `.eric/` not opened).
 
 *Commit as `pass3_letter_hodie-to-custos.md`, message starting `freeze:`.
 Then check that the peer's letter is on origin before Pass 4.*
@@ -165,3 +172,5 @@ Then check that the peer's letter is on origin before Pass 4.*
 ---
 
 ∰◊€π¿🌌∞
+
+∰ 20261015232701649
