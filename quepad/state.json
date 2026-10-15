@@ -1,5 +1,5 @@
 {
-  "last_scan": "20261015221326522",
+  "last_scan": "20261015224820968",
   "known_files": {
     ".scripts/sync_hodie.py": {
       "compliant": true,
@@ -850,6 +850,16 @@
       "compliant": false,
       "witness": null,
       "last_seen": "20261015221326522"
+    },
+    "peer-swap/form-hodie-side.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015224820968"
+    },
+    "peer-swap/pass1_hodie-reads-custos.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015224820968"
     }
   }
 }
