@@ -1,16 +1,29 @@
+# Hodie — Claude Code Review
+#
+# Run on request, not on every push.
+# It runs once when a PR opens as non-draft or is marked ready for review,
+# and again only when the owner adds the `ai-review` label. Drafts and
+# ordinary pushes do not start it, so a long-running draft is not billed
+# per commit. (Before 202610152203 UTC it also ran on every `synchronize` and
+# `reopened`, drafts included.)
+# Pattern adapted from custos `.github/workflows/claude-code-review.yml`.
 name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
+    types: [opened, ready_for_review, labeled]
 
+# Any label fires a `labeled` event, but only `ai-review` runs the job. Other
+# labels get their own group, so a bot adding a label cannot cancel a review
+# that is already running.
 concurrency:
-  group: claude-review-${{ github.event.pull_request.number }}
+  group: claude-review-${{ github.event.pull_request.number }}-${{ (github.event.action == 'labeled' && github.event.label.name != 'ai-review') && 'other-label' || 'review' }}
   cancel-in-progress: true
 
 jobs:
   claude-review:
-    if: ${{ !contains(fromJSON('["Copilot","copilot[bot]","github-actions[bot]","dependabot[bot]"]'), github.actor) }}
+    # No `secrets` in a job-level `if:` — GitHub rejects the whole expression.
+    if: ${{ ((github.event.action == 'opened' && !github.event.pull_request.draft) || github.event.action == 'ready_for_review' || (github.event.action == 'labeled' && github.event.label.name == 'ai-review')) && github.event.pull_request.head.repo.fork == false && !contains(fromJSON('["Copilot","copilot[bot]","github-actions[bot]","dependabot[bot]"]'), github.actor) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,9 +37,32 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Detect self-modified review workflow
+        id: workflow-change
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const workflowChanged = files.some(
+              (file) => file.filename === '.github/workflows/claude-code-review.yml'
+            );
+            core.setOutput('self_modified', workflowChanged ? 'true' : 'false');
+            if (workflowChanged) {
+              core.notice(
+                'Skipping Claude review because this PR changes .github/workflows/claude-code-review.yml and GitHub blocks OIDC app-token exchange for self-modifying workflow reviews.'
+              );
+            }
+
       - name: Run Claude Code Review
         id: claude-review
-        uses: anthropics/claude-code-action@v1
+        if: ${{ steps.workflow-change.outputs.self_modified != 'true' }}
+        # v1 tag pinned to an immutable commit SHA (same pin custos uses).
+        uses: anthropics/claude-code-action@fbda2eb1bdc90d319b8d853f5deb53bca199a7c1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |

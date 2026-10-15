@@ -8,7 +8,13 @@
 - **Scope**: `crawler_pixel8/`, `redundancy_entity/` only
 - **Triggers**: Push/PR with Python file changes
 
-### 2. CodeRabbit (AI Reviews)
+### 2. Claude Code Review (CI)
+- **Workflow**: `.github/workflows/claude-code-review.yml`
+- **Triggers**: PR opened non-draft, PR marked ready for review, or the `ai-review` label added. Not on drafts, not on every push.
+- **Why**: it uses a paid subscription token; per-push runs on a long draft add up. Pattern adapted from custos.
+- **Needs**: `CLAUDE_CODE_OAUTH_TOKEN` repository secret.
+
+### 3. CodeRabbit (AI Reviews)
 - **Config**: `.coderabbit.yaml`
 - **Setup**: Install from [GitHub Marketplace](https://github.com/marketplace/coderabbit)
 - **Cost**: Free for open source

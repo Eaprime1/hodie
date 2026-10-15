@@ -75,7 +75,7 @@ source .scripts/env_setup.sh
 ## CI/CD & AI Review
 
 - **Claude Code Review**: `.github/workflows/claude-code-review.yml`
-  Triggers on every PR (opened, synchronized, ready_for_review).
+  Runs once when a PR opens non-draft or is marked ready for review, and again only when the owner adds the `ai-review` label. Drafts and ordinary pushes do not start it. A PR that edits this workflow file skips the review (GitHub blocks OIDC for self-modifying workflows).
   Secret required: `CLAUDE_CODE_OAUTH_TOKEN`
 - **Claude Interactive**: `.github/workflows/claude.yml`
   Triggered by `@claude` in PR/issue comments.
