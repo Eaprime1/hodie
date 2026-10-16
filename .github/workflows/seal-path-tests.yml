@@ -1,0 +1,32 @@
+name: Seal Path Tests
+
+# Offline test of the seal-cue gate in finalize-pr.yml: a comment that carries the
+# Claude Code footer, or a cue inside quotes or code, must not seal a PR.
+# The test pulls the real gate step out of the workflow, so it fails if the
+# workflow drifts. Neither the test nor this job calls an API or writes to the repo.
+# Added in the second peer swap: the test existed but no workflow ran it.
+# Same idea as custos's seal-path-tests.yml.
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/finalize-pr.yml'
+      - '.github/workflows/seal-path-tests.yml'
+      - 'scripts/test_finalize_gate.sh'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PyYAML (the test reads the workflow file)
+        run: python3 -m pip install --quiet pyyaml
+
+      - name: Seal-cue gate
+        run: bash scripts/test_finalize_gate.sh
