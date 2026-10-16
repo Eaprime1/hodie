@@ -34,14 +34,27 @@ const cap = (w) => w.charAt(0).toUpperCase() + w.slice(1);
 
 // Drop what is quoted rather than given: fenced code, inline code, > quotes
 // and indented code. An unterminated fence runs to the end of the comment.
+// The backtick is written \x60 so that tools that read this file as text do not
+// mistake a regex for the start of a template string.
+const FENCE_RE = /\x60\x60\x60[\s\S]*?(\x60\x60\x60|$)/g;
+const TILDE_FENCE_RE = /~~~[\s\S]*?(~~~|$)/g;
+const INLINE_CODE_RE = /\x60[^\x60\n]*\x60/g;
+
+function dropCodeSpans(text) {
+  return text
+    .replace(FENCE_RE, '\n')
+    .replace(TILDE_FENCE_RE, '\n')
+    .replace(INLINE_CODE_RE, ' ');
+}
+
+const isQuoted = (line) => /^\s*>/.test(line);
+const isIndentedCode = (line) => /^( {4,}|\t)/.test(line);
+
 function strip(body) {
-  return body
-    .replace(/\r\n?/g, '\n')
-    .replace(/```[\s\S]*?(```|$)/g, '\n')
-    .replace(/~~~[\s\S]*?(~~~|$)/g, '\n')
-    .replace(/`[^`\n]*`/g, ' ')
+  const text = dropCodeSpans(body.replace(/\r\n?/g, '\n'));
+  return text
     .split('\n')
-    .filter((line) => !/^\s*>/.test(line) && !/^( {4,}|\t)/.test(line))
+    .filter((line) => !isQuoted(line) && !isIndentedCode(line))
     .join('\n');
 }
 
