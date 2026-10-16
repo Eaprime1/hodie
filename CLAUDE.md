@@ -21,13 +21,13 @@ hodie/
 │   │   └── pattern_extractor.py    # Entity/topic/technical patterns
 │   └── cli/
 │       └── test_crawler.py  # CLI testing tool
-├── quanta/                  # 16 entity domains (tardigradia, microversa, etc.)
+├── quanta/                  # 15 entity domains (tardigradia, microversa, etc.)
 ├── redundancy_entity/       # File deduplication & gravity analysis
 ├── crawler_output/          # Processing results (summaries, patterns, maps)
 ├── .locations/              # Per-device config (mulberry, pixel8a, codespaces)
 ├── .streams/                # Active workstreams (prime, codex, gamemaster)
 ├── .githooks/               # Pre-commit review, post-commit logging
-├── .scripts/                # 21+ bash/PowerShell automation scripts
+├── .scripts/                # 29 bash/PowerShell automation scripts
 ├── .claude/                 # Windows/WSL setup guides
 ├── .eric/                   # Session notes and continuity tracking
 ├── _CONSOLIDATED/           # Merged documents (CODEX, PRIME, research)
@@ -37,7 +37,7 @@ hodie/
 
 ## Language & Tech Stack
 
-- **Python 3.8+** (standard library only for core — no external deps in Phase 1)
+- **Python 3.8+** (standard library only for core — no external deps in Phase 1; running `tests/` needs the dev dependency `pytest-asyncio`, listed in `pyproject.toml`)
 - Heavy use of `asyncio`, `dataclasses`, type hints, `pathlib`
 - Processor chaining via `+` operator (`parser + extractor + custom`)
 - Optional future dep: `google-genai` for Gemini API
@@ -77,8 +77,7 @@ source .scripts/env_setup.sh
 - **Claude Code Review**: `.github/workflows/claude-code-review.yml`
   Runs once when a PR opens non-draft or is marked ready for review, and again only when the owner adds the `ai-review` label. Drafts and ordinary pushes do not start it. A PR that edits this workflow file skips the review (GitHub blocks OIDC for self-modifying workflows).
   Secret required: `CLAUDE_CODE_OAUTH_TOKEN`
-- **Claude Interactive**: `.github/workflows/claude.yml`
-  Triggered by `@claude` in PR/issue comments.
+- **Claude Interactive**: `.github/workflows/claude.yml` was deleted in `2d2c2fc` (2026-04-23); no workflow answers `@claude` comments now. `@claude finalize` is read only by `finalize-pr.yml`.
 - **Gemini Review**: `.github/workflows/gemini-dispatch.yml` (dispatch hub)
   Calls `gemini-review.yml`, `gemini-triage.yml`, `gemini-invoke.yml`
   Trigger: `@gemini-cli review/triage/[prompt]` in comments, or auto on PR open.

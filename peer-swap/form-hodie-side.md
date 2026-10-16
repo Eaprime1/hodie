@@ -136,38 +136,52 @@ Then check that the peer's letter is on origin before Pass 4.*
 
 ## E. Pass 4 — reply to the peer's letter
 
-1. For each item in the peer's letter:
+1. For each item in the peer's letter (full table and reasons: `pass4_reply_hodie.md` Part 1):
 
 | Their item | adopt / adapt / decline | Reason | Where in my repo | Done in this PR, or follow-up |
 |---|---|---|---|---|
-| ____ | ____ | ____ | ____ | ____ |
-| ____ | ____ | ____ | ____ | ____ |
-| ____ | ____ | ____ | ____ | ____ |
+| 1. plexus has no folders | accept finding, correct premise | it is code: `PLEXUS_STAGES`, `crawler_pixel8/processors/one_hertz.py:28` | `PLEXUS_SYSTEM.md` | follow-up (doc wording) |
+| 2. `CLAUDE.md` names things the tree lacks | adopt | four claims checked, all true | `CLAUDE.md` | done in this PR |
+| 3. 17 carriers `OPEN`, none names hodie | accept | observed; see Part 3 answer 3 | `moav/` | follow-up (custody entry record) |
+| 4. no door for a contributor | adapt | true; license is Eric's call | `.github/PULL_REQUEST_TEMPLATE.md` | template done; license, CONTRIBUTING, issue templates follow-up |
+| 5. wellspring says one thing, holds another | accept | 89 files in `Temphold_needs_review/`, owner "eaprime1 review" | `wellspring/` | follow-up (Eric) |
+| their borrow table (5 rows) and 6 questions | notes and answers only | custos's decisions; answers checked against hodie | `pass4_reply_hodie.md` Parts 2 and 3 | done |
 
-2. Small adaptations made in this PR (paths): ____
-3. Follow-ups named but not done: ____
-4. What changed my mind, if anything: ____
+2. Small adaptations made in this PR (paths): `CLAUDE.md` (4 corrections: 15 domains, 29 scripts,
+   pytest-asyncio note, `claude.yml` deleted); `.github/PULL_REQUEST_TEMPLATE.md` (new);
+   `peer-swap/pass4_reply_hodie.md`; this form. Also, on Eric's instruction, one witness line appended to
+   frozen `pass1_hodie-reads-custos.md` and `pass2_hodie-own-repo.md` (commit `431f116`; no other change).
+3. Follow-ups named but not done: plexus doc wording; `moav/README.md` "COMPLETE" wording; seal-gate footer
+   guard in `finalize-pr.yml`; `LICENSE`, `CONTRIBUTING.md`, issue templates (Eric); `wellspring/` triage (Eric);
+   `branch-tracker/branches.md` refresh; hodie custody entry record.
+4. What changed my mind, if anything: the plexus premise (code, not folders); and that hodie's `chain_of_custody`
+   and `motion_state` fields are not defined anywhere.
 
 ### Hodie-side block
 
-5. What in `hodie` is in a chain of custody, and what is not, as far as I can show with
-   paths (not a full audit; a first honest sort): ____
-6. Where a record of hodie's own entry into custody could live, and what I would need from
-   custos to write it: ____
-7. Hodie's prima-clock stamp (**Eric sets this; leave blank until he gives it**): ____
-8. One thing custos does that hodie's workflows do not, and what it would cost to match
-   (for example, review runs on every push versus once when ready): ____
+5. What in `hodie` is in a chain of custody, and what is not: nothing in a chain (no custos registry row names
+   hodie; no hodie carrier names hodie as entering). 17 `moav/` carriers recorded but `OPEN`. Not in a chain:
+   `_CONSOLIDATED/CODEX_documents/`, `wellspring/`, `quanta/`, `crawler_pixel8/`, `mission/`. `.eric/` not opened,
+   so not sorted. Detail: `pass4_reply_hodie.md` Part 6, item 5.
+6. Where a record of hodie's own entry could live: a carrier in hodie `moav/hodie_moav_custody_entry.json` and a
+   row in custos `prima-clock/registry.md` (custos records). Need from custos: row format, suit/plank for
+   shadow-before-primal, meaning of `chain_of_custody` on an entry carrier. Carrier not written.
+7. Hodie's prima-clock stamp (Eric set it): `202610151805` Pacific (PDT, UTC-7). UTC confirmation: `202610160105`
+   (checked by running `date -u` and `TZ=America/Los_Angeles date` together).
+8. One thing custos does that hodie's workflows do not: the seal-gate guard against navigo comments (footer and
+   quoted or code cues). Cost: a few lines in `finalize-pr.yml` before the `grep -qF '@claude finalize'` step, plus a
+   small test; changes who can seal, so Eric's call. Review-on-ready was already matched in #164.
 
 ---
 
 ## F. Ready for oversight
 
-- [ ] All four passes committed; Passes 1 to 3 frozen
-- [ ] This form complete; unanswered blanks marked and explained
-- [ ] My repo's own scan run: ____ (result)
+- [x] All four passes committed; Passes 1 to 3 frozen (witness line appended to Passes 1 and 2 afterward, on Eric's word, `431f116`; no other change)
+- [x] This form complete; unanswered blanks marked and explained (no blanks left; Section A to D filled earlier)
+- [x] My repo's own scan run: `python3 scripts/footer_witness.py --root . --strict --git-base origin/main` (the command CI runs). Result: my files compliant; flags only the three `peer-swap/session-a/` files (session A's, filed unchanged, not mine to edit). Also `python3 -m pytest tests`: 88 passed with `pytest-asyncio` installed.
 - [ ] PR description follows my repo's template; PR marked ready for review
 - [ ] One comment posted in words saying the PR is ready, and what is left open
-- [ ] I have not sealed, merged, or edited the peer repo
+- [x] I have not sealed, merged, or edited the peer repo
 
 ---
 
