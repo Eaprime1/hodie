@@ -67,4 +67,9 @@ jobs:
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
+            // The first PR that adds this script runs before the base branch has it.
+            if (!require('fs').existsSync('./.github/scripts/latin-cue-record.js')) {
+              core.info('latin-cue-record.js is not on the base branch yet; nothing to do.');
+              return;
+            }
             await require('./.github/scripts/latin-cue-record.js').run({ github, context, core });

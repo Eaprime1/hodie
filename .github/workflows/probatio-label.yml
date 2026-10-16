@@ -48,6 +48,11 @@ jobs:
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
+            // The first PR that adds this script runs before the base branch has it.
+            if (!require('fs').existsSync('./.github/scripts/probatio-label.js')) {
+              core.info('probatio-label.js is not on the base branch yet; nothing to do.');
+              return;
+            }
             const lib = require('./.github/scripts/probatio-label.js');
             const run = context.eventName === 'pull_request' ? lib.onPush : lib.onComment;
             await run({ github, context, core });
