@@ -85,7 +85,11 @@ source .scripts/env_setup.sh
 - **Pylint**: `.github/workflows/pylint.yml`
   Runs on every push, Python 3.8/3.9/3.10 matrix.
 - **Seal-path tests**: `.github/workflows/seal-path-tests.yml`
-  Runs `scripts/test_finalize_gate.sh` (11 checks, needs bash, perl and python3 with PyYAML) when `finalize-pr.yml` or the test changes. It pulls the real gate step out of the workflow, so a comment with the Claude Code footer, or a cue inside quotes or code, can't start sealing without this test failing. Offline; writes nothing.
+  Runs `scripts/test_finalize_gate.sh` when `finalize-pr.yml` or the test changes.
+  The test has 11 checks and needs bash, perl and python3 with PyYAML.
+  It pulls the real gate step out of the workflow.
+  A comment with the Claude Code footer, or a cue inside quotes or code, must not seal.
+  If one does, the test fails. Offline; writes nothing.
 - Style guide for AI reviewers: `.gemini/styleguide.md`
 
 ## Code Conventions
