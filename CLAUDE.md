@@ -88,8 +88,8 @@ source .scripts/env_setup.sh
   Runs `scripts/test_finalize_gate.sh` when `finalize-pr.yml` or the test changes.
   The test has 11 checks and needs bash, perl and python3 with PyYAML.
   It pulls the real gate step out of the workflow.
-  A comment with the Claude Code footer, or a cue inside quotes or code, must not seal.
-  If one does, the test fails. Offline; writes nothing.
+  The checks cover comments that carry the Claude Code footer, and cues inside quotes or code.
+  The test fails if any of those would start a seal. It is offline and writes nothing.
 - Style guide for AI reviewers: `.gemini/styleguide.md`
 
 ## Code Conventions
