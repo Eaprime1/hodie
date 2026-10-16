@@ -52,6 +52,8 @@ comment without the Claude Code footer. `.github/scripts/cue-parser.js` holds th
 | Cue | Read by | Effect |
 |---|---|---|
 | `@claude finalize` | `finalize-pr.yml` | Seals the PR if the template, threads and CI pass. |
+| `^name probatio` | `probatio-label.yml` | Sets `ready-for-oversight` with a comment naming the head. Owner only. |
+| any call, or opening the PR ready | `latin-cue-record.yml` | Logs it in one living comment with the checks, threads and merge state. |
 | `@claude ultima probatio` | `finalize-pr.yml` | The same seal, in the Latin wording. |
 | any other call | nothing | Words for the conversation. No workflow acts on them. |
 
@@ -63,9 +65,9 @@ sentence does not say `finalize` right after `@claude`.
 
 | Step | Who | Cue | What happens |
 |---|---|---|---|
-| 1 | Contributor | (opens the PR ready) | The first witness. |
+| 1 | Contributor | (opens the PR ready) | The first witness. `latin-cue-record.yml` logs it as Prima Recensio. |
 | 2 | Contributor | `recensio`, `ultima recensio` | Reviews its own PR and fixes what it finds. |
-| 3 | Shepherd | `probatio` | Soft seal. In hodie this is a conversation call; no label is set yet. |
+| 3 | Shepherd | `^name probatio` | Soft seal. `probatio-label.yml` sets `ready-for-oversight`; a person's push takes it off. |
 | 4 | Shepherd | `@claude finalize` or `ultima probatio` | The seal. Owner only. |
 | 5 | Shepherd | the `final-oversight` label, then the approval | Report only (`final-oversight.md`). |
 | 6 | Shepherd | `emenda` | Asks the contributor to repair a flag. A fix is a new head and needs a new seal. |
@@ -76,9 +78,8 @@ A contributor never seals, never merges and never answers a cue meant for anothe
 ## Not in hodie yet
 
 These exist in custos and are not ported. Each is a separate swap.
+The check-in cues stay out until hodie has a mission board to run.
 
-- The soft-seal label: `probatio-label.yml` sets `ready-for-oversight` on the owner's `^name probatio`.
-- The cue record: `latin-cue-record.yml` logs each call with the PR's state.
 - The check-in cues `disponi`, `petitio` and `placet`, which run the mission board.
 - The observation document before the seal.
 
