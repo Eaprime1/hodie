@@ -202,6 +202,10 @@ def to_centesimal_minutes(stamp: str) -> Optional[float]:
 # ---------------------------------------------------------------------------
 
 
+# A git ref: letters, digits and . _ / ~ ^ @ { } -, never starting with '-'.
+SAFE_REF_PATTERN = re.compile(r"[A-Za-z0-9._/~^@{}][A-Za-z0-9._/~^@{}-]*")
+
+
 def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
     """Return repo-relative paths of files added since *base_ref*, or None on failure.
 
@@ -212,12 +216,14 @@ def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
     new on every pull_request event.
     """
     git = shutil.which("git")
-    if git is None or base_ref.startswith("-"):
-        # No git on PATH, or a ref that git would read as an option.
+    if git is None or not SAFE_REF_PATTERN.fullmatch(base_ref):
+        # No git on PATH, or a ref that git could read as an option or a shell-like string.
         return None
     try:
-        result = subprocess.run(  # nosec B603 - fixed argument list, no shell
-            [git, "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],
+        # nosemgrep: the argument list is fixed, git is resolved by shutil.which and
+        # base_ref passed SAFE_REF_PATTERN above (no leading '-', no spaces or shell characters).
+        result = subprocess.run(  # nosec B603 nosemgrep
+            [git, "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],  # nosemgrep
             cwd=root,
             capture_output=True,
             text=True,

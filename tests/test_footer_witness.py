@@ -427,6 +427,10 @@ class TestGetGitNewFiles:
     def test_ref_that_looks_like_an_option_is_refused(self, tmp_path):
         assert get_git_new_files(tmp_path, "--output=leak.txt") is None
 
+    @pytest.mark.parametrize("ref", ["main; rm -rf x", "a b", "$(id)", "", "-x"])
+    def test_unsafe_refs_are_refused(self, tmp_path, ref):
+        assert get_git_new_files(tmp_path, ref) is None
+
     def test_no_git_on_path_returns_none(self, tmp_path, monkeypatch):
         monkeypatch.setenv("PATH", str(tmp_path))
         assert get_git_new_files(tmp_path, "origin/main") is None
