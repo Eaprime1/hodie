@@ -70,20 +70,25 @@ function splitId(tokens) {
 
 const isKnown = (w) => ACTIONS.includes(w) || MODIFIERS.includes(w) || VERBS.includes(w);
 
+const isVerbAlone = (actions, modifiers, verbs) =>
+  verbs.length === 1 && actions.length === 0 && modifiers.length === 0;
+const isLoneRenovata = (words) => words.length === 1 && words[0] === 'renovata';
+const isOneAction = (actions, verbs) => actions.length === 1 && verbs.length === 0;
+
 // What the known words mean together: a verb alone, a lone renovata, or one action with modifiers.
 function shapeCue(id, words) {
   const actions = words.filter((w) => ACTIONS.includes(w));
   const modifiers = words.filter((w) => MODIFIERS.includes(w));
   const verbs = words.filter((w) => VERBS.includes(w));
 
-  if (verbs.length === 1 && actions.length === 0 && modifiers.length === 0) {
+  if (isVerbAlone(actions, modifiers, verbs)) {
     return { id, verb: verbs[0], canonical: verbs[0], modifiers: [], action: null };
   }
   // Renovata may stand alone: a request to refresh the current work (docs/latin-workflow.md).
-  if (words.length === 1 && words[0] === 'renovata') {
+  if (isLoneRenovata(words)) {
     return { id, verb: null, action: null, modifiers: ['Renovata'], canonical: 'Renovata' };
   }
-  if (actions.length === 1 && verbs.length === 0) {
+  if (isOneAction(actions, verbs)) {
     return {
       id, verb: null, action: cap(actions[0]),
       modifiers: modifiers.map(cap), canonical: words.map(cap).join(' '),
@@ -102,12 +107,22 @@ function readWords(rest) {
   return shapeCue(id, words);
 }
 
-// Why a whole comment is not read at all, or null when it is.
+const isEmpty = (body) => !body || !String(body).trim();
+const isBot = (o) => o.authorType === 'Bot';
+const notOwner = (o) => o.association !== undefined && !(o.allowed || ['OWNER']).includes(o.association);
+
+// Why a whole comment is not read at all, in the order the reasons are checked.
+const SKIP_RULES = [
+  ['empty', (body) => isEmpty(body)],
+  ['bot', (body, o) => isBot(o)],
+  ['not owner', (body, o) => notOwner(o)],
+  ['footer', (body) => hasFooter(body)],
+];
+
+// The first reason a comment is skipped, or null when it is read.
 function skipReason(body, o) {
-  if (!body || !String(body).trim()) return 'empty';
-  if (o.authorType === 'Bot') return 'bot';
-  if (o.association !== undefined && !(o.allowed || ['OWNER']).includes(o.association)) return 'not owner';
-  return hasFooter(body) ? 'footer' : null;
+  const hit = SKIP_RULES.find(([, test]) => test(body, o));
+  return hit ? hit[0] : null;
 }
 
 const CARET_RE = /^ {0,3}\^([A-Za-z][A-Za-z0-9_-]*)(?![A-Za-z0-9_-])(.*)$/;
