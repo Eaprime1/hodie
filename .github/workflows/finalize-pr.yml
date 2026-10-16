@@ -35,8 +35,20 @@ jobs:
         id: gate
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
+        # Guards (ported from custos, 2026-10-16, after the first peer swap):
+        #   - A comment with the Claude Code footer is a navigo writing under
+        #     the owner's login, not the owner. It never seals.
+        #   - A cue inside `code`, a ``` block or a > quote is being quoted,
+        #     not given, so those parts are removed before matching.
         run: |
-          if echo "$COMMENT_BODY" | grep -qF '@claude finalize'; then
+          if printf '%s' "$COMMENT_BODY" | grep -qiE 'Generated (by|with) \[Claude Code\]'; then
+            echo "Comment carries the Claude Code footer; not a seal cue."
+            exit 0
+          fi
+          body=$(printf '%s' "$COMMENT_BODY" \
+            | perl -0777 -pe 's/```.*?```//gs; s/`[^`\n]*`//g; s/^[ \t]*>.*$//mg' \
+            | tr '\n' ' ')
+          if printf '%s' "$body" | grep -qiE '@claude[[:space:]]+finalize([^[:alnum:]_]|$)'; then
             echo "triggered=true" >> "$GITHUB_OUTPUT"
           fi
 
