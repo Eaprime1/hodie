@@ -58,19 +58,20 @@ function strip(body) {
     .join('\n');
 }
 
-// Read the words after the navigo name: an optional conversation id, then cue words.
-function readWords(rest) {
-  const tokens = rest.split(/\s+/)
-    .map((t) => t.replace(/[.,;:!?]+$/, ''))
-    .filter(Boolean);
-  let id = null;
-  if (tokens.length && ID_RE.test(tokens[0])) id = tokens.shift().toLowerCase();
-  if (!tokens.length) return { id, error: 'no cue words' };
+const tokenize = (rest) => rest.split(/\s+/)
+  .map((t) => t.replace(/[.,;:!?]+$/, ''))
+  .filter(Boolean);
 
-  const words = tokens.map((t) => t.toLowerCase());
-  const bad = words.filter((w) => !ACTIONS.includes(w) && !MODIFIERS.includes(w) && !VERBS.includes(w));
-  if (bad.length) return { id, error: `unrecognized words: ${bad.join(', ')}` };
+// An optional conversation id may come first.
+function splitId(tokens) {
+  if (tokens.length && ID_RE.test(tokens[0])) return { id: tokens[0].toLowerCase(), tokens: tokens.slice(1) };
+  return { id: null, tokens };
+}
 
+const isKnown = (w) => ACTIONS.includes(w) || MODIFIERS.includes(w) || VERBS.includes(w);
+
+// What the known words mean together: a verb alone, a lone renovata, or one action with modifiers.
+function shapeCue(id, words) {
   const actions = words.filter((w) => ACTIONS.includes(w));
   const modifiers = words.filter((w) => MODIFIERS.includes(w));
   const verbs = words.filter((w) => VERBS.includes(w));
@@ -78,7 +79,7 @@ function readWords(rest) {
   if (verbs.length === 1 && actions.length === 0 && modifiers.length === 0) {
     return { id, verb: verbs[0], canonical: verbs[0], modifiers: [], action: null };
   }
-  // Renovata may stand alone: a request to refresh the current work (docs/latin-workflow-v2.md).
+  // Renovata may stand alone: a request to refresh the current work (docs/latin-workflow.md).
   if (words.length === 1 && words[0] === 'renovata') {
     return { id, verb: null, action: null, modifiers: ['Renovata'], canonical: 'Renovata' };
   }
@@ -91,40 +92,60 @@ function readWords(rest) {
   return { id, error: 'ambiguous cue' };
 }
 
+// Read the words after the navigo name: an optional conversation id, then cue words.
+function readWords(rest) {
+  const { id, tokens } = splitId(tokenize(rest));
+  if (!tokens.length) return { id, error: 'no cue words' };
+  const words = tokens.map((t) => t.toLowerCase());
+  const bad = words.filter((w) => !isKnown(w));
+  if (bad.length) return { id, error: `unrecognized words: ${bad.join(', ')}` };
+  return shapeCue(id, words);
+}
+
+// Why a whole comment is not read at all, or null when it is.
+function skipReason(body, o) {
+  if (!body || !String(body).trim()) return 'empty';
+  if (o.authorType === 'Bot') return 'bot';
+  if (o.association !== undefined && !(o.allowed || ['OWNER']).includes(o.association)) return 'not owner';
+  return hasFooter(body) ? 'footer' : null;
+}
+
+const CARET_RE = /^ {0,3}\^([A-Za-z][A-Za-z0-9_-]*)(?![A-Za-z0-9_-])(.*)$/;
+const AT_RE = /^ {0,3}@(claude)(?![A-Za-z0-9_-])(.*)$/i;
+
+function matchLine(line) {
+  const caret = line.match(CARET_RE);
+  const at = !caret && line.match(AT_RE);
+  const m = caret || at;
+  return m ? { sigil: caret ? '^' : '@', navigo: m[1].toLowerCase(), rest: m[2] } : null;
+}
+
+// One line -> null (not a cue), { rejected } or { cue }.
+function readLine(line, number, names) {
+  const m = matchLine(line);
+  if (!m) return null;
+  const { sigil, navigo } = m;
+  if (!names.includes(navigo)) return { rejected: { line: number, sigil, navigo, reason: 'unknown navigo' } };
+  const read = readWords(m.rest);
+  if (read.error) return { rejected: { line: number, sigil, navigo, reason: read.error } };
+  return {
+    cue: {
+      line: number, sigil, navigo, id: read.id,
+      action: read.action, modifiers: read.modifiers, verb: read.verb, canonical: read.canonical,
+    },
+  };
+}
+
 function parseComment(body, opts) {
   const o = opts || {};
   const names = (o.names || DEFAULT_NAMES).map((n) => n.toLowerCase());
-  const out = { cues: [], rejected: [], skipped: null };
-
-  if (!body || !String(body).trim()) { out.skipped = 'empty'; return out; }
-  if (o.authorType === 'Bot') { out.skipped = 'bot'; return out; }
-  if (o.association !== undefined && !(o.allowed || ['OWNER']).includes(o.association)) {
-    out.skipped = 'not owner';
-    return out;
-  }
-  if (hasFooter(body)) { out.skipped = 'footer'; return out; }
+  const out = { cues: [], rejected: [], skipped: skipReason(body, o) };
+  if (out.skipped) return out;
 
   strip(String(body)).split('\n').forEach((line, i) => {
-    const caret = line.match(/^ {0,3}\^([A-Za-z][A-Za-z0-9_-]*)(?![A-Za-z0-9_-])(.*)$/);
-    const at = !caret && line.match(/^ {0,3}@(claude)(?![A-Za-z0-9_-])(.*)$/i);
-    const m = caret || at;
-    if (!m) return;
-
-    const sigil = caret ? '^' : '@';
-    const navigo = m[1].toLowerCase();
-    if (!names.includes(navigo)) {
-      out.rejected.push({ line: i + 1, sigil, navigo, reason: 'unknown navigo' });
-      return;
-    }
-    const read = readWords(m[2]);
-    if (read.error) {
-      out.rejected.push({ line: i + 1, sigil, navigo, reason: read.error });
-      return;
-    }
-    out.cues.push({
-      line: i + 1, sigil, navigo, id: read.id,
-      action: read.action, modifiers: read.modifiers, verb: read.verb, canonical: read.canonical,
-    });
+    const r = readLine(line, i + 1, names);
+    if (r && r.cue) out.cues.push(r.cue);
+    if (r && r.rejected) out.rejected.push(r.rejected);
   });
   return out;
 }
