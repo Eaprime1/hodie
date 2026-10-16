@@ -87,7 +87,7 @@ Gravity = (duplicate_count × 5.0) +      ← Highest weight!
 
 **What it does:**
 - Scans all of beasis (55,022 files in 128 seconds!)
-- Calculates MD5 hashes for deduplication
+- Calculates SHA-256 hashes for deduplication
 - Identifies unique file families
 - Calculates gravity scores (duplicates = high gravity)
 - Marks files for dup_ prefix

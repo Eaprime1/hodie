@@ -70,7 +70,8 @@ decimal-time standard is formalised.
 import argparse
 import json
 import re
-import subprocess
+import shutil
+import subprocess  # nosec B404 - runs one fixed git command, no shell
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -210,9 +211,13 @@ def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
     is not persisted between runs — it prevents every file from appearing
     new on every pull_request event.
     """
+    git = shutil.which("git")
+    if git is None or base_ref.startswith("-"):
+        # No git on PATH, or a ref that git would read as an option.
+        return None
     try:
-        result = subprocess.run(
-            ["git", "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],
+        result = subprocess.run(  # nosec B603 - fixed argument list, no shell
+            [git, "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],
             cwd=root,
             capture_output=True,
             text=True,

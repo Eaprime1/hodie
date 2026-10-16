@@ -38,8 +38,8 @@ GRAVITY_WEIGHTS = {
 }
 
 def calculate_hash(filepath, chunk_size=8192):
-    """Calculate MD5 hash for file identity"""
-    hasher = hashlib.md5()
+    """Calculate the SHA-256 hash that identifies a file."""
+    hasher = hashlib.sha256()
     try:
         with open(filepath, 'rb') as f:
             while chunk := f.read(chunk_size):
