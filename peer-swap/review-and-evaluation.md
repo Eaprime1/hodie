@@ -25,7 +25,7 @@ not a verdict", and readiness for hodie's entry into custody.
 | Declines with reasons | **Met** | Pass 3 declined four of eight borrow items with reasons; custos declined the footer state file and bot commit. |
 | Honest gaps stated | **Met** | Both Pass 1s list what could not be seen (history, other branches, CI). Both letters mark guesses. |
 | Independent perspectives | **Partly** | Neither Pass 1 was cold: both sides had the peer's `CLAUDE.md` loaded, and custos's was labelled a warm start. Custos wrote Passes 2 and 3 after my letter was on origin and said it had not read it. Convergence helps here (section 3). |
-| Clean mechanics | **Not met this run** | 13 issues in `first-run-notes.md`; seven were avoidable with a better template or README (section 5). |
+| Clean mechanics | **Not met this run** | 13 issues in `first-run-notes.md`; several look avoidable with a better template or README (section 5). I did not count how many. |
 
 ## 3. What the run produced (observed)
 
@@ -35,7 +35,7 @@ not a verdict", and readiness for hodie's entry into custody.
   the strongest ones; a one-sided finding (the plexus premise, `claude.yml`) needed a check.
 - **Fixes in hodie:** four `CLAUDE.md` claims corrected; a PR template; the witness bot no longer commits to PR
   branches; the Gemini review workflows found failing since 2026-08-22 and paused (`.gemini/OUT_OF_ORDER.md`).
-  None of these was on anyone's list before the swap.
+  None of these was a stated goal of the swap; they came from chasing problems that surfaced during it.
 - **Questions that sharpened the work:** custos asked what `OPEN` means on a `COMPLETE` carrier. Hodie has two
   fields (`chain_of_custody`, `motion_state`) that nothing defines; the question exposed it.
 - **A usable custody picture:** nothing in hodie is in a chain yet; 17 carriers sit `OPEN` (Pass 4 Part 6).

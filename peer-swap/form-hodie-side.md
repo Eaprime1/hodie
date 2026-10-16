@@ -178,9 +178,9 @@ Then check that the peer's letter is on origin before Pass 4.*
 
 - [x] All four passes committed; Passes 1 to 3 frozen (witness line appended to Passes 1 and 2 afterward, on Eric's word, `431f116`; no other change)
 - [x] This form complete; unanswered blanks marked and explained (no blanks left; Section A to D filled earlier)
-- [x] My repo's own scan run: `python3 scripts/footer_witness.py --root . --strict --git-base origin/main` (the command CI runs). Result: my files compliant; flags only the three `peer-swap/session-a/` files (session A's, filed unchanged, not mine to edit). Also `python3 -m pytest tests`: 88 passed with `pytest-asyncio` installed.
-- [ ] PR description follows my repo's template; PR marked ready for review
-- [ ] One comment posted in words saying the PR is ready, and what is left open
+- [x] My repo's own scan run: `python3 scripts/footer_witness.py --root . --strict --git-base origin/main` (the command CI runs). Result when first run: my files compliant; flagged only the three `peer-swap/session-a/` files. After their witness lines were added (`6778023`), the check passes on the PR (11 of 11 checks green at `958292c`). Also `python3 -m pytest tests`: 88 passed with `pytest-asyncio` installed.
+- [x] PR description follows my repo's template (`.github/PULL_REQUEST_TEMPLATE.md`); PR marked ready for review (done 202610160110 UTC; description updated again at the final review)
+- [x] One comment posted in words saying the PR is ready, and what is left open (issue comment on #165, 202610160110 UTC)
 - [x] I have not sealed, merged, or edited the peer repo
 
 ---
