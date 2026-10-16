@@ -55,6 +55,11 @@ comment but no journey doc until the variable is set. I could not test these on 
 YAML parses and the embedded scripts pass `node --check`. The old bot commits on this branch (`4e2c96e`, `5bc876e`)
 stay Unverified in history; I did not rewrite them. A squash merge would drop them from `main`.
 
+The finalize gate (`finalize-pr.yml`) requires `## Intent`, `## What Arrived`, `## Resonance` and a `∰` in the PR body. The
+PR template I added first had none of the last three, so the first `@claude finalize` (2026-10-16 02:06 UTC) was refused with
+those three gaps. The template and the PR body now match the gate; the Resonance text in the PR body is a Claude draft for
+Eric to rewrite.
+
 Small fixes made in the same pass: `CONTRIBUTING.md` (new), a pointer to `PLEXUS_STAGES` in `PLEXUS_SYSTEM.md`, and a
 note in `moav/README.md` that `COMPLETE` is not sealed. Left alone: `LICENSE` (the owner's choice), issue templates,
 the seal-gate footer guard, `wellspring/` triage, `branch-tracker/branches.md` refresh.
