@@ -5,10 +5,12 @@ on:
     paths:
       - '.github/workflows/**'
       - 'scripts/check_workflow_injection.py'
+      - 'scripts/test_check_workflow_injection.sh'
   pull_request:
     paths:
       - '.github/workflows/**'
       - 'scripts/check_workflow_injection.py'
+      - 'scripts/test_check_workflow_injection.sh'
   workflow_dispatch:
 
 jobs:
@@ -24,6 +26,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: The checker's own tests
+        run: bash scripts/test_check_workflow_injection.sh
 
       - name: Check for expression injection in workflows
         run: |
