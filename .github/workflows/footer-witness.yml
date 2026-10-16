@@ -74,7 +74,13 @@ jobs:
         # (especially from forks), and no reason to commit on every PR run.
         # quepad/** isn't in this workflow's own path filters, so this can't
         # trigger an infinite loop; [skip ci] is belt-and-suspenders.
-        if: github.event_name == 'push'
+        #
+        # Default branch only. Committing to feature branches moved the branch tip
+        # under whoever was pushing (forced a rebase before every push during the
+        # first peer swap, 2026-10-15) and left commits that GitHub shows as
+        # Unverified. Feature-branch scans still run and still fail strict mode;
+        # they just don't write state back.
+        if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

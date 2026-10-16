@@ -13,3 +13,5 @@ branch so the two cold reads of custos do not overwrite each other.
 - Pass 2 onward should use session b. Where session A saw something session b did not,
   carry it into a later pass as new text, citing this file.
 - Nothing in session A is edited. The original branch is left as it was.
+
+∰ 20261016012345051
