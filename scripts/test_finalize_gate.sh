@@ -33,5 +33,12 @@ check "inline code cue skips"           skip "$(gate 'say `@claude finalize` whe
 check "fenced cue skips"                skip "$(gate $'```\n@claude finalize\n```')"
 check "prose without cue skips"         skip "$(gate 'looks good, finalize later')"
 check "word run-on does not seal"       skip "$(gate '@claude finalizer')"
+check "ultima probatio seals"           seal "$(gate '@claude ultima probatio')"
+check "ultima probatio, odd spacing"    seal "$(gate $'@claude  Ultima\nProbatio')"
+check "ultima probatio + footer skips"  skip "$(gate "@claude ultima probatio $WITH")"
+check "ultima probatio quoted skips"    skip "$(gate '> @claude ultima probatio')"
+check "probatio alone does not seal"    skip "$(gate '@claude probatio')"
+check "ultima recensio does not seal"   skip "$(gate '@claude ultima recensio')"
+check "no @claude does not seal"        skip "$(gate 'ultima probatio')"
 echo "$pass of $((pass+fail)) passed"
 [ "$fail" -eq 0 ]

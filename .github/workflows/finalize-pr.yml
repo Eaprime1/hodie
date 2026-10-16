@@ -1,6 +1,7 @@
 # Hodie — Finalize PR
 #
-# Comment `@claude finalize` on any PR to seal it.
+# Comment `@claude finalize` (or `ultima Probatio` with `@claude`) on any PR to seal it.
+# `ultima Probatio` is the Latin workflow's final seal (docs/latin-workflow.md).
 # Gates: template sections filled · threads resolved · CI green
 # On pass: posts rubric + valuation · applies `finalized` label · commits PR Journey doc
 #
@@ -35,6 +36,9 @@ jobs:
         id: gate
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
+        # The comment must say "@claude finalize" as a phrase, or mention @claude
+        # and say "ultima Probatio" (ported from custos). A comment that only
+        # mentions both words elsewhere does not seal the PR.
         # Guards (ported from custos, 2026-10-16, after the first peer swap):
         #   - A comment with the Claude Code footer is a navigo writing under
         #     the owner's login, not the owner. It never seals.
@@ -48,7 +52,9 @@ jobs:
           body=$(printf '%s' "$COMMENT_BODY" \
             | perl -0777 -pe 's/```.*?```//gs; s/`[^`\n]*`//g; s/^[ \t]*>.*$//mg' \
             | tr '\n' ' ')
-          if printf '%s' "$body" | grep -qiE '@claude[[:space:]]+finalize([^[:alnum:]_]|$)'; then
+          if printf '%s' "$body" | grep -qiE '@claude[[:space:]]+finalize([^[:alnum:]_]|$)' ||
+             { printf '%s' "$body" | grep -qiF '@claude' &&
+               printf '%s' "$body" | grep -qiE '(^|[^[:alnum:]_])ultima[[:space:]]+probatio([^[:alnum:]_]|$)'; }; then
             echo "triggered=true" >> "$GITHUB_OUTPUT"
           fi
 

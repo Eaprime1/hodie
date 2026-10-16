@@ -86,11 +86,12 @@ source .scripts/env_setup.sh
   Runs on every push, Python 3.8/3.9/3.10 matrix.
 - **Seal-path tests**: `.github/workflows/seal-path-tests.yml`
   Runs `scripts/test_finalize_gate.sh` when `finalize-pr.yml` or the test changes.
-  The test has 11 checks and needs bash, perl and python3 with PyYAML.
+  The test has 18 checks and needs bash, perl and python3 with PyYAML.
   It pulls the real gate step out of the workflow.
   The checks cover comments that carry the Claude Code footer, and cues inside quotes or code.
+  They also cover both seal cues: `@claude finalize` and `@claude ultima probatio`.
   The test fails if any of those would start a seal. It is offline and writes nothing.
-  It also runs `scripts/test_file_review.js` (29 rows) and `scripts/test_final_oversight.js` (43 checks) with Node.
+  It also runs `scripts/test_file_review.js` (29 rows), `scripts/test_final_oversight.js` (43 checks) and `scripts/test_cue_parser.js` (62 rows) with Node.
 - **File review**: `.github/workflows/file-review.yml`
   Posts one living comment per PR: a checklist of the files.
   Files for reading start unticked, and a push that changes a file clears its tick.
@@ -100,6 +101,9 @@ source .scripts/env_setup.sh
   The approval is the `final-oversight` environment, which needs the owner as a required reviewer.
   It checks the CI, open threads, the seal record and the file review ticks.
   Hodie has no observation folder, so there is no observation row. See `docs/final-oversight.md`.
+- **Latin workflow**: `docs/latin-workflow.md`
+  Words for the stage of the work, shared with custos. `finalize-pr.yml` reads `@claude finalize` and `@claude ultima probatio`.
+  `.github/scripts/cue-parser.js` holds the rules for reading a cue. No hodie workflow reads the caret form yet.
 - Style guide for AI reviewers: `.gemini/styleguide.md`
 
 ## Code Conventions
