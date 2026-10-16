@@ -70,7 +70,8 @@ decimal-time standard is formalised.
 import argparse
 import json
 import re
-import subprocess
+import shutil
+import subprocess  # nosec B404 - runs one fixed git command, no shell
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -201,6 +202,10 @@ def to_centesimal_minutes(stamp: str) -> Optional[float]:
 # ---------------------------------------------------------------------------
 
 
+# A git ref: letters, digits and . _ / ~ ^ @ { } -, never starting with '-'.
+SAFE_REF_PATTERN = re.compile(r"[A-Za-z0-9._/~^@{}][A-Za-z0-9._/~^@{}-]*")
+
+
 def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
     """Return repo-relative paths of files added since *base_ref*, or None on failure.
 
@@ -210,9 +215,15 @@ def get_git_new_files(root: Path, base_ref: str) -> Optional[Set[str]]:
     is not persisted between runs — it prevents every file from appearing
     new on every pull_request event.
     """
+    git = shutil.which("git")
+    if git is None or not SAFE_REF_PATTERN.fullmatch(base_ref):
+        # No git on PATH, or a ref that git could read as an option or a shell-like string.
+        return None
     try:
-        result = subprocess.run(
-            ["git", "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],
+        # nosemgrep: the argument list is fixed, git is resolved by shutil.which and
+        # base_ref passed SAFE_REF_PATTERN above (no leading '-', no spaces or shell characters).
+        result = subprocess.run(  # nosec B603 nosemgrep
+            [git, "diff", "--name-only", "--diff-filter=A", f"{base_ref}...HEAD"],  # nosemgrep
             cwd=root,
             capture_output=True,
             text=True,

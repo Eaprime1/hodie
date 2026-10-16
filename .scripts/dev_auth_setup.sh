@@ -61,6 +61,27 @@ cmd_exists() {
     command -v "$1" &> /dev/null
 }
 
+# Report whether the environment variable named in $1 is set (never prints its value)
+report_env() {
+    if [ -n "${!1}" ]; then
+        print_status "$1: set"
+    else
+        print_warning "$1: not set"
+    fi
+}
+
+# Download Google's installer to a file, then run it. The script is not piped into bash.
+run_google_installer() {
+    local installer
+    installer="$(mktemp)" || return 1
+    if curl -fsSL https://sdk.cloud.google.com -o "$installer"; then
+        bash "$installer"
+    else
+        print_error "Could not download the Google Cloud CLI installer"
+    fi
+    rm -f "$installer"
+}
+
 # =============================================================================
 # CHECK FUNCTIONS - What's already installed/configured?
 # =============================================================================
@@ -187,10 +208,10 @@ check_all() {
 
     # Environment variables
     echo -e "\n${BLUE}=== Environment Variables ===${NC}"
-    [ -n "$ANTHROPIC_API_KEY" ] && print_status "ANTHROPIC_API_KEY: set" || print_warning "ANTHROPIC_API_KEY: not set"
-    [ -n "$OPENAI_API_KEY" ] && print_status "OPENAI_API_KEY: set" || print_warning "OPENAI_API_KEY: not set"
-    [ -n "$GEMINI_API_KEY" ] && print_status "GEMINI_API_KEY: set" || print_warning "GEMINI_API_KEY: not set"
-    [ -n "$GITHUB_TOKEN" ] && print_status "GITHUB_TOKEN: set" || print_warning "GITHUB_TOKEN: not set"
+    report_env ANTHROPIC_API_KEY
+    report_env OPENAI_API_KEY
+    report_env GEMINI_API_KEY
+    report_env GITHUB_TOKEN
 
     echo ""
     if [ $issues -eq 0 ]; then
@@ -331,13 +352,13 @@ install_google_cloud_cli() {
             if cmd_exists brew; then
                 brew install --cask google-cloud-sdk
             else
-                curl https://sdk.cloud.google.com | bash
+                run_google_installer
             fi
             ;;
         linux|wsl)
             read -p "About to run installer from Google. Continue? (y/N) " -n 1 -r; echo
             if [[ $REPLY =~ ^[Yy]$ ]]; then
-                curl https://sdk.cloud.google.com | bash
+                run_google_installer
             fi
             ;;
         termux)

@@ -20,6 +20,7 @@ from footer_witness import (  # noqa: E402
     build_flagged_report,
     build_new_docs_report,
     check_file_witness,
+    get_git_new_files,
     is_valid_timestamp,
     iter_scannable_files,
     load_state,
@@ -418,5 +419,23 @@ class TestScan:
         # Second scan — old.md is now known, no NEW missing files → exit 0 in strict
         exit2 = scan(tmp_path, strict=True)
         assert exit2 == 0
+
+
+class TestGetGitNewFiles:
+    """The git helper returns None for refs it must not hand to git."""
+
+    def test_ref_that_looks_like_an_option_is_refused(self, tmp_path):
+        assert get_git_new_files(tmp_path, "--output=leak.txt") is None
+
+    @pytest.mark.parametrize("ref", ["main; rm -rf x", "a b", "$(id)", "", "-x"])
+    def test_unsafe_refs_are_refused(self, tmp_path, ref):
+        assert get_git_new_files(tmp_path, ref) is None
+
+    def test_no_git_on_path_returns_none(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("PATH", str(tmp_path))
+        assert get_git_new_files(tmp_path, "origin/main") is None
+
+    def test_not_a_repo_returns_none(self, tmp_path):
+        assert get_git_new_files(tmp_path, "origin/main") is None
 
 # ∰ 20260424000000000
