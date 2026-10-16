@@ -73,16 +73,11 @@ async function upsertComment(ctx) {
   else await github.rest.issues.createComment({ owner, repo, issue_number: number, body });
 }
 
-module.exports = async function run({ github, context, core, fo }) {
-  const { owner, repo } = context.repo;
-  const pr = context.payload.pull_request;
-  const base = { github, fo, owner, repo, number: pr.number, head: pr.head.sha };
-  const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: base.number, per_page: 100 });
-  const files = await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number: base.number, per_page: 100 });
-  const names = files.map((f) => f.filename);
-
-  const watched = fo.watchedPaths(names);
-  const facts = {
+async function gatherFacts(base, comments, pr) {
+  const { github, fo, owner, repo, number } = base;
+  const files = await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number: number, per_page: 100 });
+  const watched = fo.watchedPaths(files.map((f) => f.filename));
+  return {
     head: base.head,
     checks: await gatherChecks(base),
     threads: await gatherThreads(base),
@@ -91,7 +86,14 @@ module.exports = async function run({ github, context, core, fo }) {
     watched,
     unnamed: fo.unnamedWatched(watched, pr.body || ''),
   };
+}
 
+module.exports = async function run({ github, context, core, fo }) {
+  const { owner, repo } = context.repo;
+  const pr = context.payload.pull_request;
+  const base = { github, fo, owner, repo, number: pr.number, head: pr.head.sha };
+  const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: base.number, per_page: 100 });
+  const facts = await gatherFacts(base, comments, pr);
   const body = fo.render(facts);
   await upsertComment({ ...base, comments, body });
   core.summary.addRaw(body).write();
