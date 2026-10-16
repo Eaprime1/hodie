@@ -4,6 +4,9 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Paused the four Gemini workflows (`gemini-dispatch`, `gemini-review`, `gemini-triage`, `gemini-invoke`) by renaming them to `.yml.disabled`, at the Shepherd's word. They failed on every push with zero jobs, on `main` since at least 2026-08-22. Notice and re-enable steps: `.gemini/OUT_OF_ORDER.md`.
+
 ### Fixed
 - Resolved Pylint workflow failure on Python < 3.11 by implementing a compatibility path for pyproject.toml parsing.
 - Added credential guard (`if: secrets.GEMINI_API_KEY != '' || vars.GCP_WIF_PROVIDER != ''`) to the "Run Gemini CLI" step in `gemini-invoke.yml` so the workflow skips gracefully when Gemini credentials are not configured, preventing noisy failures in unconfigured environments.
