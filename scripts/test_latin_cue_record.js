@@ -95,6 +95,7 @@ async function fullRun() {
   context.payload.comment = ownerComment('^claude probatio');
   await rec.run({ github, context, core });
   check('one comment kept', stored.length, 1);
+  check('same head says no new commits', stored[0].body.includes('no new commits since the last cue'), true);
   check('two rows logged', rec.oldRows(stored[0].body).length, 2);
 }
 
