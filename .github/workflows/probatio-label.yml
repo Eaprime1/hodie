@@ -1,0 +1,58 @@
+name: Hodie — Probatio Label
+
+# The soft seal. When the owner comments `^<name> probatio` (or `^omnes probatio`)
+# on a PR, this sets the `ready-for-oversight` label and keeps one comment that
+# names the head commit. A push by a person takes the label off again, because
+# the soft seal covered the earlier head. A push by a bot leaves it.
+#
+# It reads cues with .github/scripts/cue-parser.js: owner only, never a bot,
+# never a comment with the Claude Code footer, never a cue inside quotes or code.
+# `ultima probatio` is the final seal and belongs to finalize-pr.yml, so it does
+# not set this label. This workflow never seals and never merges.
+# Same idea as custos's probatio-label.yml. See docs/latin-workflow.md.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: probatio-label-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  label:
+    if: >-
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       github.event.comment.user.type != 'Bot' &&
+       github.event.comment.author_association == 'OWNER' &&
+       contains(github.event.comment.body, 'probatio')) ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.fork == false)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # The rules come from the base branch, so a PR cannot loosen the reader that judges it.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Set or withdraw the soft seal
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        with:
+          script: |
+            // The first PR that adds this script runs before the base branch has it.
+            if (!require('fs').existsSync('./.github/scripts/probatio-label.js')) {
+              core.info('probatio-label.js is not on the base branch yet; nothing to do.');
+              return;
+            }
+            const lib = require('./.github/scripts/probatio-label.js');
+            const run = context.eventName === 'pull_request' ? lib.onPush : lib.onComment;
+            await run({ github, context, core });

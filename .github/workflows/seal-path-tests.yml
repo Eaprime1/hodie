@@ -9,7 +9,8 @@ name: Seal Path Tests
 # Same idea as custos's seal-path-tests.yml.
 # Phase C of the file review swap adds the two offline tests for the file review
 # checklist and the final oversight rules (both from custos, without observations).
-# The Latin workflow swap adds the cue parser test.
+# The Latin workflow swap adds the cue parser test, and its second slice the soft-seal label
+# and the cue record.
 
 on:
   pull_request:
@@ -28,6 +29,12 @@ on:
       - '.github/scripts/cue-parser.js'
       - 'scripts/test_cue_parser.js'
       - 'scripts/test_cue_parser.sh'
+      - '.github/scripts/probatio-label.js'
+      - '.github/workflows/probatio-label.yml'
+      - 'scripts/test_probatio_label.js'
+      - '.github/scripts/latin-cue-record.js'
+      - '.github/workflows/latin-cue-record.yml'
+      - 'scripts/test_latin_cue_record.js'
   workflow_dispatch:
 
 permissions:
@@ -54,3 +61,9 @@ jobs:
 
       - name: Cue parser
         run: bash scripts/test_cue_parser.sh
+
+      - name: Soft-seal label
+        run: node scripts/test_probatio_label.js
+
+      - name: Cue record
+        run: node scripts/test_latin_cue_record.js
