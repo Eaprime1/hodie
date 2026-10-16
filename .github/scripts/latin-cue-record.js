@@ -82,6 +82,8 @@ function render(s) {
   ].join('\n');
 }
 
+const whyNot = (e) => e.status || e.message;
+
 // What changed since the last row's head.
 async function sinceLast({ github, repo, prev, head }) {
   if (!prev) return 'first cue on this PR';
@@ -91,7 +93,7 @@ async function sinceLast({ github, repo, prev, head }) {
     return `${data.ahead_by} commit(s) since the last cue ` +
       `([compare](https://github.com/${repo.owner}/${repo.repo}/compare/${prev}...${head}))`;
   } catch (e) {
-    return `head moved from \`${prev}\` (compare unavailable: ${e.status || e.message})`;
+    return `head moved from \`${prev}\` (compare unavailable: ${whyNot(e)})`;
   }
 }
 
@@ -138,14 +140,21 @@ async function upsert({ github, repo, number, mine, body }) {
   else await github.rest.issues.createComment({ ...repo, issue_number: number, body });
 }
 
+const callFrom = (payload) => (payload.pull_request ? fromPr(payload) : fromComment(payload));
+const isMine = (c) => c.user.type === 'Bot' && String(c.body).startsWith(MARK);
+
+// The record comment already on the PR, or undefined.
+async function findMine({ github, repo, number }) {
+  const all = await github.paginate(github.rest.issues.listComments, { ...repo, issue_number: number, per_page: 100 });
+  return all.find(isMine);
+}
+
 async function run({ github, context, core }) {
-  const payload = context.payload;
-  const call = payload.pull_request ? fromPr(payload) : fromComment(payload);
+  const call = callFrom(context.payload);
   if (!call) { core.info('No Latin call outside quotes; nothing to record.'); return; }
   const repo = context.repo;
   const snap = await snapshot({ github, repo, number: call.number });
-  const all = await github.paginate(github.rest.issues.listComments, { ...repo, issue_number: call.number, per_page: 100 });
-  const mine = all.find((c) => c.user.type === 'Bot' && (c.body || '').startsWith(MARK));
+  const mine = await findMine({ github, repo, number: call.number });
   const rows = oldRows(mine && mine.body);
   const since = await sinceLast({ github, repo, prev: lastSha(rows), head: snap.full });
   rows.push(rowFor({ ...call, head: snap.head }));

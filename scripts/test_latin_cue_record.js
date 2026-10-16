@@ -60,14 +60,15 @@ check('render marks not ready', body.includes('⬜ Ready'), true);
 check('no rows without a log', rec.oldRows('plain'), []);
 check('no rows from null', rec.oldRows(null), []);
 
-// One full run against a fake GitHub: first cue creates the comment, second updates it.
-async function fullRun() {
-  const stored = [];
-  const github = {
+// A fake GitHub that keeps the one record comment in `stored`.
+function fakeGithub(stored) {
+  const prData = { draft: false, mergeable_state: 'clean', head: { sha: 'abc1234def' }, labels: [] };
+  const threads = { repository: { pullRequest: { reviewThreads: { pageInfo: { hasNextPage: false }, nodes: [] } } } };
+  return {
     paginate: async (fn) => (fn === 'checks' ? [{ status: 'completed', conclusion: 'success' }] : stored),
-    graphql: async () => ({ repository: { pullRequest: { reviewThreads: { pageInfo: { hasNextPage: false }, nodes: [] } } } }),
+    graphql: async () => threads,
     rest: {
-      pulls: { get: async () => ({ data: { draft: false, mergeable_state: 'clean', head: { sha: 'abc1234def' }, labels: [] } }) },
+      pulls: { get: async () => ({ data: prData }) },
       checks: { listForRef: 'checks' },
       issues: {
         listComments: 'comments',
@@ -77,11 +78,21 @@ async function fullRun() {
       repos: { compareCommitsWithBasehead: async () => ({ data: { ahead_by: 2 } }) },
     },
   };
-  const comment = { body: '^claude recensio', user: { type: 'User', login: 'owner' }, author_association: 'OWNER', html_url: 'u', created_at: '2026-10-16T09:05:00Z' };
-  const context = { repo: { owner: 'o', repo: 'r' }, payload: { comment, issue: { number: 7 } } };
+}
+
+const ownerComment = (body) => ({
+  body, user: { type: 'User', login: 'owner' }, author_association: 'OWNER',
+  html_url: 'u', created_at: '2026-10-16T09:05:00Z',
+});
+
+// First cue creates the comment, the second updates it.
+async function fullRun() {
+  const stored = [];
+  const github = fakeGithub(stored);
   const core = { info: () => {} };
+  const context = { repo: { owner: 'o', repo: 'r' }, payload: { comment: ownerComment('^claude recensio'), issue: { number: 7 } } };
   await rec.run({ github, context, core });
-  context.payload.comment = { ...comment, body: '^claude probatio' };
+  context.payload.comment = ownerComment('^claude probatio');
   await rec.run({ github, context, core });
   check('one comment kept', stored.length, 1);
   check('two rows logged', rec.oldRows(stored[0].body).length, 2);
