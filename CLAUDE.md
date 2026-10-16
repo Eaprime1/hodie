@@ -90,6 +90,16 @@ source .scripts/env_setup.sh
   It pulls the real gate step out of the workflow.
   The checks cover comments that carry the Claude Code footer, and cues inside quotes or code.
   The test fails if any of those would start a seal. It is offline and writes nothing.
+  It also runs `scripts/test_file_review.js` (29 rows) and `scripts/test_final_oversight.js` (43 checks) with Node.
+- **File review**: `.github/workflows/file-review.yml`
+  Posts one living comment per PR: a checklist of the files.
+  Files for reading start unticked, and a push that changes a file clears its tick.
+  Files not for reading are ticked by the rules in `.github/review-skip.json`.
+- **Final oversight**: `.github/workflows/final-oversight.yml`
+  Report only. It runs when a PR carries the `final-oversight` label and the owner approves the run.
+  The approval is the `final-oversight` environment, which needs the owner as a required reviewer.
+  It checks the CI, open threads, the seal record and the file review ticks.
+  Hodie has no observation folder, so there is no observation row. See `docs/final-oversight.md`.
 - Style guide for AI reviewers: `.gemini/styleguide.md`
 
 ## Code Conventions

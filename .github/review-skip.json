@@ -1,0 +1,21 @@
+{
+  "note": "Files the file review ticks by rule, because they are not for human reading. Edit freely. A match is by prefix, suffix or exact path. The watched list is never skipped.",
+  "rules": [
+    { "prefix": "pr-journeys/", "reason": "journey document, written by the seal bot" },
+    { "exact": "package-lock.json", "reason": "lockfile" },
+    { "suffix": ".lock", "reason": "lockfile" },
+    { "suffix": ".min.js", "reason": "generated" },
+    { "suffix": ".png", "reason": "binary image" },
+    { "suffix": ".jpg", "reason": "binary image" },
+    { "suffix": ".gif", "reason": "binary image" },
+    { "suffix": ".ico", "reason": "binary image" },
+    { "suffix": ".pdf", "reason": "binary document" }
+  ],
+  "watched": [
+    { "prefix": "moav/" },
+    { "prefix": "branch-tracker/" },
+    { "prefix": ".github/workflows/" },
+    { "prefix": ".github/scripts/" },
+    { "exact": ".github/review-skip.json" }
+  ]
+}
