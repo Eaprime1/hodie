@@ -91,7 +91,7 @@ source .scripts/env_setup.sh
   The checks cover comments that carry the Claude Code footer, and cues inside quotes or code.
   They also cover both seal cues: `@claude finalize` and `@claude ultima probatio`.
   The test fails if any of those would start a seal. It is offline and writes nothing.
-  It also runs `scripts/test_file_review.js` (29 rows), `scripts/test_final_oversight.js` (43 checks) `scripts/test_cue_parser.js` (62 rows), `scripts/test_probatio_label.js` (15 rows) and `scripts/test_latin_cue_record.js` (30 checks) with Node.
+  It also runs `scripts/test_file_review.js` (29 rows), `scripts/test_final_oversight.js` (43 checks), `scripts/test_cue_parser.js` (62 rows), `scripts/test_probatio_label.js` (15 rows) and `scripts/test_latin_cue_record.js` (30 checks) with Node.
 - **File review**: `.github/workflows/file-review.yml`
   Posts one living comment per PR: a checklist of the files.
   Files for reading start unticked, and a push that changes a file clears its tick.
