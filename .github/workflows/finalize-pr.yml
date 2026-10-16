@@ -373,6 +373,9 @@ jobs:
               `**prima-clock:** ${primaClock}  `,
               `**witnessed:** true  `,
               `*${IDENTITY} · ${SYMBOL}*`,
+              '',
+              // Footer witness: ∰ then 17 digits (YYYYMMDDHHMMSSmmm), as footer_witness.py --strict expects.
+              `∰ ${new Date().toISOString().replace(/[-:T.Z]/g, '')}`,
             ].join('\n');
 
             // Auto-commits are OFF until verified (2026-10-15). The journey doc is not

@@ -69,6 +69,10 @@ The step is ported from custos. `scripts/test_finalize_gate.sh` pulls the real g
 (11 of 11 pass; 4 of 11 on the old gate). It is not wired into CI yet. Not changed: the gate still lets
 `github-actions[bot]` comments through, and a bot comment cannot start a new workflow run, so this has not mattered.
 
+The journey doc the finalize run wrote to `main` (`4ad95e6`) had no `∰` + 17-digit footer, so when Eric merged `main`
+into this branch the push-run witness check failed (the PR-run check, which diffs against `main`, passed). I appended a
+witness line to that file and added one to the journey template in both finalize workflows.
+
 Small fixes made in the same pass: `CONTRIBUTING.md` (new), a pointer to `PLEXUS_STAGES` in `PLEXUS_SYSTEM.md`, and a
 note in `moav/README.md` that `COMPLETE` is not sealed. Left alone: `LICENSE` (the owner's choice), issue templates,
 the seal-gate footer guard, `wellspring/` triage, `branch-tracker/branches.md` refresh.
