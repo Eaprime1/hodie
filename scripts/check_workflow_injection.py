@@ -11,73 +11,98 @@ Fix: move ${{ }} expressions to the step's env: block, then reference
 as $ENV_VAR in the shell script.
 
 Usage:
-  python scripts/check_workflow_injection.py [--check DIR] [FILE ...]
+  python3 scripts/check_workflow_injection.py [--check DIR] [FILE ...]
 
 Exits 0 if clean, 1 if injection patterns found.
+
+Fixed in the second peer swap, found while custos adopted this file: the original matched only a
+single-line "run: command". It now also reads "run: |" and "run: >-" blocks and "- run:" steps.
+Split into small functions so the lint tools stay quiet.
 """
 
 import argparse
 import re
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 # Matches any ${{ ... }} expression (GitHub Actions template syntax)
 EXPRESSION_RE = re.compile(r"\$\{\{[^}]+\}\}")
 
-# run: key variants
-RUN_BLOCK_RE = re.compile(r"^\s*run:\s*[\|>-]*\s*$")
-RUN_INLINE_RE = re.compile(r"^\s*run:\s+(.+)$")
+# run: key variants. A step may start with "- " (a list item). The block form is a block scalar:
+# run: | or run: >- (optional chomping sign or indentation digit). Test it before the inline form,
+# because "run: |" also fits the inline pattern.
+RUN_BLOCK_RE = re.compile(r"^\s*(?:-\s+)?(?P<key>run:)\s*[|>][-+]?\d?\s*$")
+RUN_INLINE_RE = re.compile(r"^\s*(?:-\s+)?(?P<key>run:)\s+(?P<text>.+)$")
 
 
-def check_file(path: Path) -> List[Tuple[int, str, str]]:
+Issue = Tuple[int, str, str]
+State = Tuple[bool, int]  # (inside a run: block, column of the run: key)
+
+
+def _expression_issue(lineno: int, raw: str, context: str, text: str) -> Optional[Issue]:
+    """An issue for this line if *text* holds a ${{ }} expression."""
+    if EXPRESSION_RE.search(text):
+        return (lineno, raw.rstrip(), context)
+    return None
+
+
+def _classify(raw: str) -> Tuple[str, int, str]:
+    """('block' | 'inline' | 'other', column of the run: key, inline command text)."""
+    block = RUN_BLOCK_RE.match(raw)
+    if block:
+        return "block", block.start("key"), ""
+    inline = RUN_INLINE_RE.match(raw)
+    if inline:
+        return "inline", inline.start("key"), inline.group("text")
+    return "other", 0, ""
+
+
+def _inside(raw: str, run_col: int) -> bool:
+    """A blank line, or one indented deeper than the run: key, belongs to the block."""
+    return not raw.strip() or len(raw) - len(raw.lstrip()) > run_col
+
+
+def _step(lineno: int, raw: str, state: State) -> Tuple[Optional[Issue], State]:
+    """Read one line. Returns the issue found on it (if any) and the next state."""
+    in_block, run_col = state
+    kind, col, text = _classify(raw)
+    if kind == "block":
+        return None, (True, col)
+    if kind == "inline":
+        return _expression_issue(lineno, raw, "run: (inline)", text), (False, run_col)
+    if in_block and _inside(raw, run_col):
+        return _expression_issue(lineno, raw, "run: block", raw), state
+    return None, (False, run_col)  # a line at or before the key's column ends the block
+
+
+def scan_lines(lines: List[str]) -> List[Issue]:
+    """Scan workflow text for expression injection in run: steps."""
+    issues: List[Issue] = []
+    state: State = (False, 0)
+    for lineno, raw in enumerate(lines, 1):
+        issue, state = _step(lineno, raw, state)
+        if issue:
+            issues.append(issue)
+    return issues
+
+
+def check_file(path: Path) -> List[Issue]:
     """
     Scan *path* for expression injection in run: steps.
 
     Returns a list of (line_number, line_text, context) tuples.
     """
-    issues: List[Tuple[int, str, str]] = []
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except OSError as exc:
         print(f"  ⚠ Could not read {path}: {exc}", file=sys.stderr)
-        return issues
-
-    in_run_block = False
-    run_indent = 0
-
-    for lineno, raw in enumerate(lines, 1):
-        stripped = raw.lstrip()
-        indent = len(raw) - len(stripped)
-
-        # Single-line run: run: some command ${{ expr }}
-        m = RUN_INLINE_RE.match(raw)
-        if m:
-            if EXPRESSION_RE.search(m.group(1)):
-                issues.append((lineno, raw.rstrip(), "run: (inline)"))
-            in_run_block = False
-            continue
-
-        # Multi-line run block: run: | or run: |-
-        if RUN_BLOCK_RE.match(raw):
-            in_run_block = True
-            run_indent = indent
-            continue
-
-        if in_run_block:
-            # End of block: non-empty line at or before run_indent
-            if raw.strip() and indent <= run_indent:
-                in_run_block = False
-                # Check this line normally (it may start a new key)
-            else:
-                if EXPRESSION_RE.search(raw):
-                    issues.append((lineno, raw.rstrip(), "run: block"))
-                continue
-
-    return issues
+        return []
+    return scan_lines(lines)
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
+    """The command line."""
     parser = argparse.ArgumentParser(
         description="Check GitHub Actions workflow files for expression injection.",
         epilog=(
@@ -92,47 +117,49 @@ def main() -> int:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
-        "--check",
-        metavar="DIR",
-        default=None,
-        help="Directory to scan for *.yml files (e.g. .github/workflows/)",
+    parser.add_argument("--check", metavar="DIR", default=None,
+                        help="Directory to scan for *.yml files (e.g. .github/workflows/)")
+    parser.add_argument("files", nargs="*", type=Path, help="Specific workflow files to check")
+    return parser
+
+
+def report(path: Path, issues: List[Issue]) -> None:
+    """Print what was found in one file."""
+    print(f"\n🚩 {path}  ({len(issues)} issue(s))")
+    for lineno, line, context in issues:
+        print(f"   Line {lineno} [{context}]: {line.strip()}")
+    print()
+    print(
+        "   Fix: move each ${{ }} expression to the step's env: block,\n"
+        "   then reference it as $ENV_VAR in the run: script."
     )
-    parser.add_argument(
-        "files",
-        nargs="*",
-        type=Path,
-        help="Specific workflow files to check",
-    )
-    args = parser.parse_args()
 
-    targets: List[Path] = list(args.files)
-    if args.check:
-        targets += sorted(Path(args.check).glob("*.yml"))
 
-    if not targets:
-        print("No files to check. Pass --check DIR or file paths.")
-        return 0
-
+def scan_all(targets: List[Path]) -> int:
+    """Check each file, print what is found, return the number of issues."""
     total_issues = 0
-
     for path in targets:
         issues = check_file(path)
         if issues:
             total_issues += len(issues)
-            print(f"\n🚩 {path}  ({len(issues)} issue(s))")
-            for lineno, line, context in issues:
-                print(f"   Line {lineno} [{context}]: {line.strip()}")
-            print()
-            print(
-                "   Fix: move each ${{ }} expression to the step's env: block,\n"
-                "   then reference it as $ENV_VAR in the run: script."
-            )
+            report(path, issues)
+    return total_issues
 
+
+def main() -> int:
+    """Check the named files and the --check directory. Exit 1 if anything is found."""
+    args = build_parser().parse_args()
+    targets: List[Path] = list(args.files)
+    if args.check:
+        targets += sorted(Path(args.check).glob("*.yml"))
+    if not targets:
+        print("No files to check. Pass --check DIR or file paths.")
+        return 0
+
+    total_issues = scan_all(targets)
     if total_issues == 0:
         print(f"✅ {len(targets)} workflow file(s) checked — no expression injection found.")
         return 0
-
     print(f"\n⛔ {total_issues} expression injection issue(s) across {len(targets)} file(s).")
     return 1
 
