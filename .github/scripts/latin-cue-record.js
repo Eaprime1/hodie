@@ -39,8 +39,8 @@ function lastSha(rows) {
   return last ? (last.match(SHA_RE) || [])[1] || null : null;
 }
 
-function rowFor({ at, cue, by, head, source }) {
-  return `| ${stamp(at)} | ${cue} | @${by} | \`${head}\` | ${source} |`;
+function rowFor(call) {
+  return `| ${stamp(call.at)} | ${call.cue} | @${call.by} | \`${call.head}\` | ${call.source} |`;
 }
 
 // How the checks on the head stand.
