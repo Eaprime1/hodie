@@ -156,7 +156,7 @@ async function run({ github, context, core }) {
   const snap = await snapshot({ github, repo, number: call.number });
   const mine = await findMine({ github, repo, number: call.number });
   const rows = oldRows(mine && mine.body);
-  const since = await sinceLast({ github, repo, prev: lastSha(rows), head: snap.full });
+  const since = await sinceLast({ github, repo, prev: lastSha(rows), head: snap.head });
   rows.push(rowFor({ ...call, head: snap.head }));
   const body = render({ ...snap, ...call, at: stamp(call.at), since, rows });
   await upsert({ github, repo, number: call.number, mine, body });
