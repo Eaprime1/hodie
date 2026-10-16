@@ -9,6 +9,7 @@ name: Seal Path Tests
 # Same idea as custos's seal-path-tests.yml.
 # Phase C of the file review swap adds the two offline tests for the file review
 # checklist and the final oversight rules (both from custos, without observations).
+# The Latin workflow swap adds the cue parser test.
 
 on:
   pull_request:
@@ -24,6 +25,9 @@ on:
       - '.github/review-skip.json'
       - 'scripts/test_file_review.js'
       - 'scripts/test_final_oversight.js'
+      - '.github/scripts/cue-parser.js'
+      - 'scripts/test_cue_parser.js'
+      - 'scripts/test_cue_parser.sh'
   workflow_dispatch:
 
 permissions:
@@ -47,3 +51,6 @@ jobs:
 
       - name: Final oversight rules
         run: node scripts/test_final_oversight.js
+
+      - name: Cue parser
+        run: bash scripts/test_cue_parser.sh
