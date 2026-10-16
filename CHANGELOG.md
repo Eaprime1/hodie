@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Switched off every workflow step that commits on its own (witness state refresh in `footer-witness.yml`, daily Drive sync in `sync-hodie.yml`, journey-doc write in `finalize-pr.yml` and `auto-finalize.yml`). Each runs only when the repo variable `AUTO_COMMITS` is `true`; it is unset, so they are off. The sync still runs and prints what it would change.
+- `finalize-pr.yml` seal gate ignores comments that carry the Claude Code footer and cues inside code or quotes; `scripts/test_finalize_gate.sh` tests it offline.
+- Journey documents written by the finalize workflows now end with a `∰` + 17-digit witness line (the first one, PR #165, failed the push-run witness check without it; witness added by hand).
+- Added `CONTRIBUTING.md`; clarified `PLEXUS_SYSTEM.md` (stage list in code) and `moav/README.md` (`COMPLETE` is not closed).
+- Paused the four Gemini workflows (`gemini-dispatch`, `gemini-review`, `gemini-triage`, `gemini-invoke`) by renaming them to `.yml.disabled`, at the Shepherd's word. They failed on every push with zero jobs, on `main` since at least 2026-08-22. Notice and re-enable steps: `.gemini/OUT_OF_ORDER.md`.
+
 ### Fixed
 - Resolved Pylint workflow failure on Python < 3.11 by implementing a compatibility path for pyproject.toml parsing.
 - Added credential guard (`if: secrets.GEMINI_API_KEY != '' || vars.GCP_WIF_PROVIDER != ''`) to the "Run Gemini CLI" step in `gemini-invoke.yml` so the workflow skips gracefully when Gemini credentials are not configured, preventing noisy failures in unconfigured environments.

@@ -1,5 +1,5 @@
 {
-  "last_scan": "20261015221326522",
+  "last_scan": "20261016010832885",
   "known_files": {
     ".scripts/sync_hodie.py": {
       "compliant": true,
@@ -850,6 +850,46 @@
       "compliant": false,
       "witness": null,
       "last_seen": "20261015221326522"
+    },
+    "peer-swap/form-hodie-side.md": {
+      "compliant": true,
+      "witness": "∰ 20261015232701649",
+      "last_seen": "20261015232719761"
+    },
+    "peer-swap/pass1_hodie-reads-custos.md": {
+      "compliant": true,
+      "witness": "∰ 20261016010553275",
+      "last_seen": "20261016010619977"
+    },
+    "peer-swap/pass2_hodie-own-repo.md": {
+      "compliant": true,
+      "witness": "∰ 20261016010553290",
+      "last_seen": "20261016010619977"
+    },
+    "peer-swap/pass3_letter_hodie-to-custos.md": {
+      "compliant": true,
+      "witness": "∰ 20261015232649123",
+      "last_seen": "20261015232719761"
+    },
+    "peer-swap/session-a/README.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
+    },
+    "peer-swap/session-a/form-hodie-side.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
+    },
+    "peer-swap/session-a/pass1_hodie-reads-custos.md": {
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
+    },
+    "peer-swap/pass4_reply_hodie.md": {
+      "compliant": true,
+      "witness": "∰ 20261016010741256",
+      "last_seen": "20261016010832885"
     }
   }
 }

@@ -40,6 +40,13 @@ hodie/
 
 ## Plexus Stages (Processing Pipeline)
 
+> **In code:** the crawler's stage list is `PLEXUS_STAGES` in
+> `crawler_pixel8/processors/one_hertz.py` (simplex, duplex, triplex,
+> quadroplex, multiplex, omniplex); each file advances one step per cycle.
+> The stage descriptions below are the design and cover more folders than the
+> code list (uniplex, duplicatus, exemplar, gravitar, rudera, strues); check
+> the code for what runs.
+
 ### simplex/ - Ready State
 **Purpose**: Files that are complete and ready to use
 **Criteria**:
