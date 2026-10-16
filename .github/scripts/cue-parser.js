@@ -58,9 +58,13 @@ function strip(body) {
     .join('\n');
 }
 
-const tokenize = (rest) => rest.split(/\s+/)
-  .map((t) => t.replace(/[.,;:!?]+$/, ''))
-  .filter(Boolean);
+const WHITESPACE_RE = /\s+/;
+const TRAILING_PUNCT_RE = /[.,;:!?]+$/;
+const stripPunct = (word) => word.replace(TRAILING_PUNCT_RE, '');
+
+function tokenize(rest) {
+  return rest.split(WHITESPACE_RE).map(stripPunct).filter(Boolean);
+}
 
 // An optional conversation id may come first.
 function splitId(tokens) {
