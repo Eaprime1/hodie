@@ -7,6 +7,8 @@ name: Seal Path Tests
 # the repo.
 # Added in the second peer swap: the test existed but no workflow ran it.
 # Same idea as custos's seal-path-tests.yml.
+# Phase C of the file review swap adds the two offline tests for the file review
+# checklist and the final oversight rules (both from custos, without observations).
 
 on:
   pull_request:
@@ -14,6 +16,14 @@ on:
       - '.github/workflows/finalize-pr.yml'
       - '.github/workflows/seal-path-tests.yml'
       - 'scripts/test_finalize_gate.sh'
+      - '.github/workflows/file-review.yml'
+      - '.github/workflows/final-oversight.yml'
+      - '.github/scripts/file-review.js'
+      - '.github/scripts/final-oversight.js'
+      - '.github/scripts/final-oversight-run.js'
+      - '.github/review-skip.json'
+      - 'scripts/test_file_review.js'
+      - 'scripts/test_final_oversight.js'
   workflow_dispatch:
 
 permissions:
@@ -31,3 +41,9 @@ jobs:
 
       - name: Seal-cue gate
         run: bash scripts/test_finalize_gate.sh
+
+      - name: File review checklist
+        run: node scripts/test_file_review.js
+
+      - name: Final oversight rules
+        run: node scripts/test_final_oversight.js
