@@ -78,8 +78,10 @@ source .scripts/env_setup.sh
   Runs once when a PR opens non-draft or is marked ready for review, and again only when the owner adds the `ai-review` label. Drafts and ordinary pushes do not start it. A PR that edits this workflow file skips the review (GitHub blocks OIDC for self-modifying workflows).
   Secret required: `CLAUDE_CODE_OAUTH_TOKEN`
 - **Claude Interactive**: `.github/workflows/claude.yml` was deleted in `2d2c2fc` (2026-04-23); no workflow answers `@claude` comments now. `@claude finalize` is read only by `finalize-pr.yml`.
-- **Gemini Review**: **paused (out of order).** The four files `gemini-dispatch`, `gemini-review`, `gemini-triage` and `gemini-invoke` are renamed to `.yml.disabled` in `.github/workflows/`, so GitHub does not run them. See `.gemini/OUT_OF_ORDER.md` for why and how to switch them back on.
-  Was: `gemini-dispatch.yml` (dispatch hub) calling the other three; trigger `@gemini-cli review/triage/[prompt]` in comments, or auto on PR open. Secret required: `GEMINI_API_KEY`
+- **Gemini Review**: paused (out of order).
+  The four workflow files (`gemini-dispatch`, `gemini-review`, `gemini-triage`, `gemini-invoke`) end in `.yml.disabled` in `.github/workflows/`.
+  GitHub does not run them. Notice and re-enable steps: `.gemini/OUT_OF_ORDER.md`.
+  Was: `gemini-dispatch.yml` calling the other three, on `@gemini-cli` comments or PR open. Secret: `GEMINI_API_KEY`.
 - **Pylint**: `.github/workflows/pylint.yml`
   Runs on every push, Python 3.8/3.9/3.10 matrix.
 - Style guide for AI reviewers: `.gemini/styleguide.md`
