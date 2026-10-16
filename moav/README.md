@@ -35,7 +35,14 @@ its prima-clock stamp in the JSON payload. Adopted from custos's
 - hodie_moav_dedupe_seventh_pinnacle.json — quanta/seventh_pinnacle same-folder duplicate (1 redundant copy → 1 carbonite copy in duplicatus), 202608212040, CANDIDATE/OPEN
 - hodie_moav_dedupe_my_git_py.json — my.gita.py typo'd duplicate of my.git.py (1 redundant copy → 1 carbonite copy in duplicatus), 202608212055, CANDIDATE/OPEN
 
-All of the above are CANDIDATE/OPEN, not formally closed — eaprime1 approved
+Reading the status words: `COMPLETE` on the Gravity Core line means the
+transfer itself finished (its carrier has `motion_state: COMPLETE`). Its
+`chain_of_custody` is still `OPEN`, like every other carrier here, so
+`COMPLETE` is not the same as sealed or closed. (Wording added during the
+first peer swap, 2026-10-15; the meaning of the two fields is the hodie
+side's reading, not yet confirmed by Eric.)
+
+All of the other carriers are CANDIDATE/OPEN, not formally closed — eaprime1 approved
 the *format* (per the PRIME_02 worked example) but has not yet reviewed each
 individual consolidation. `duplicates_check/`, `PRIME_documents/`, and
 `transition_frameworks/` are now fully resolved and removed from

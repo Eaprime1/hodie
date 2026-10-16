@@ -75,12 +75,15 @@ jobs:
         # quepad/** isn't in this workflow's own path filters, so this can't
         # trigger an infinite loop; [skip ci] is belt-and-suspenders.
         #
+        # Off by default: runs only when the repo variable AUTO_COMMITS is 'true'
+        # (turned off 2026-10-15 until the bot commits are trusted).
+        #
         # Default branch only. Committing to feature branches moved the branch tip
         # under whoever was pushing (forced a rebase before every push during the
         # first peer swap, 2026-10-15) and left commits that GitHub shows as
         # Unverified. Feature-branch scans still run and still fail strict mode;
         # they just don't write state back.
-        if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        if: vars.AUTO_COMMITS == 'true' && github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

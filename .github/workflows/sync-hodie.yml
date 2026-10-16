@@ -32,7 +32,15 @@ jobs:
           GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
         run: python .scripts/sync_hodie.py
 
+      - name: Report what would change (auto-commits off)
+        if: vars.AUTO_COMMITS != 'true'
+        run: |
+          echo "AUTO_COMMITS is not 'true' - the sync ran but nothing is committed."
+          git status --short hodie | head -50 || true
+
       - name: Commit and push synced files
+        # Off by default (2026-10-15): set repo variable AUTO_COMMITS=true to enable.
+        if: vars.AUTO_COMMITS == 'true'
         run: |
           set -euo pipefail
           git config user.name  "github-actions[bot]"

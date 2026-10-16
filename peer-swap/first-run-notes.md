@@ -45,6 +45,20 @@ Whether a branch push can then re-flag a file the state file would have remember
 PRs, which use `--git-base origin/main`). The old behaviour is a one-line revert. Not fixed here: the seal gate in
 `finalize-pr.yml` still has no footer guard (Pass 4 Part 6, item 8).
 
+### 3b. Follow-up (2026-10-15, evening Pacific): all auto-commits off
+
+Eric asked that nothing commit on its own until it is verified. Four steps did: the witness state refresh, the daily
+Drive sync (`sync-hodie.yml`), and the journey-doc write in `finalize-pr.yml` and `auto-finalize.yml`. All four now
+run only when the repo variable `AUTO_COMMITS` is `true`; it is unset, so they are off. The sync still runs and prints
+`git status` for `hodie/` so a dry run is visible. With the finalize workflows, a finalized PR gets its label and
+comment but no journey doc until the variable is set. I could not test these on GitHub from here; I checked that the
+YAML parses and the embedded scripts pass `node --check`. The old bot commits on this branch (`4e2c96e`, `5bc876e`)
+stay Unverified in history; I did not rewrite them. A squash merge would drop them from `main`.
+
+Small fixes made in the same pass: `CONTRIBUTING.md` (new), a pointer to `PLEXUS_STAGES` in `PLEXUS_SYSTEM.md`, and a
+note in `moav/README.md` that `COMPLETE` is not sealed. Left alone: `LICENSE` (the owner's choice), issue templates,
+the seal-gate footer guard, `wellspring/` triage, `branch-tracker/branches.md` refresh.
+
 ## 4. For the second run
 
 1. Put the witness line in the pass-file template so no file needs a post-freeze edit.
