@@ -1,5 +1,5 @@
 {
-  "last_scan": "20261022064030439",
+  "last_scan": "20261016010832885",
   "known_files": {
     ".scripts/sync_hodie.py": {
       "compliant": true,
@@ -872,64 +872,24 @@
       "last_seen": "20261015232719761"
     },
     "peer-swap/session-a/README.md": {
-      "compliant": true,
-      "witness": "∰ 20261016012345051",
-      "last_seen": "20261022064030439"
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
     },
     "peer-swap/session-a/form-hodie-side.md": {
-      "compliant": true,
-      "witness": "∰ 20261016012345066",
-      "last_seen": "20261022064030439"
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
     },
     "peer-swap/session-a/pass1_hodie-reads-custos.md": {
-      "compliant": true,
-      "witness": "∰ 20261016012345080",
-      "last_seen": "20261022064030439"
+      "compliant": false,
+      "witness": null,
+      "last_seen": "20261015235934338"
     },
     "peer-swap/pass4_reply_hodie.md": {
       "compliant": true,
       "witness": "∰ 20261016010741256",
       "last_seen": "20261016010832885"
-    },
-    ".gemini/OUT_OF_ORDER.md": {
-      "compliant": true,
-      "witness": "∰ 20261016014103236",
-      "last_seen": "20261022064030439"
-    },
-    "CONTRIBUTING.md": {
-      "compliant": true,
-      "witness": "∰ 20261016020500000",
-      "last_seen": "20261022064030439"
-    },
-    "docs/final-oversight.md": {
-      "compliant": true,
-      "witness": "∰ 20261016123459039",
-      "last_seen": "20261022064030439"
-    },
-    "docs/latin-lexemes.txt": {
-      "compliant": true,
-      "witness": "∰ 20261016131738269",
-      "last_seen": "20261022064030439"
-    },
-    "docs/latin-workflow.md": {
-      "compliant": true,
-      "witness": "∰ 20261016132010000",
-      "last_seen": "20261022064030439"
-    },
-    "peer-swap/first-run-notes.md": {
-      "compliant": true,
-      "witness": "∰ 20261016012408691",
-      "last_seen": "20261022064030439"
-    },
-    "peer-swap/review-and-evaluation.md": {
-      "compliant": true,
-      "witness": "∰ 20261016014211671",
-      "last_seen": "20261022064030439"
-    },
-    "pr-journeys/202610_PR165_peer-swap-hodie-side-session-b-passes-1-.md": {
-      "compliant": true,
-      "witness": "∰ 20261016033502000",
-      "last_seen": "20261022064030439"
     }
   }
 }
