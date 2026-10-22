@@ -31,6 +31,8 @@ of work, not proof that the stage passed.
 | `extrema` | Deepest. Root cause, with evidence. |
 | `renovata` | Refresh. May stand alone. |
 | `expeditus` | Prompt. Focused, with the same standards. |
+| `confirmanda` | With `emenda`: a claim or source cannot be checked from the repo. Cite it, or mark it unconfirmed. Never fill the gap from memory. |
+| `supplenda` | With `emenda`: the work is sound but a step the road needs is missing. Supply it, or name who it waits on. Not a defect. |
 
 ## How to call
 
